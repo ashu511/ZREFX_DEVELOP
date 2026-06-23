@@ -1,0 +1,97 @@
+managed implementation in class zbp_refx_i_claims unique;
+strict ( 2 );
+with draft;
+define behavior for ZREFX_I_CLAIMS alias claims
+persistent table zrefx_claims
+draft table zrefx_dr_claims
+lock master total etag Lastchangedat
+authorization master ( global )
+etag master Lastchangedat
+late numbering
+with additional save
+{
+  create;
+  update;
+  delete;
+  association _Attachments { create; with draft; }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  field ( readonly ) Claimid;
+
+  mapping for zrefx_claims
+    {
+      Claimid              = claim_id;
+      Createddate          = createddate;
+      Status               = status;
+      //      Vendorcompanyname    = vendorcompanyname;
+      //      Contactpersonname    = contactpersonname;
+      //      Contactmobile        = contactmobile;
+      //      Vendorregistrationno = vendorregistrationno;
+      //      Contactemail         = contactemail;
+      //      Preferredlanguage    = preferredlanguage;
+      Vendorid             = vendorid;
+      Vendorname           = vendorname;
+      Vendoraltnum         = vendoraltnum;
+      Vendorcompanyname    = vendorcompanyname;
+      Contactpersonname    = contactpersonname;
+      Contactmobile        = contactmobile;
+      Vendorregistrationno = vendorregistrationno;
+      Contactemail         = contactemail;
+      Legalflag            = Legalflag;
+      //      Vendoraddress        = vendoraddress;
+      Claimcategory        = claimcategory;
+      Sourcechannel        = sourcechannel;
+      Claimtype            = claimtype;
+      Urgency              = urgency;
+      Referencetype        = referencetype;
+      Referenceid          = referenceid;
+      Contractnumber       = contractnumber;
+      Leasenumber          = leasenumber;
+      Projectid            = projectid;
+      Projectname          = projectname;
+      Claimreferenceno     = claimreferenceno;
+      Region               = region;
+      Claimsubject         = claimsubject;
+      Incidentdate         = incidentdate;
+      Requestedpaymentdate = requestedpaymentdate;
+      Detaileddescription  = detaileddescription;
+      Claimamount          = claimamount;
+      Confirminformation   = confirminformation;
+      Consentdate          = consentdate;
+      Lastchangedat        = lastchangedat;
+      Locallastchangedat   = locallastchangedat;
+    }
+}
+
+define behavior for ZREFX_I_ATT_CLAIMS alias Attachments
+persistent table zrefx_att_claims
+draft table zrefx_d_att_clms
+lock dependent by _claims
+authorization dependent by _claims
+etag master Lastchangedat
+late numbering
+with additional save
+{
+  update ( features : instance );
+  delete;
+  field ( readonly ) ClaimId, AttachmentId;
+
+  association _claims { with draft; }
+  mapping for zrefx_att_claims
+    {
+      ClaimId      = claim_id;
+      AttachmentId = attachment_id;
+      Dmsid        = dmsid;
+      Filename     = filename;
+      Mimetype     = mimetype;
+      Content      = content;
+      CreatedAt    = created_at;
+      CreatedBy    = created_by;
+    }
+
+}

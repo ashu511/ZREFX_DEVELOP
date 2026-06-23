@@ -1,0 +1,90 @@
+@Metadata.layer: #PARTNER
+@UI.updateHidden: true
+
+@UI.headerInfo: {
+  typeName: 'Attachment',
+  typeNamePlural: 'Attachments',
+  title: { type: #STANDARD, value: 'Filename' } // Sets the File Name as the header title
+}
+annotate entity ZREFX_C_ATT_COMPLAINTS with
+{
+  /* =====================================================================
+     1. FACET LAYOUT
+     ===================================================================== */
+  @UI.facet: [
+    {
+      id: 'AttachmentDetails',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'Attachment Details',
+      position: 10
+    }
+  ]
+
+  /* =====================================================================
+     2. HIDDEN TECHNICAL KEYS
+     ===================================================================== */
+  @UI.hidden: true
+  ComplaintId;
+
+  @UI.hidden: true
+  AttachmentId;
+
+  /* =====================================================================
+     3. ACTIVE VISIBLE FIELDS
+     ===================================================================== */
+  @EndUserText.label: 'File Name'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  Filename;
+
+  @EndUserText.label: 'Attachment'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  Content;
+
+  /* =====================================================================
+     4. INACTIVE / RESERVED FIELDS
+     ===================================================================== */
+
+  // @EndUserText.label: 'DMS ID'
+  // @UI.lineItem: [{ position: 30 }]
+  // @UI.identification: [{ position: 30 }]
+  // Dmsid;
+
+  // @EndUserText.label: 'Document Type'
+  // @UI.lineItem: [{ position: 40 }]
+  // @UI.identification: [{ position: 40 }]
+  // Documenttype;
+
+  // @EndUserText.label: 'Document Name'
+  // @UI.lineItem: [{ position: 50 }]
+  // @UI.identification: [{ position: 50 }]
+  // Documentname;
+
+  // @EndUserText.label: 'Category'
+  // @UI.lineItem: [{ position: 60 }]
+  // @UI.identification: [{ position: 60 }]
+  // Category;
+
+  // @EndUserText.label: 'Media Type'
+  // @UI.lineItem: [{ position: 70 }]
+  // @UI.identification: [{ position: 70 }]
+  // Mediatype;
+
+  // @EndUserText.label: 'Notes'
+  // @UI.lineItem: [{ position: 80 }]
+  // @UI.identification: [{ position: 80 }]
+  // Notes;
+
+  // @EndUserText.label: 'Created By'
+  // @UI.lineItem: [{ position: 90 }]
+  // @UI.identification: [{ position: 90 }]
+  // CreatedBy;
+
+  // @EndUserText.label: 'Created At'
+  // @UI.lineItem: [{ position: 100 }]
+  // @UI.identification: [{ position: 100 }]
+  // CreatedAt;
+
+}

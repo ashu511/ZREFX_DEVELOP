@@ -1,0 +1,26 @@
+managed implementation in class zbp_refx_i_gl_userref unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_USERREF //alias <alias_name>
+persistent table zrefx_gl_userrf
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  field ( readonly, numbering : managed ) Id;
+  create;
+  update;
+  delete;
+
+  mapping for zrefx_gl_userrf
+    {
+      Id           = id;
+      Division     = division;
+      Email        = email;
+      FullName     = fullname;
+      Mobile       = mobile;
+      Organization = organization;
+      RoleHint     = rolehint;
+      UserID       = userid;
+    }
+}

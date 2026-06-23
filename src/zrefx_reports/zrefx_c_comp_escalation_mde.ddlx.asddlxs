@@ -1,0 +1,76 @@
+@Metadata.layer: #PARTNER
+
+@UI: {
+  headerInfo: {
+    typeName: 'Complaint',
+    typeNamePlural: 'Complaints',
+    title: {
+             type:#STANDARD,
+            label: 'Complaint',
+            value: 'ComplaintId'
+           }
+  }
+}
+annotate entity ZREFX_C_COMP_ESCALATION_REP with
+{
+  @UI: { lineItem: [ { position: 10, label: 'SLA Status'  } ],
+  identification: [{ position: 10, label: 'SLA Status'}],
+  selectionField: [ { position: 10  } ]
+       }
+  @EndUserText.label: 'SLA Status'
+  SlaStatus;
+  @UI: { lineItem: [ { position: 20, label: 'Escalation Triggered'  } ],
+  identification: [{ position: 20, label: 'Escalation Triggered', hidden :true }],
+  selectionField: [ { position: 20 } ]
+     }
+  EscalationTriggered;
+  @UI: { lineItem: [ { position: 30, label: 'Authority Level'  } ],
+  identification: [{ position: 30, label: 'Authority Level', hidden :true }],
+  selectionField: [ { position: 30 } ]
+     }
+  AuthorityLevel;
+  @UI: { lineItem: [ { position: 40, label: 'Region'  } ],
+  identification: [{ position: 40, label: 'Region', hidden :true }],
+  selectionField: [ { position: 40 } ]
+     }
+  Region;
+  @UI: { lineItem: [ { position: 50, label: 'Complaint Id'  } ],
+  identification: [{ position: 50, label: 'Complaint Id', hidden :true }],
+  selectionField: [ { position: 50 } ]
+     }
+  ComplaintId;
+  @UI: { lineItem: [ { position: 60, label: 'Days Pending'  } ],
+  identification: [{ position: 60, label: 'Days Pending', hidden :true }],
+  selectionField: [ { position: 60 } ]
+     }
+  DaysPending;
+  @UI: { lineItem: [ { position: 70, label: 'Escalation Date'  } ],
+  identification: [{ position: 70, label: 'Escalation Date', hidden :true }],
+  selectionField: [ { position: 70 } ]
+     }
+  EscalationDate;
+  //   WfInstanceId;
+  //   Category;
+  //   Source;
+  //
+  //   Maindivision;
+  //   Legalflag;
+  //   CurrentStatus;
+  //   CurrentOwner;
+  //   DaysOpen;
+  //
+  //   SubmissionFromDate;
+  //   SubmissionToDate;
+  //
+  //
+  //
+  //
+  //   LegalInvolvement;
+  //   DecisionOutcome;
+  //   LegalReviewReq;
+  //   LegalDecision;
+  //   FinalDecision;
+  //   ClosureDate;
+
+
+}

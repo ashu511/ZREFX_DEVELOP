@@ -1,0 +1,21 @@
+managed implementation in class zbp_refx_i_gl_status unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_STATUS //alias <alias_name>
+persistent table zrefx_gl_status
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+  field ( readonly, numbering : managed ) Id;
+  mapping for zrefx_gl_status {
+  Id = id;
+  Active = active;
+  Code = code;
+  Sequence = sequence;
+  Statustype = statustype;
+  }
+}

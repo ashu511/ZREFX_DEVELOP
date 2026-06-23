@@ -1,0 +1,228 @@
+@Metadata.layer: #PARTNER
+
+@UI.headerInfo: {
+  typeName: 'Complaint',
+  typeNamePlural: 'Complaints',
+  title: { type: #STANDARD, value: 'ComplaintId' }
+}
+@Search.searchable: true
+annotate entity ZREFX_C_COMPLAINTS with
+{
+  /* =====================================================================
+     1. FACET LAYOUT
+     ===================================================================== */
+  @UI.facet: [
+    // --- TABS (Collections) ---
+    { id: 'idInfo',         type: #COLLECTION, label: 'Complaint Information',        position: 10 },
+    { id: 'VendorInfo',     type: #COLLECTION, label: 'Vendor / Complainant Details', position: 20 },
+    { id: 'Classification', type: #COLLECTION, label: 'Complaint Classification',     position: 30 },
+    { id: 'ReferenceInfo',  type: #COLLECTION, label: 'Reference Information',        position: 40 },
+    { id: 'CmpDet',         type: #COLLECTION, label: 'Complaint Details',            position: 50 },
+    { id: 'Upload',         type: #LINEITEM_REFERENCE, label: 'Upload Attachments',   position: 60, targetElement: '_Attachments' },
+    { id: 'IdDec',          type: #COLLECTION, label: 'Declaration',                  position: 70 },
+
+    // --- SECTIONS (Inside the Tabs) ---
+    { id: 'idHeaderInfo',  type: #FIELDGROUP_REFERENCE, label: 'Header Information',           parentId: 'idInfo',         targetQualifier: 'tqHeaderInformation', position: 10 },
+    { id: 'idVendorInfo',  type: #FIELDGROUP_REFERENCE, label: 'Vendor / Complainant Details', parentId: 'VendorInfo',     targetQualifier: 'tqVendorInformation', position: 10 },
+    { id: 'idCompClass',   type: #FIELDGROUP_REFERENCE, label: 'Complaint Classification',     parentId: 'Classification', targetQualifier: 'tqCompClass',         position: 10 },
+    { id: 'idRefInfo',     type: #FIELDGROUP_REFERENCE, label: 'Reference Information',        parentId: 'ReferenceInfo',  targetQualifier: 'tqRefInfo',           position: 10 },
+    { id: 'idCompDetails', type: #FIELDGROUP_REFERENCE, label: 'Complaint Details',            parentId: 'CmpDet',         targetQualifier: 'tqCompDetails',       position: 10 },
+    { id: 'idDeclaration', type: #FIELDGROUP_REFERENCE, label: 'Declaration',                  parentId: 'IdDec',          targetQualifier: 'tqDeclaration',       position: 10 }
+  ]
+
+  /* =====================================================================
+     2. FIELD ANNOTATIONS
+     ===================================================================== */
+
+  // --- Complaint Information Tab ---
+  @EndUserText.label: 'Complaint ID'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqHeaderInformation' }]
+  @Search.defaultSearchElement: true
+  ComplaintId;
+
+  @EndUserText.label: 'Created Date'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqHeaderInformation' }]
+  Createddate;
+
+  @EndUserText.label: 'Status'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqHeaderInformation' }]
+  Status;
+
+  // --- Vendor / Complainant Details Tab ---
+  @EndUserText.label: 'Vendor ID'
+  @UI.lineItem: [{ position: 31 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqVendorInformation' }]
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.7
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_I_VENDOR_F4', element: 'Vendorid' } }]
+  Vendorid;
+
+  @EndUserText.label: 'Vendor Name'
+  @UI.lineItem: [{ position: 32 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqVendorInformation' }]
+  Vendorname;
+
+  @EndUserText.label: 'Vendor Company Name'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqVendorInformation' }]
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.7
+  Vendorcompanyname;
+
+  @EndUserText.label: 'Contact Person Name'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqVendorInformation' }]
+  Contactpersonname;
+
+  @EndUserText.label: 'Contact Number'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqVendorInformation' }]
+  Contactmobile;
+
+  @EndUserText.label: 'Alternative Number'
+  @UI.lineItem: [{ position: 61 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqVendorInformation' }]
+  Vendoraltnum;
+
+  @EndUserText.label: 'Vendor Registration Number'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqVendorInformation' }]
+  Vendorregistrationno;
+
+  @EndUserText.label: 'Contact Email'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.fieldGroup: [{ position: 80, qualifier: 'tqVendorInformation' }]
+  Contactemail;
+
+  @EndUserText.label: 'Legal Flag'
+  @UI.lineItem: [{ position: 85 }]
+  @UI.fieldGroup: [{ position: 90, qualifier: 'tqVendorInformation' }]
+  Legalflag;
+
+  @EndUserText.label: 'Vendor Address'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.fieldGroup: [{ position: 100, qualifier: 'tqVendorInformation' }]
+  Vendoraddress;
+
+  // --- Complaint Classification Tab ---
+  @EndUserText.label: 'Complaint Category'
+  @UI.lineItem: [{ position: 110 }]
+  @UI.selectionField: [{ position: 50 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqCompClass' }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_COMPCAT', element: 'Value'} }]
+  Complaintcategory;
+
+  @EndUserText.label: 'Source Channel'
+  @UI.lineItem: [{ position: 120 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqCompClass' }]
+  Sourcechannel;
+
+  @EndUserText.label: 'Complaint Type'
+  @UI.lineItem: [{ position: 130 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqCompClass' }]
+  Complainttype;
+
+  @EndUserText.label: 'Urgency'
+  @UI.lineItem: [{ position: 140 }]
+  @UI.selectionField: [{ position: 40 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqCompClass' }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_URGENCY', element: 'Value'} }]
+  Urgency;
+
+  @EndUserText.label: 'City'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqCompClass' }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_CITY', element: 'Value'} }]
+  City;
+
+  @EndUserText.label: 'Main Division'
+  @UI.lineItem: [{ position: 231 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqCompClass' }]
+  MainDivision;
+
+  // @EndUserText.label: 'Sub Division'
+  // @UI.lineItem: [{ position: 232 }]
+  // @UI.fieldGroup: [{ position: 70, qualifier: 'tqCompClass' }]
+  // SubDivision;
+
+  // --- Reference Information Tab ---
+  @EndUserText.label: 'Reference Type'
+  @UI.lineItem: [{ position: 150 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqRefInfo' }]
+  Referencetype;
+
+  @EndUserText.label: 'Reference ID'
+  @UI.lineItem: [{ position: 160 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqRefInfo' }]
+  Referenceid;
+
+  @EndUserText.label: 'Land ID'
+  @UI.lineItem: [{ position: 170 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqRefInfo' }]
+  Landid;
+
+  @EndUserText.label: 'Title Deed No.'
+  @UI.lineItem: [{ position: 180 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqRefInfo' }]
+  Titledeedno;
+
+  @EndUserText.label: 'Project ID'
+  @UI.lineItem: [{ position: 190 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqRefInfo' }]
+  Projectid;
+
+  @EndUserText.label: 'Project Name'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqRefInfo' }]
+  Projectname;
+
+  @EndUserText.label: 'Claim Reference'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqRefInfo' }]
+  Claimreferenceno;
+
+  @EndUserText.label: 'Region ID'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.fieldGroup: [{ position: 80, qualifier: 'tqRefInfo' }]
+  Region;
+
+  // --- Complaint Details Tab ---
+  @EndUserText.label: 'Subject'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqCompDetails' }]
+  Subject;
+
+  @EndUserText.label: 'Incident Date'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqCompDetails' }]
+  Incidentdate;
+
+  @EndUserText.label: 'Requested Outcome'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqCompDetails' }]
+  Requestedoutcome;
+
+  @EndUserText.label: 'Detailed Description'
+  @UI.lineItem: [{ position: 270 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqCompDetails' }]
+  Detaileddescription;
+
+  @EndUserText.label: 'Financial Impact'
+  @UI.lineItem: [{ position: 280 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqCompDetails' }]
+  Financialimpact;
+
+  // --- Declaration Tab ---
+  @EndUserText.label: 'Confirm Information'
+  @UI.lineItem: [{ position: 290 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqDeclaration' }]
+  Confirminformation;
+
+  @EndUserText.label: 'Consent Date'
+  @UI.lineItem: [{ position: 300 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqDeclaration' }]
+  Consentdate;
+}

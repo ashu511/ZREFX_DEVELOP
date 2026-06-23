@@ -1,0 +1,73 @@
+@Metadata.layer: #CORE
+annotate view ZREFX_C_GL_LAND_ALLOCATION with
+{
+
+
+  @UI.identification: [
+    {
+      position: 20,
+      label: 'Request ID'
+    }
+  ]
+  RequestId;
+
+
+
+//  @Consumption.valueHelpDefinition: [{
+//        entity: {
+//          name: 'ZREFX_I_ALLOCATION_VH',
+//          element: 'LandNumber'
+//        }
+//      }]
+  @UI.selectionField: [{ position: 10 }]
+  @UI.lineItem: [{ position: 10, importance: #HIGH }]
+  @EndUserText.label: 'Land Number'
+  @UI.identification: [
+    {
+      position: 30,
+      label: 'Land Number'
+    }
+  ]
+  LandNumber;
+
+
+
+//  @Consumption.valueHelpDefinition: [{
+//          entity: {
+//            name: 'ZREFX_I_LEASEIN_VH',
+//            element: 'LeaseInContract'
+//          }
+//        }]
+
+  @UI.selectionField: [{ position: 20 }]
+  @UI.lineItem: [{ position: 20, importance: #HIGH }]
+  @EndUserText.label: 'Lease In Contract'
+  @UI.identification: [
+    {
+      position: 40,
+      label: 'Lease In Contract'
+    }
+  ]
+  LeaseInContract;
+
+
+
+//  @Consumption.valueHelpDefinition: [{
+//          entity: {
+//            name: 'ZREFX_I_LEASEOUT_VH',
+//            element: 'LeaseOutContract'
+//          }
+//        }]
+
+  @UI.selectionField: [{ position: 30 }]
+  @UI.lineItem: [{ position: 30, importance: #HIGH }]
+  @EndUserText.label: 'Lease Out Contract'
+  @UI.identification: [
+   {
+     position: 50,
+     label: 'Lease Out Contract'
+   }
+  ]
+  LeaseOutContract;
+
+};

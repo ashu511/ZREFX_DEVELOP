@@ -1,0 +1,5 @@
+@EndUserText.label: 'REFX Claims Service Definition'
+define service ZREFX_SD_CLAIMS {
+  expose ZREFX_C_CLAIMS;
+  expose ZREFX_C_ATT_CLAIMS;
+}

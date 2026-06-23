@@ -1,0 +1,397 @@
+@Metadata.layer: #PARTNER
+
+@UI: {
+  headerInfo: {
+    typeName: 'Claim',
+    typeNamePlural: 'Claims',
+    title: {
+             type:#STANDARD,
+            label: 'Claim',
+            value: 'Claimid'
+           }
+  }
+}
+@Search.searchable: true
+annotate entity ZREFX_C_CLAIMS with
+{
+  @UI.facet: [
+                          { id:'idInfo',
+                          type:#COLLECTION,
+                          label:'Claim Information',
+                          position:10
+                          },
+
+  //                          {
+  //                          id : 'ClaimId',
+  //                          purpose: #STANDARD,
+  //                          type: #IDENTIFICATION_REFERENCE,
+  //                          label: 'Claim',
+  //                          parentId:'idInfo',
+  //                          position: 10
+  //                 },
+  //                 {id : 'Upload',
+  //                          purpose: #STANDARD,
+  //                          type: #LINEITEM_REFERENCE,
+  //                          label: 'Upload Attachments',
+  //
+  //                          position: 20,
+  //                          targetElement: '_Attachments'
+  //                 },
+
+                 {id : 'HeaderInfo',
+
+                          type: #COLLECTION,
+                          label: 'Header Information',
+                          position: 20
+  //                          targetQualifier: 'tqHeaderInformation',
+  //                          parentId: 'idInfo'
+                 },
+
+
+                 {id : 'VendorInfo',
+
+                          type: #COLLECTION,
+                          label: 'Vendor / Complainant Details',
+                          position: 30
+  //                          targetQualifier: 'tqVendorInformation',
+  //                          parentId: 'idInfo'
+                 },
+
+                 {id : 'ClaimClass',
+
+                          type:#COLLECTION,
+                          label: 'Claim Classification',
+                          position: 40
+  //                          targetQualifier: 'tqClaimClass',
+  //                          parentId: 'idInfo'
+                 },
+
+                 {id : 'RefInfo',
+
+                          type: #COLLECTION,
+                          label: 'Reference Information',
+                          position: 50
+  //                          targetQualifier: 'tqRefInfo',
+  //                          parentId: 'idInfo'
+                 },
+
+                 {id : 'ClaimDetails',
+
+                          type: #COLLECTION,
+                          label: 'Claim Details',
+                          position: 60
+  //                          targetQualifier: 'tqClaimDetails',
+  //                          parentId: 'idInfo'
+                 },
+
+                 {id : 'Declaration',
+
+                          type: #COLLECTION,
+                          label: 'Declaration',
+                          position: 70
+  //                          targetQualifier: 'tqDeclaration',
+  //                          parentId: 'idInfo'
+                 },
+
+                          {
+                          id : 'ClaimId',
+                          purpose: #STANDARD,
+                          type: #IDENTIFICATION_REFERENCE,
+                          label: 'Claim',
+                          parentId:'idInfo',
+                          position: 10
+                 },
+
+                 {id : 'idHeaderInfo',
+
+                          type: #FIELDGROUP_REFERENCE,
+                          label: 'Header Information',
+                          position: 20,
+                          targetQualifier: 'tqHeaderInformation',
+                          parentId: 'HeaderInfo'
+                 },
+
+
+                 {id : 'idVendorInfo',
+
+                          type: #FIELDGROUP_REFERENCE,
+                          label: 'Vendor / Complainant Details',
+                          position: 30,
+                          targetQualifier: 'tqVendorInformation',
+                          parentId: 'VendorInfo'
+                 },
+
+                 {id : 'idClaimClass',
+
+                          type:#FIELDGROUP_REFERENCE,
+                          label: 'Claim Classification',
+                          position: 40,
+                          targetQualifier: 'tqClaimClass',
+                          parentId: 'ClaimClass'
+                 },
+
+                 {id : 'idRefInfo',
+
+                          type: #FIELDGROUP_REFERENCE,
+                          label: 'Reference Information',
+                          position: 50,
+                          targetQualifier: 'tqRefInfo',
+                                 parentId: 'RefInfo'
+                 },
+
+                 {id : 'idClaimDetails',
+
+                          type: #FIELDGROUP_REFERENCE,
+                          label: 'Claim Details',
+                          position: 60,
+                          targetQualifier: 'tqClaimDetails',
+                          parentId: 'ClaimDetails'
+                 },
+
+                 {id : 'idDeclaration',
+
+                          type: #FIELDGROUP_REFERENCE,
+                          label: 'Declaration',
+                          position: 70,
+                          targetQualifier: 'tqDeclaration',
+                          parentId: 'Declaration'
+                 },
+                 {id : 'Upload',
+                          purpose: #STANDARD,
+                          type: #LINEITEM_REFERENCE,
+                          label: 'Upload Attachments',
+                          position: 60,
+                          targetElement: '_Attachments'
+                 }
+
+
+
+                 ]
+
+
+  //@UI.identification:  [
+  //  { qualifier: 'tqHeaderInformation', position: 10, label: 'Claim Number' }
+  //]
+  //Claimid;
+  //
+  //@UI.identification:  [
+  //  { qualifier: 'tqHeaderInformation', position: 20, label: 'Status' }
+  //]
+  //Status;
+  //
+  //@UI.identification:  [
+  //  { qualifier: 'tqHeaderInformation', position: 30, label: 'Created Date' }
+  //]
+  //Createddate;
+
+  @UI: { lineItem: [ { position: 10, label: 'Claim ID'  } ],
+  //  selectionField: [ { position: 10 } ],
+  identification: [{ position: 10, label: 'Claim ID', hidden :true }]}
+  @UI.fieldGroup: [{ position: 10, label: 'Claim ID', qualifier: 'tqHeaderInformation'}]
+  Claimid;
+
+  @UI: { lineItem: [ { position: 20, label: 'Created Date'  } ],
+  selectionField: [ { position: 20 } ],
+  identification: [{ position: 20, label: 'Created Date', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 20, label: 'Created Date', qualifier: 'tqHeaderInformation'}]
+  Createddate;
+
+  @UI: { lineItem: [ { position: 30, label: 'Status'  } ],
+  identification: [{ position: 30, label: 'Status', hidden :true }],
+  selectionField: [ { position: 30 } ]
+       }
+  @UI.fieldGroup: [{ position: 30, label: 'Status', qualifier: 'tqHeaderInformation'}]
+
+  Status;
+
+  @UI: { lineItem: [ { position: 40, label: 'Vendor ID'  } ],
+  identification: [{ position: 40, label: 'Vendor ID', hidden :true }]}
+  @UI.fieldGroup: [{ position: 10, label: 'Vendor ID', qualifier: 'tqVendorInformation'}]
+  @Search.defaultSearchElement: true
+  @Search.fuzzinessThreshold: 0.7
+  @Consumption.valueHelpDefinition: [{
+      entity: { name: 'ZREFX_I_CLAIMS_VENDOR_F4', element: 'Vendorid' }
+      }]
+  Vendorid;
+
+  @UI: { lineItem: [ { position: 50, label: 'Vendor Name'  } ],
+  identification: [{ position: 50, label: 'Vendor Name', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 20, label: 'Vendor Name', qualifier: 'tqVendorInformation'}]
+  Vendorname;
+
+  @UI: { lineItem: [ { position: 60, label: 'Vendor Company Name'  } ],
+  identification: [{ position: 60, label: 'Vendor Company Name', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 30, label: 'Vendor Company Name', qualifier: 'tqVendorInformation'}]
+  Vendorcompanyname;
+
+  @UI: { lineItem: [ { position: 65, label: 'Contact Person Name'  } ],
+   identification: [{ position: 65, label: 'Contact Person Name', hidden :true }]
+        }
+  @UI.fieldGroup: [{ position: 35, label: 'Contact Person Name', qualifier: 'tqVendorInformation'}]
+  Contactpersonname;
+
+  @UI: { lineItem: [ { position: 66, label: 'Contact Number'  } ],
+  identification: [{ position: 66, label: 'Contact Number', hidden :true }]
+     }
+  @UI.fieldGroup: [{ position: 36, label: 'Contact Number', qualifier: 'tqVendorInformation'}]
+  Contactmobile;
+
+  @UI: { lineItem: [ { position: 67, label: 'Alternative Number'  } ],
+  identification: [{ position: 67, label: 'Alternative Number', hidden :true }]
+     }
+  @UI.fieldGroup: [{ position: 37, label: 'Alternative Number', qualifier: 'tqVendorInformation'}]
+  Vendoraltnum;
+
+
+  @UI: { lineItem: [ { position: 70, label: 'Vendor Registration Number'  } ],
+  identification: [{ position: 70, label: 'Vendor Registration Number', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 40, label: 'Vendor Registration Number', qualifier: 'tqVendorInformation'}]
+  Vendorregistrationno;
+
+  @UI: { lineItem: [ { position: 80, label: 'Contact Email'  } ],
+  identification: [{ position: 80, label: 'Contact Email', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 50, label: 'Contact Email',  qualifier: 'tqVendorInformation'}]
+  Contactemail;
+
+  @UI: { lineItem: [ { position: 90, label: 'Legal Flag'  } ],
+  identification: [{ position: 90, label: 'Legal Flag', hidden :true }]
+    }
+  @UI.fieldGroup: [{ position: 60, label: 'Legal Flag',  qualifier: 'tqVendorInformation'}]
+  Legalflag;
+
+  //  @UI: { lineItem: [ { position: 100, label: 'Vendor Address'  } ],
+  //  identification: [{ position: 100, label: 'Vendor Address', hidden :true }]
+  //       }
+  //  @UI.fieldGroup: [{ position: 70, label: 'Vendor Address', qualifier: 'tqVendorInformation'}]
+  //  vendoraddress;
+
+  @UI: { lineItem: [ { position: 110, label: 'Claim Category'  } ],
+  identification: [{ position: 110, label: 'Claim Category', hidden :true }]
+
+       }
+  @Consumption.valueHelpDefinition: [{entity : { name: 'ZREFX_DOV_CLAIMCAT', element: 'Value'}}]
+  @UI.fieldGroup: [{ position: 80, label: 'Claim Category', qualifier: 'tqClaimClass'}]
+  Claimcategory;
+
+  @UI: { lineItem: [ { position: 120, label: 'Source Channel'  } ],
+  identification: [{ position: 120, label: 'Source Channel', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 90, label: 'Source Channel', qualifier: 'tqClaimClass'}]
+  Sourcechannel;
+
+  @UI: { lineItem: [ { position: 130, label: 'Claim Type'  } ],
+  identification: [{ position: 130, label: 'Claim Type', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 100, label: 'Claim Type', qualifier: 'tqClaimClass'}]
+  Claimtype;
+
+  @UI: { lineItem: [ { position: 140, label: 'Urgency'  } ],
+  identification: [{ position: 140, label: 'Urgency', hidden :true }],
+  selectionField: [ { position: 40 } ]
+       }
+
+  @Consumption.valueHelpDefinition: [{entity : { name: 'ZREFX_DOV_URGENCY', element: 'Value'}}]
+  @UI.fieldGroup: [{ position: 110, label: 'Urgency', qualifier: 'tqClaimClass'}]
+  //@consumption.valueHelpDefinition: [{ entity:{ element: '', name: 'ZREFX_DOV_URGENCY' } }]
+  Urgency;
+
+  @UI: { lineItem: [ { position: 150, label: 'Reference Type'  } ],
+  identification: [{ position: 150, label: 'Reference Type', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 120, label: 'Reference Type' , qualifier: 'tqRefInfo'}]
+  Referencetype;
+
+  @UI: { lineItem: [ { position: 160, label: 'Reference ID'  } ],
+  identification: [{ position: 130, label: 'Reference ID', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 120, label: 'Reference ID' , qualifier: 'tqRefInfo'}]
+  Referenceid;
+
+  @UI: { lineItem: [ { position: 170, label: 'Contract Number'  } ],
+  identification: [{ position: 170, label: 'Contract Number', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 140, label: 'Contract Number' , qualifier: 'tqRefInfo'}]
+  Contractnumber;
+
+  @UI: { lineItem: [ { position: 180, label: 'Lease Number'  } ],
+  identification: [{ position: 180, label: 'Lease Number', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 150, label: 'Lease Number' , qualifier: 'tqRefInfo'}]
+  Leasenumber;
+
+  @UI: { lineItem: [ { position: 190, label: 'Project ID'  } ],
+  identification: [{ position: 190, label: 'Project ID', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 160, label: 'Project ID' , qualifier: 'tqRefInfo'}]
+  Projectid;
+  @UI: { lineItem: [ { position: 200, label: 'Project Name'  } ],
+  identification: [{ position: 200, label: 'Project Name', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 170, label: 'Project Name' , qualifier: 'tqRefInfo'}]
+  Projectname;
+  //  @UI: { lineItem: [ { position: 210, label: 'Claim Reference'  } ],
+  //  identification: [{ position: 210, label: 'Claim Reference', hidden :true }]
+  //       }
+  //  @UI.fieldGroup: [{ position: 180, label: 'Claim Reference' , qualifier: 'tqRefInfo'}]
+  //  Claimreferenceno;
+
+  @UI: { lineItem: [ { position: 220, label: 'Region'  } ],
+  identification: [{ position: 220, label: ' Region ID', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 190, label: ' Region ID' , qualifier: 'tqRefInfo'}]
+  Region;
+
+  //  @UI: { lineItem: [ { position: 230, label: 'City'  } ],
+  //  identification: [{ position: 230, label: 'City', hidden :true }]
+  //       }
+  //  @UI.fieldGroup: [{ position: 200, label: 'City' , qualifier: 'tqCompClass'}]
+  //  city;
+  @UI: { lineItem: [ { position: 240, label: 'Claim Subject'  } ],
+  identification: [{ position: 240, label: 'Claim Subject', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 210, label: 'Claim Subject' , qualifier: 'tqClaimDetails'}]
+  Claimsubject;
+
+  @UI: { lineItem: [ { position: 250, label: 'Incident Date'  } ],
+  identification: [{ position: 250, label: 'Incident Date', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 220, label: 'Incident Date' , qualifier: 'tqClaimDetails'}]
+  Incidentdate;
+
+  @UI: { lineItem: [ { position: 260, label: 'Claim Amount'  } ],
+  identification: [{ position: 260, label: 'Claim Amount', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 230, label: 'Claim Amount',  qualifier: 'tqClaimDetails'}]
+  Claimamount;
+
+  @UI: { lineItem: [ { position: 270, label: 'Detailed Description'  } ],
+  identification: [{ position: 270, label: 'Detailed Description', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 240, label: 'Detailed Description' , qualifier: 'tqClaimDetails'}]
+  Detaileddescription;
+
+  @UI: { lineItem: [ { position: 280, label: 'Requested Payment Date'  } ],
+  identification: [{ position: 280, label: 'Requested Payment Date', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 250, label: 'Requested Payment Date' , qualifier: 'tqClaimDetails'}]
+  Requestedpaymentdate;
+
+  @UI: { lineItem: [ { position: 290, label: 'Confirm Information'  } ],
+  identification: [{ position: 290, label: 'Confirm Information', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 260, label: 'Confirm Information' , qualifier: 'tqDeclaration'}]
+  Confirminformation;
+
+  @UI: { lineItem: [ { position: 300, label: 'Consent Date'  } ],
+  identification: [{ position: 300, label: 'Consent Date', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 270, label: 'Consent Date' , qualifier: 'tqDeclaration'}]
+  Consentdate;
+
+
+}

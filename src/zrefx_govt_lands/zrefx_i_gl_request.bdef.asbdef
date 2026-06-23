@@ -1,0 +1,411 @@
+managed with additional save implementation in class zbp_refx_i_gl_request
+unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_REQUEST //alias <alias_name>
+persistent table zrefx_gl
+lock master
+authorization master ( instance )
+late numbering
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) RequestId;
+  field ( mandatory ) Statuscode;
+
+  association _Clarifications { create; }
+  association _LandAllocations { create; }
+  association _Proposal { create; }
+  association _RequestAttachments { create; }
+  association _WorkflowInstance { create; }
+
+  mapping for zrefx_gl
+    {
+      RequestId                  = request_id;
+      Actualcompletiondate       = actualcompletiondate;
+      Additionalcomments         = additionalcomments;
+      Approvalstatus             = approvalstatus;
+      Approvalstatuscode         = approvalstatuscode;
+      Areasqmrequested           = areasqmrequested;
+      Businessarea               = businessarea;
+      Businessjustification      = businessjustification;
+      Cablelengthkm              = cablelengthkm;
+      Capacitymva                = capacitymva;
+      Companycode                = companycode;
+      Costcenter                 = costcenter;
+      Currentprocessorrole       = currentprocessorrole;
+      Currentprocessoruser       = currentprocessoruser;
+      Currentstep                = currentstep;
+      Currentstepchangedat       = currentstepchangedat;
+      Externalprojectaccountno   = externalprojectaccountno;
+      Facilitytype               = facilitytype;
+      Gislocationlink            = gislocationlink;
+      Gisprojectid               = gisprojectid;
+      Hijrienddate               = hijrienddate;
+      Hijristartdate             = hijristartdate;
+      Initiatedbyrole            = initiatedbyrole;
+      Landcategory               = landcategory;
+      Lengthmrequested           = lengthmrequested;
+      Plancompletiondate         = plancompletiondate;
+      Previousrequestno          = previousrequestno;
+      Priority                   = priority;
+      Profitcenter               = profitcenter;
+      Projectapprovalyear        = projectapprovalyear;
+      Projectbudgetyear          = projectbudgetyear;
+      Projectcostsar             = projectcostsar;
+      Projectenddate             = projectenddate;
+      Projectname                = projectname;
+      Projectstartdate           = projectstartdate;
+      Requestdate                = requestdate;
+      Requestdescription         = requestdescription;
+      Requestor                  = requestor;
+      Requestorcomments          = requestorcomments;
+      Requestpurpose             = requestpurpose;
+      Requesttype                = requesttype;
+      Sourcedepartment           = sourcedepartment;
+      Sourcesubsidiary           = sourcesubsidiary;
+      Stagegateprojectno         = stagegateprojectno;
+      Stationtype                = stationtype;
+      Status                     = status;
+      Statuscode                 = statuscode;
+      Voltagekv                  = voltagekv;
+      Wbsprojectno               = wbsprojectno;
+      Widthmrequested            = widthmrequested;
+      UserId                     = userid;
+      UserName                   = username;
+      Title                      = title;
+      Department                 = department;
+      CurrentStepDesc            = currentstepdescription;
+      //      Projectname_A            = projectname_a;
+      CurrentProcessorName       = currentprocessorname;
+      CurrentProcessorDepartment = currentprocessordepartment;
+      MileStoneDescription       = milestonedesc;
+      Milestone                  = milestone;
+      WorkflowInstanceId         = workflowinstanceid;
+      MilestoneSequence          = milestonesequence;
+    }
+
+}
+
+define behavior for ZREFX_I_GL_CLARIFICATION //alias <alias_name>
+persistent table zrefx_gl_clarif
+lock dependent by _LandRequest
+authorization dependent by _LandRequest
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Id, RequestId;
+  association _LandRequest;
+  mapping for zrefx_gl_clarif
+    {
+      RequestId  = request_id;
+      Answer     = answer;
+      Answeredby = answeredby;
+      Question   = question;
+      Raisedby   = raisedby;
+      Statuscode = statuscode;
+      UserId     = userid;
+      UserName   = username;
+      Title      = title;
+      Department = department;
+      Id         = id;
+    }
+}
+
+define behavior for ZREFX_I_GL_LAND_ALLOCATION //alias <alias_name>
+persistent table zrefx_gl_landal
+lock dependent by _LandRequest
+late numbering
+authorization dependent by _LandRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) RequestId;
+  association _LandRequest;
+  mapping for zrefx_gl_landal
+    {
+      RequestId        = request_id;
+      // Id            = id;
+      LandNumber       = landnumber;
+      LeaseInContract  = leaseincontract;
+      LeaseOutContract = leaseoutcontract;
+    }
+}
+
+define behavior for ZREFX_I_GL_PROPOSAL //alias <alias_name>
+persistent table zrefx_gl_psl
+lock dependent by _LandRequest
+authorization dependent by _LandRequest
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Id, RequestId;
+  association _LandRequest;
+  association _ProposedLand { create; }
+  mapping for zrefx_gl_psl
+    {
+      RequestId          = request_id;
+      Cownedlandavl      = cownedlandavl;
+      Focaluser          = focaluser;
+      Justification      = justification;
+      Notes              = notes;
+      Preparedby         = preparedby;
+      Proposaldate       = proposaldate;
+      Proposalstatuscode = proposalstatuscode;
+      Proposedland       = proposedlands;
+      Requestorcomment   = requestorcomment;
+      Reviewedby         = reviewedby;
+      Selectedland       = selectedland;
+      Sponsorcontact     = sponsorcontact;
+      Sponsoremail       = sponsoremail;
+      Sponsorname        = sponsorname;
+      Sponsororg         = sponsororg;
+      Status             = status;
+      Version            = version;
+      Id                 = id;
+      UserId             = userid;
+      UserName           = username;
+      Title              = title;
+      Department         = department;
+    }
+}
+
+define behavior for ZREFX_I_GL_PROPOSEDLAND //alias <alias_name>
+persistent table zrefx_row_propl
+lock dependent by _LandRequest
+late numbering
+authorization dependent by _LandRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Id, ProposalId, RequestId;
+  association _LandRequest;
+  association _Proposal;
+  association _SiteVisit { create; }
+  association _SiteVisitNom { create; }
+  mapping for zrefx_row_propl
+    {
+      Id                       = id;
+      ProposalId               = proposalid;
+      RequestId                = request_id;
+      Landid                   = landid;
+      City                     = city;
+      District                 = district;
+      Postalcode               = postalcode;
+      Totalarea                = totalarea;
+      Remainingarea            = remainingarea;
+      Latitude                 = latitude;
+      Longitude                = longitude;
+      Gismaplink               = gismaplink;
+      Divisionemployeeuserid   = divisionemployeeuserid;
+      Divisionemployeefullname = divisionemployeefullname;
+      Divisionemployeeremarks  = divisionemployeeremarks;
+      Supportingdocuments      = supportingdocuments;
+      IsFitsRequirement        = isfitsrequirement;
+      IsSelectSiteVisit        = isselectsitevisit;
+      Status                   = status;
+    }
+}
+
+define behavior for ZREFX_I_GL_SITEVISIT //alias <alias_name>
+persistent table zrefx_row_sitevi
+lock dependent by _LandRequest
+late numbering
+authorization dependent by _LandRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) ID, ProposalId, ProposalLandId, RequestId;
+  association _LandRequest;
+  association _ProposedLand;
+  association _Attachments { create; }
+  mapping for zrefx_row_sitevi
+    {
+      ID                   = id;
+      RequestId            = request_id;
+      ProposalId           = proposalid;
+      ProposalLandId       = proposalandid;
+      Proposal             = proposal;
+      Proposedland         = proposedland;
+      Plannedvisitdatetime = plannedvisitdatetime;
+      Actualvisitdatetime  = actualvisitdatetime;
+      Engineer             = engineer;
+      Statuscode           = statuscode;
+      Status               = status;
+      Reports              = reports;
+      Widthmmeasured       = widthmmeasured;
+      Lengthmmeasured      = lengthmmeasured;
+      Areasqmmeasured      = areasqmmeasured;
+      Obstacles            = obstacles;
+      Safetyobservations   = safetyobservations;
+      Sitenotes            = sitenotes;
+      UserId               = userid;
+      UserName             = username;
+      Title                = title;
+      Department           = department;
+    }
+}
+
+define behavior for ZREFX_I_GL_SITEVISIT_ATT //alias <alias_name>
+persistent table zrefx_gl_visita
+late numbering
+lock dependent by _LandRequest
+authorization dependent by _LandRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) RequestId, Dmsid, SiteId, ProposalId, ProposalLandId;
+
+  //  static action uploadsitevisitattachment
+  //    parameter ZREFX_A_SIT_ATTACH_UPLOAD_IN
+  //    result [1] $self;
+  //  static action deletesitevisitattachment
+  //    parameter ZREFX_A_DMS_SITEVISIT_DELET_IN
+  //    result [1] $self;
+
+  association _LandRequest;
+  association _SiteVisit;
+  mapping for zrefx_gl_visita
+    {
+      SiteId         = siteid;
+      ProposalId     = proposalid;
+      ProposalLandId = proposallandid;
+      Category       = category;
+      Documentname   = documentname;
+      Filename       = filename;
+      Mediatype      = mediatype;
+      Dmsid          = dmsid;
+      Notes          = notes;
+      DocumentType   = documenttype;
+    }
+
+
+}
+
+define behavior for ZREFX_I_GL_SITEVISITNOM //alias <alias_name>
+persistent table zrefx_gl_svn
+lock dependent by _LandRequest
+late numbering
+authorization dependent by _LandRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) ID, ProposalId, ProposalLand_Id, RequestId;
+  association _LandRequest;
+  association _ProposedLand;
+  mapping for zrefx_gl_svn
+    {
+      ID                = id;
+      ProposalId        = proposalid;
+      ProposalLand_Id   = proposallandid;
+      Proposedlandid    = proposedlandid;
+      Nominatedby       = nominatedby;
+      Nominatedat       = nominatedat;
+      Engineer          = engineer;
+      Visitreason       = visitreason;
+      Priority          = priority;
+      Preoposeddatetime = preoposeddatetime;
+      Agreeddatetime    = agreeddatetime;
+      Notes             = notes;
+      Status            = status;
+      Statuscode        = statuscode;
+      Acceptedby        = acceptedby;
+      Acceptedat        = acceptedat;
+      Acceptancecomment = acceptancecomment;
+      Declinereason     = declinereason;
+      RequestId         = request_id;
+      UserId            = userid;
+      UserName          = username;
+      Title             = title;
+      Department        = department;
+      Division          = division;
+      EmailId           = emailid;
+      ContactNo         = contactno;
+    }
+}
+
+define behavior for ZREFX_I_GL_REQUEST_ATTACHMENT //alias <alias_name>
+persistent table zrefx_gl_req_a
+late numbering
+lock dependent by _GLRequest
+authorization dependent by _GLRequest
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) RequestId, Dmsid;
+
+  //    static action upload
+  //    parameter ZREFX_A_DMS_UPLOAD_IN
+  //    result [1] ZREFX_A_DMS_UPLOAD_OUT;
+  //
+  //  static action delete
+  //    parameter ZREFX_A_DMS_DELETE_IN
+  //    result [1] $self;
+  //
+  //  static action download
+  //    parameter ZREFX_A_DMS_DOWNLOAD_IN
+  //    result [1] ZREFX_A_DMS_DOWNLOAD_OUT;
+
+  association _GLRequest;
+  mapping for zrefx_gl_req_a
+    {
+      RequestId    = request_id;
+      Category     = category;
+      Dmsid        = dmsid;
+      Documentname = documentname;
+      Filename     = filename;
+      Mediatype    = mediatype;
+      Notes        = notes;
+      CreatedAt    = created_at;
+      CreatedBy    = created_by;
+    }
+
+}
+
+define behavior for ZREFX_I_GL_WORKFLOW_INSTANCE //alias <alias_name>
+persistent table zrefx_gl_workin
+lock dependent by _GLRequest
+authorization dependent by _GLRequest
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Objectid, RequestId;
+  association _GLRequest;
+  //  determination initWorkflowDetails on modify { create; }
+  mapping for zrefx_gl_workin
+    {
+      RequestId            = request_id;
+      Comments             = comments;
+      CreatedBy            = createdby;
+      Definitionid         = definitionid;
+      Department           = department;
+      Instanceid           = instanceid;
+      Objectid             = objectid;
+      Objecttype           = objecttype;
+      Status               = status;
+      UserId               = userid;
+      ActionDate           = actiondate;
+      UserName             = username;
+      Title                = title;
+      Statuscode           = statuscode;
+      DivisionEmployeeId   = divemplid;
+      DivisionEmployeeName = divemplname;
+      DivisionManagerId    = divmanagerid;
+      DivisionManagerName  = divmanagername;
+      BusinessArea         = businessarea;
+    }
+}

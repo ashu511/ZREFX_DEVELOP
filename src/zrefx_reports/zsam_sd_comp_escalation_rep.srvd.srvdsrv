@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Defination for Escalation Report'
+define service ZSAM_SD_COMP_ESCALATION_REP {
+  expose ZREFX_C_COMP_ESCALATION_REP;
+}

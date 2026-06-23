@@ -1,0 +1,10 @@
+@EndUserText.label: 'DCL For Complaints Interface View'
+@MappingRole: true
+define role ZREFX_I_COMPLAINTS_DCL {
+    grant
+        select
+            on
+                ZREFX_I_COMPLAINTS
+                    where
+                        CreatedBy = $session.user;                       
+}

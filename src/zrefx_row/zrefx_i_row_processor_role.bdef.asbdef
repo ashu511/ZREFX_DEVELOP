@@ -1,0 +1,22 @@
+managed implementation in class zbp_refx_i_row_processor_role unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_ROW_PROCESSOR_ROLE //alias <alias_name>
+persistent table zrefx_row_pro_ro
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly, numbering : managed ) Id;
+  mapping for zrefx_row_pro_ro
+    {
+      Id          = id;
+      Active      = active;
+      Code        = code;
+      Description = description;
+      Sequence    = sequence;
+    }
+}

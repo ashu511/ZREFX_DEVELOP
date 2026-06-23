@@ -1,0 +1,9 @@
+@EndUserText.label: 'ZREFX Complaints Service Definition'
+define service ZREFX_SD_COMPLAINTS {
+  expose ZREFX_C_COMPLAINTS;
+  expose ZREFX_C_ATT_COMPLAINTS;
+  expose ZREFX_C_WF_COM         as WorkflowInfo;
+  expose ZREFX_DOV_URGENCY;
+  expose ZREFX_DOV_COMPCAT;
+  expose ZREFX_I_VENDOR_F4      as VendorF4;
+}

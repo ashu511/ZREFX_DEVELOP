@@ -1,0 +1,34 @@
+projection;
+strict ( 2 );
+use draft;
+use side effects;
+define behavior for ZREFX_C_COMPLAINTS //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+  use action UpdateDivision;
+  use action UpdateWorkflowInfo;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+  use association _Attachments { create; with draft; }
+  use association _WorkflowInfo { create; with draft; }
+}
+
+define behavior for ZREFX_C_ATT_COMPLAINTS
+{
+  use update;
+  use delete;
+  //  use action upload;
+  //  use action delete;
+  use action download;
+  use association _Complaints { with draft; }
+}
+
+define behavior for ZREFX_C_WF_COM
+{
+  use association _Complaints { with draft; }
+}

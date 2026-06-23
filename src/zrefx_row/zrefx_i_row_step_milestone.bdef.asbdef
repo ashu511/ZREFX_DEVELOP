@@ -1,0 +1,22 @@
+managed implementation in class zbp_refx_i_row_step_milestone unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_ROW_STEP_MILESTONE //alias <alias_name>
+persistent table zrefx_row_stp_ms
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly, numbering : managed ) Id;
+  mapping for zrefx_row_stp_ms
+    {
+      Id          = id;
+      Active      = active;
+      Code        = code;
+      Description = description;
+      Sequence    = sequence;
+    }
+}

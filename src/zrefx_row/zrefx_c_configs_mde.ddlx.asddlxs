@@ -1,0 +1,49 @@
+@Metadata.layer: #CORE
+
+@UI.headerInfo: {
+    typeName:       'Configuration',
+    typeNamePlural: 'Configurations',
+    title:          { type: #STANDARD, value: 'ObjectId' }
+}
+
+annotate view ZREFX_C_ROW_CONFIGS with
+{
+
+  @UI.facet: [{
+      id:       'ConfigDetails',
+      type:     #IDENTIFICATION_REFERENCE,
+      label:    'Configuration Details',
+      position: 10
+  }]
+
+  @EndUserText.label: 'Object ID'
+  @UI: {
+    lineItem:       [{ position: 10, label: 'Object ID' }],
+    identification: [{ position: 10, label: 'Object ID' }],
+    selectionField: [{ position: 10 }]
+  }
+  ObjectId;
+
+  @EndUserText.label: 'Environment'
+  @UI: {
+    lineItem:       [{ position: 20, label: 'Environment' }],
+    identification: [{ position: 20, label: 'Environment' }],
+    selectionField: [{ position: 20 }]
+  }
+  Environment;
+
+  @EndUserText.label: 'Config Value'
+  @UI: {
+    lineItem:       [{ position: 30, label: 'Config Value' }],
+    identification: [{ position: 30, label: 'Config Value' }]
+  }
+  ConfigValue;
+
+  @EndUserText.label: 'Description'
+  @UI: {
+    lineItem:       [{ position: 40, label: 'Description' }],
+    identification: [{ position: 40, label: 'Description' }]
+  }
+  Description;
+
+}

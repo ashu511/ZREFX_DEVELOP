@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SIA6" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SIA6>
+    <MAIN_OBJECT>
+     <NAME>ZBUSINESS_USER_ODATA_V4_EXT</NAME>
+     <TYPE>SIA6</TYPE>
+     <DESCRIPTION>IAM App to provide OData V4 access to all Business Users</DESCRIPTION>
+     <RESPONSIBLE>CB9980000040</RESPONSIBLE>
+     <MASTER_LANGUAGE>EN</MASTER_LANGUAGE>
+     <MASTER_SYSTEM>DV3</MASTER_SYSTEM>
+     <PACKAGE_REF>
+      <PACKAGE_NAME>ZREFX_OTHERS</PACKAGE_NAME>
+     </PACKAGE_REF>
+     <ABAP_LANGU_VERSION>5</ABAP_LANGU_VERSION>
+    </MAIN_OBJECT>
+    <APP_ID>ZBUSINESS_USER_ODATA_V4_EXT</APP_ID>
+    <APP_TYPE>EXT</APP_TYPE>
+    <ABAP_LANGUAGE_VERSION>5</ABAP_LANGUAGE_VERSION>
+    <SERVICE>
+     <item>
+      <REL_NAME>ZREFX_SB_CLAIMS_V4</REL_NAME>
+      <REL_TYPE>G4BA</REL_TYPE>
+      <APP_ID>ZBUSINESS_USER_ODATA_V4_EXT</APP_ID>
+      <SRVC_NAME>C139B082501EEA45068E7492D71C53</SRVC_NAME>
+      <SRVC_TYPE>HT</SRVC_TYPE>
+      <TEXT>REFX Claims V4</TEXT>
+      <TYPE_TEXT>OData V4</TYPE_TEXT>
+     </item>
+     <item>
+      <REL_NAME>ZREFX_SB_COMPLAINTS_V4</REL_NAME>
+      <REL_TYPE>G4BA</REL_TYPE>
+      <APP_ID>ZBUSINESS_USER_ODATA_V4_EXT</APP_ID>
+      <SRVC_NAME>5E2F5D78FDA2C4351AB25627BC3B8A</SRVC_NAME>
+      <SRVC_TYPE>HT</SRVC_TYPE>
+      <TEXT>V4 REFX Service Binding</TEXT>
+      <TYPE_TEXT>OData V4</TYPE_TEXT>
+     </item>
+    </SERVICE>
+    <PUBLISH_STATUS>p</PUBLISH_STATUS>
+   </SIA6>
+  </asx:values>
+ </asx:abap>
+</abapGit>

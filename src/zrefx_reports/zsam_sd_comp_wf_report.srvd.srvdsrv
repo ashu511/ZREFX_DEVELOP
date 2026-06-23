@@ -1,0 +1,4 @@
+@EndUserText.label: 'Complaints WF Report'
+define service ZSAM_SD_COMP_WF_REPORT {
+  expose ZREFX_C_COMP_WF_TRACK;
+}

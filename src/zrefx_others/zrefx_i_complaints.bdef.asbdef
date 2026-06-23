@@ -1,0 +1,189 @@
+managed implementation in class zbp_refx_i_complaints unique;
+strict ( 2 );
+with draft;
+define behavior for ZREFX_I_COMPLAINTS alias Complaints
+persistent table zrefx_complaints
+draft table zrefx_draft_comp
+lock master total etag Locallastchangedat
+authorization master ( global )
+etag master Lastchangedat
+late numbering
+with additional save
+{
+  create;
+  update ( features : instance );
+  delete ( features : instance );
+
+  field ( mandatory ) Complaintcategory;
+
+  association _Attachments { create; with draft; }
+  association _WorkflowInfo { create; with draft; }
+
+  determination setInitialDate on modify { create; }
+  determination setStatusDraft on modify { create; }
+  //  determination updateDivisions on modify { field City; }
+  determination populateExternalVendor on modify { create; }
+  determination fetchVendorDetails on modify { field Vendorid; }
+
+  side effects
+  {
+    //  field City affects field MainDivision, field SubDivision;
+    field Vendorid affects field Vendorname, field Vendorcompanyname,
+        field Contactpersonname, field Contactmobile,
+        field Vendoraltnum, field Vendorregistrationno,
+        field Contactemail, field Vendoraddress;
+  }
+
+  //  validation validateEmail on save { field Contactemail; create; update; }
+  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
+  validation validateMandatoryFields on save { field Complaintcategory, Vendorid; create; update; }
+
+  field ( readonly ) ComplaintId, Createddate, Status, MainDivision, Legalflag;
+
+  field ( features : instance ) Vendorid, Vendorname,
+  Vendorcompanyname, Contactpersonname,
+  Contactmobile, Vendoraltnum,
+  Vendorregistrationno, Contactemail,
+  Vendoraddress;
+
+  action UpdateDivision parameter ZREFX_A_UPDATE_DIVISION result [1] $self;
+  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
+  action SetStatusSubmitted result [1] $self;
+
+  draft action ( features : instance ) Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validate_Confirminformation;
+    validation validateMandatoryFields;
+  }
+
+  mapping for zrefx_complaints
+    {
+      ComplaintId          = complaint_id;
+      Createddate          = createddate;
+      Status               = status;
+      Vendorid             = vendorid;
+      Vendorname           = vendorname;
+      Vendoraltnum         = vendoraltnum;
+      Vendorcompanyname    = vendorcompanyname;
+      Contactpersonname    = contactpersonname;
+      Contactmobile        = contactmobile;
+      Vendorregistrationno = vendorregistrationno;
+      Contactemail         = contactemail;
+      Legalflag            = Legalflag;
+      Vendoraddress        = vendoraddress;
+      Complaintcategory    = complaintcategory;
+      Sourcechannel        = sourcechannel;
+      Complainttype        = complainttype;
+      Urgency              = urgency;
+      Referencetype        = referencetype;
+      Referenceid          = referenceid;
+      Landid               = landid;
+      Titledeedno          = titledeedno;
+      Projectid            = projectid;
+      Projectname          = projectname;
+      Claimreferenceno     = claimreferenceno;
+      Region               = region;
+      City                 = city;
+      MainDivision         = maindivision;
+      SubDivision          = subdivision;
+      Subject              = subject;
+      Incidentdate         = incidentdate;
+      Requestedoutcome     = requestedoutcome;
+      Detaileddescription  = detaileddescription;
+      Financialimpact      = financialimpact;
+      Confirminformation   = confirminformation;
+      Consentdate          = consentdate;
+      Createdby            = createdby;
+    }
+
+}
+
+define behavior for ZREFX_I_ATT_COMPlAINTS alias Attachments
+persistent table zrefx_att_comp
+draft table zrefx_d_att_comp
+lock dependent by _Complaints
+authorization dependent by _Complaints
+etag master Lastchangedat
+late numbering
+with additional save
+{
+  update ( features : instance );
+  delete;
+  field ( readonly ) ComplaintId, AttachmentId;
+
+  ////  static action upload
+  ////    parameter ZREFX_A_DMS_UPD_COM_IN
+  ////    result [1] ZREFX_A_DMS_UPD_COM_OUT;
+  ////  static action delete
+  ////    parameter ZREFX_A_DMS_DDEL_COM_IN
+  ////    result [1] $self;
+
+  static action download
+    parameter ZREFX_A_DMS_COM_DOW_IN
+    result [1] ZREFX_A_DMS_COM_DOW_OUT;
+
+  association _Complaints { with draft; }
+  mapping for zrefx_att_comp
+    {
+      ComplaintId  = complaint_id;
+      AttachmentId = attachment_id;
+      Dmsid        = dmsid;
+      Category     = category;
+      CreatedAt    = created_at;
+      CreatedBy    = created_by;
+      Documentname = documentname;
+      Documenttype = documenttype;
+      Filename     = filename;
+      Mediatype    = mediatype;
+      Mimetype     = mimetype;
+      Content      = content;
+      Notes        = notes;
+    }
+}
+
+define behavior for ZREFX_I_WF_COM alias WorkflowInfo
+persistent table zrefx_wf_com
+draft table zrefx_d_wf_com
+lock dependent by _Complaints
+authorization dependent by _Complaints
+late numbering
+with additional save
+{
+  update;
+  delete;
+  field ( readonly ) ComplaintId, LogUuid;
+  association _Complaints { with draft; }
+
+  mapping for zrefx_wf_com
+    {
+      ComplaintId         = complaint_id;
+      LogUuid             = log_uuid;
+      WfInstanceId        = wf_instance_id;
+      ApprovalStep        = approvalstep;
+      ApprovalStepDesc    = approvalstepdesc;
+      ApproverEmail       = approver_email;
+      CurrentStatus       = current_status;
+      CurrentOwner        = current_owner;
+      CurrentOwnerDesig   = current_owner_desig;
+      OrganizationField   = organization_field;
+      Comments            = comments;
+      AuthorityLevel      = authority_level;
+      DecisionOutcome     = decision_outcome;
+      LegalInvolvement    = legal_involvement;
+      SubmissionFromDate  = submission_from_date;
+      SubmissionToDate    = submission_to_date;
+      EscalationTriggered = escalation_triggered;
+      DaysPending         = days_pending;
+      EscalationDate      = escalation_date;
+      LegalReviewReq      = legal_review_req;
+      LegalDecision       = legal_decision;
+      FinalDecision       = final_decision;
+      ClosureDate         = closure_date;
+      slaStatus           = sla_status;
+      DaysOpen            = days_open;
+    }
+}

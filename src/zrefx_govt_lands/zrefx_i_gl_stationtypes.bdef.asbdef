@@ -1,0 +1,19 @@
+managed implementation in class zbp_refx_i_gl_stationtypes unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_STATIONTYPES //alias <alias_name>
+persistent table zrefx_gl_stypes
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+  field ( readonly, numbering : managed ) Id;
+  mapping for zrefx_gl_stypes {
+   Id = id;
+   Code = code;
+   Text = text;
+  }
+}

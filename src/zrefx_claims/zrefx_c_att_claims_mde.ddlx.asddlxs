@@ -1,0 +1,19 @@
+@Metadata.layer: #PARTNER
+@UI.updateHidden: true
+annotate entity ZREFX_C_ATT_CLAIMS
+    with 
+{
+      @UI.facet: [{ id : 'AttacId',
+                          purpose: #STANDARD,
+                          type: #IDENTIFICATION_REFERENCE,
+                          label: 'Attachment',
+                          position: 10
+                 }]
+                   @UI: { lineItem: [ { position: 60, label: 'File Name'  } ],
+  identification: [{ position: 60, label: 'File Name' }] }
+  Filename;
+    @UI: { lineItem: [ { position: 110, label: 'Attachment'  } ],
+  identification: [{ position: 110, label: 'Attachment' }] }
+  Content;
+
+}

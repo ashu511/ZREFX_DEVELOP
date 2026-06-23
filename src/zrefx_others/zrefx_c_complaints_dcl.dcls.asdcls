@@ -1,0 +1,10 @@
+@EndUserText.label: 'DCL For Complaints Projection View'
+@MappingRole: true
+define role ZREFX_C_COMPLAINTS_DCL {
+    grant
+        select
+            on
+                ZREFX_C_COMPLAINTS
+                    where
+                        inheriting conditions from entity ZREFX_I_COMPLAINTS;                       
+}

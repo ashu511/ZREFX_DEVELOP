@@ -1,0 +1,87 @@
+@Metadata.layer: #PARTNER
+
+@UI: {
+  headerInfo: {
+    typeName: 'Complaint',
+    typeNamePlural: 'Complaints',
+    title: {
+             type:#STANDARD,
+            label: 'Complaint',
+            value: 'ComplaintId'
+           }
+  }
+}
+annotate entity ZREFX_C_COMP_AUTHORITY_REPORT with
+{
+  @UI: { lineItem: [ { position: 10, label: 'Legal Involvement'  } ],
+  identification: [{ position: 10, label: 'Legal Involvement', hidden :true }],
+  selectionField: [ { position: 10  } ]
+       }
+  LegalInvolvement;
+  @UI: { lineItem: [ { position: 20, label: 'Authority Level;'  } ],
+  identification: [{ position: 20, label: 'Authority Level;', hidden :true }],
+  selectionField: [ { position: 20  } ]
+     }
+  AuthorityLevel;
+  @UI: { lineItem: [ { position: 30, label: 'Decision Outcome'  } ],
+  identification: [{ position: 30, label: 'Decision Outcome', hidden :true }],
+  selectionField: [ { position: 30  } ]
+     }
+  DecisionOutcome;
+  @UI: { lineItem: [ { position: 40, label: 'Submission From Date'  } ],
+  identification: [{ position: 40, label: 'Submission From Date', hidden :true }],
+  selectionField: [ { position: 40  } ]
+     }
+  SubmissionFromDate;
+  @UI: { lineItem: [ { position: 50, label: 'Submission To Date'  } ],
+  identification: [{ position: 50, label: 'Submission To Date', hidden :true }],
+  selectionField: [ { position: 50  } ]
+     }
+  SubmissionToDate;
+  @UI: { lineItem: [ { position: 60, label: 'Complaint Id'  } ],
+  identification: [{ position: 60, label: 'Complaint Id', hidden :true }],
+  selectionField: [ { position: 60  } ]
+     }
+  ComplaintId;
+  @UI: { lineItem: [ { position: 70, label: 'Legal Review Reqired'  } ],
+  identification: [{ position: 70, label: 'Legal Review Reqired', hidden :true }],
+  selectionField: [ { position: 70  } ]
+     }
+  LegalReviewReq;
+  @UI: { lineItem: [ { position: 80, label: 'Legal Decision'  } ],
+  identification: [{ position: 80, label: 'Legal Decision', hidden :true }],
+  selectionField: [ { position: 80  } ]
+     }
+  LegalDecision;
+  @UI: { lineItem: [ { position: 90, label: 'Final Decision'  } ],
+  identification: [{ position: 90, label: 'Final Decision', hidden :true }],
+  selectionField: [ { position: 90  } ]
+     }
+  FinalDecision;
+  @UI: { lineItem: [ { position: 100, label: 'Closure Date'  } ],
+  identification: [{ position: 100, label: 'Closure Date', hidden :true }],
+  selectionField: [ { position: 100  } ]
+     }
+  ClosureDate;
+
+  //    WfInstanceId;
+  //    Category;
+  //    Source;
+  //    Region;
+  //    Maindivision;
+  //    Legalflag;
+  //    CurrentStatus;
+  //    CurrentOwner;
+  //    DaysOpen;
+  //    SlaStatus;
+  //
+  //    EscalationTriggered;
+  //
+  //    DaysPending;
+  //    EscalationDate;
+
+
+
+
+
+}

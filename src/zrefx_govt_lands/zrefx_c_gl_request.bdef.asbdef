@@ -1,0 +1,95 @@
+projection;
+strict ( 2 );
+
+define behavior for ZREFX_C_GL_REQUEST //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use association _Clarifications { create; }
+  use association _LandAllocations { create; }
+  use association _Proposal { create; }
+  use association _RequestAttachments { create; }
+  use association _WorkflowInstance { create; }
+}
+
+define behavior for ZREFX_C_GL_CLARIFICATION //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+}
+
+define behavior for ZREFX_C_GL_LAND_ALLOCATION //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+}
+
+define behavior for ZREFX_C_GL_PROPOSAL //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+  use association _ProposedLand { create; }
+}
+
+define behavior for ZREFX_C_GL_PROPOSEDLAND //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+  use association _Proposal;
+  use association _SiteVisit { create; }
+  use association _SiteVisitNom { create; }
+}
+
+define behavior for ZREFX_C_GL_SITEVISIT //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+  use association _ProposedLand;
+  use association _Attachments { create; }
+}
+
+define behavior for ZREFX_C_GL_SITEVISIT_ATT //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+  use association _SiteVisit;
+}
+
+define behavior for ZREFX_C_GL_SITEVISITNOM //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _LandRequest;
+  use association _ProposedLand;
+}
+
+define behavior for ZREFX_C_GL_REQUEST_ATTACHMENT //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _GLRequest;
+}
+
+define behavior for ZREFX_C_GL_WORKFLOW_INSTANCE //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _GLRequest;
+}

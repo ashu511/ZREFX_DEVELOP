@@ -1,0 +1,21 @@
+@EndUserText.label: 'Service defination for ROW'
+define service ZREFX_SD_ROW_REQUEST {
+  expose ZREFX_C_ROW_REQUEST            as LandRequest;
+  expose ZREFX_C_ROW_CLARIFICATION      as Clarification;
+  expose ZREFX_C_ROW_PROPOSAL           as Proposal;
+  expose ZREFX_C_ROW_PROPOSEDLAND       as ProposedLand;
+  expose ZREFX_C_ROW_REQUEST_ATTACHMENT as RequestAttachments;
+  expose ZREFX_C_ROW_REQUESTTYPES       as Requesttypes;
+  expose ZREFX_C_ROW_STATUS_TEXT        as StatusTexts;
+  expose ZREFX_C_ROW_USERREF            as UserRef;
+  expose ZREFX_C_ROW_STATUS             as Status;
+  expose ZREFX_C_ROW_STATIONTYPES       as Stationtypes;
+  expose ZREFX_C_ROW_SITEVISIT          as SiteVisit;
+  expose ZREFX_C_ROW_SITEVISITNOM       as SiteVisitNominations;
+  expose ZREFX_C_ROW_SITEVISIT_ATT      as SiteVisitAttachments;
+  expose ZREFX_C_ROW_SUBSIDIARY         as Subsidiary;
+  expose ZREFX_C_ROW_WORKFLOW_INSTANCE  as WorkflowInstance;
+  expose ZREFX_C_ROW_STEP_MILESTONE     as Milestones;
+  expose ZREFX_C_ROW_LAND_ALLOCATION    as LandAllocations;
+  expose ZREFX_C_ROW_CONFIGS            as Configs;
+}

@@ -1,0 +1,21 @@
+managed implementation in class zbp_refx_i_row_configs unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_ROW_CONFIGS //alias <alias_name>
+persistent table zrefx_row_config
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  field ( readonly : update ) ObjectId, Environment, ConfigValue;
+  create ( authorization : global );
+  update;
+  delete;
+  static action setNumberRange;
+  mapping for zrefx_row_config {
+  ConfigValue = config_value;
+  Environment = environment;
+  Description = description;
+  ObjectId   = object_id;
+  }
+  }

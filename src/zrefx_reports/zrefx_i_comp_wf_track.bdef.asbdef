@@ -1,0 +1,14 @@
+managed implementation in class zbp_refx_i_comp_wf_track unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_COMP_WF_TRACK //alias <alias_name>
+persistent table zrefx_wf_com
+lock master
+authorization master ( global )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) ComplaintId;
+}

@@ -1,0 +1,5 @@
+CLASS zbp_refx_i_gl_userref DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zrefx_i_gl_userref.
+ENDCLASS.
+
+CLASS zbp_refx_i_gl_userref IMPLEMENTATION.
+ENDCLASS.

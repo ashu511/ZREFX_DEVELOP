@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Defination for Authority Report'
+define service ZSAM_SD_COMP_AUTHORITY_REPORT {
+  expose ZREFX_C_COMP_AUTHORITY_REPORT;
+}

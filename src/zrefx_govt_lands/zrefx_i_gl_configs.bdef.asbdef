@@ -1,0 +1,21 @@
+managed implementation in class zbp_refx_i_gl_configs unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_CONFIGS //alias <alias_name>
+persistent table zrefx_gl_config
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly : update ) ObjectId, Environment, ConfigValue;
+  static action setNumberRange;
+  mapping for zrefx_gl_config {
+  ConfigValue = config_value;
+  Environment = environment;
+  Description = description;
+  ObjectId   = object_id;
+  }
+}

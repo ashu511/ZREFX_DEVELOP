@@ -1,0 +1,23 @@
+managed implementation in class zbp_refx_i_gl_status_text unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_GL_STATUS_TEXT //alias <alias_name>
+persistent table zrefx_gl_stat_t
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create;
+  update;
+  delete;
+  mapping for zrefx_gl_stat_t {
+   Description = description;
+   Language = language;
+   Statusid = statusid;
+   StatusCode = statuscode;
+  }
+
+  field ( readonly, numbering : managed ) StatusId;
+
+
+}

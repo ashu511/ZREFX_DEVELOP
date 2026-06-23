@@ -1,0 +1,21 @@
+@EndUserText.label: 'GL Land Request Service'
+define service ZREFX_SD_GL_LAND_REQUEST {
+  expose ZREFX_C_GL_REQUEST            as LandRequest;
+  expose ZREFX_C_GL_CLARIFICATION      as Clarification;
+  expose ZREFX_C_GL_PROPOSAL           as Proposal;
+  expose ZREFX_C_GL_PROPOSEDLAND       as ProposedLand;
+  expose ZREFX_C_GL_REQUEST_ATTACHMENT as RequestAttachments;
+  expose ZREFX_C_GL_REQUESTTYPES       as Requesttypes;
+  expose ZREFX_C_GL_STATUS_TEXT        as StatusTexts;
+  expose ZREFX_C_GL_USERREF            as UserRef;
+  expose ZREFX_C_GL_STATUS             as Status;
+  expose ZREFX_C_GL_STATIONTYPES       as Stationtypes;
+  expose ZREFX_C_GL_SITEVISIT          as SiteVisit;
+  expose ZREFX_C_GL_SITEVISITNOM       as SiteVisitNominations;
+  expose ZREFX_C_GL_SITEVISIT_ATT      as SiteVisitAttachments;
+  expose ZREFX_C_ROW_SUBSIDIARY        as Subsidiary;
+  expose ZREFX_C_GL_WORKFLOW_INSTANCE  as WorkflowInstance;
+  expose ZREFX_C_GL_STEP_MILESTONE     as Milestones;
+  expose ZREFX_C_GL_LAND_ALLOCATION    as LandAllocations;
+  expose ZREFX_C_GL_CONFIGS            as Configs;
+}

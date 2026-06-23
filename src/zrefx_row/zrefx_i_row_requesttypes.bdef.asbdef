@@ -1,0 +1,19 @@
+managed implementation in class zbp_refx_i_row_requesttypes unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_ROW_REQUESTTYPES //alias <alias_name>
+persistent table zrefx_row_reqtyp
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  mapping for zrefx_row_reqtyp
+    {
+      Code    = code;
+      RequesttypeText = text;
+
+    }
+}
