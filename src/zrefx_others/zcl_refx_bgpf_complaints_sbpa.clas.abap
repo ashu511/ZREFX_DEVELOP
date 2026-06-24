@@ -150,7 +150,7 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
         lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'tIz4x-XPQyPltaI8jA5wf3LEuL-wPFaU' ).
         lo_request->set_uri_path( '/workflow/rest/v1/workflow-instances' ).
 *        lo_request->set_query( query = 'environmentId=realestate' ).
-        lo_request->set_query( query = 'environmentId=sbpatestforallprocess' ).
+        lo_request->set_query( query = 'environmentId=newrealestate' ).
         lo_request->set_text( lv_json ).
 
         DATA(lo_response) = lo_http_client->execute( if_web_http_client=>post ).

@@ -283,6 +283,12 @@
      <GROUPNAME>%ADMIN</GROUPNAME>
     </DD03P>
    </DD03P_TABLE>
+   <TABL_EXTRAS>
+    <TDDAT>
+     <TABNAME>ZREFX_D_WF_COM</TABNAME>
+     <CCLASS>CUS_DEV_SUP_DA</CCLASS>
+    </TDDAT>
+   </TABL_EXTRAS>
   </asx:values>
  </asx:abap>
 </abapGit>

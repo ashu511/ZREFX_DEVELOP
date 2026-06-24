@@ -18,7 +18,7 @@ define root view entity ZREFX_I_CLAIMS
   key claim_id             as Claimid,
       createddate          as Createddate,
       status               as Status,
-        vendorid             as Vendorid,
+      vendorid             as Vendorid,
       vendorname           as Vendorname,
       vendorcompanyname    as Vendorcompanyname,
       contactpersonname    as Contactpersonname,

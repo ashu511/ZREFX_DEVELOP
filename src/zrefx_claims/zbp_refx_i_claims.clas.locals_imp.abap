@@ -32,10 +32,22 @@ CLASS lsc_zrefx_i_claims IMPLEMENTATION.
           " 2. Set the context data - this will be passed to the SBPA workflow
           DATA(lv_user_id) = cl_abap_context_info=>get_user_technical_name( ).
 
-          lo_operation->set_context_data( claimid      = <fs_claims>-Claimid
-                                          claim_type   = <fs_claims>-Claimtype
-                                          claim_ref_no = <fs_claims>-Claimreferenceno
-                                          claim_amount = <fs_claims>-Claimamount
+          lo_operation->set_context_data(
+
+*                                          claimid      = <fs_claims>-Claimid
+*                                          claim_type   = <fs_claims>-Claimtype
+*                                          claim_ref_no = <fs_claims>-Claimreferenceno
+*                                          claim_amount = <fs_claims>-Claimamount
+                                            claimid       = <fs_claims>-Claimid
+                                            claimtype     = <fs_claims>-Claimtype
+                                            claimcategory = <fs_claims>-Claimcategory
+                                            sourcechannel = <fs_claims>-Sourcechannel
+                                            claimsubject  = <fs_claims>-Claimsubject
+                                            claimamount   = <fs_claims>-Claimamount
+                                            description   = <fs_claims>-Detaileddescription
+                                            status        = <fs_claims>-Status
+                                            "CreatedBy = <fs_claims>-
+                                            createddate   = <fs_claims>-Createddate
                                            ).
 
           " 3. Get the bgPF process factory and create a process
