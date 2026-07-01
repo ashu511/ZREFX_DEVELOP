@@ -12,11 +12,14 @@ dataClass: #MIXED
 define view entity ZREFX_DOV_COMPCAT
   as select from DDCDS_CUSTOMER_DOMAIN_VALUE_T( p_domain_name: 'ZREFX_DO_COMPCAT' )
 {
-      //  key domain_name,
-      //  key value_position,
+      @EndUserText.label: 'Complaint Category'
   key value_low as Value,
       @Semantics.language: true
+      @UI.hidden: true
   key language,
+      @EndUserText.label: 'Description'
       @Semantics.text: true
       text      as Description
 }
+where
+  language = $session.system_language

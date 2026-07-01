@@ -3,7 +3,8 @@ define service ZREFX_SD_COMPLAINTS {
   expose ZREFX_C_COMPLAINTS;
   expose ZREFX_C_ATT_COMPLAINTS;
   expose ZREFX_C_WF_COM         as WorkflowInfo;
-  expose ZREFX_DOV_URGENCY;
-  expose ZREFX_DOV_COMPCAT;
+  expose ZREFX_DOV_URGENCY      as UrgencyF4;
+  expose ZREFX_DOV_COMPCAT      as ComplaintCategoryF4;
+  expose ZREFX_DOV_CITY         as CityF4;
   expose ZREFX_I_VENDOR_F4      as VendorF4;
 }

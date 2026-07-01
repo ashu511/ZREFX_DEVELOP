@@ -300,6 +300,16 @@ annotate entity ZREFX_C_CLAIMS with
   //@consumption.valueHelpDefinition: [{ entity:{ element: '', name: 'ZREFX_DOV_URGENCY' } }]
   Urgency;
 
+  @UI: { lineItem: [ { position: 145, label: 'City'  } ],
+  identification: [{ position: 145, label: 'City', hidden :true }],
+  selectionField: [ { position: 45 } ]
+       }
+
+
+  @UI.fieldGroup: [{ position: 115, label: 'City', qualifier: 'tqClaimClass'}]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_CITY', element: 'Value'} }]
+  City;
+
   @UI: { lineItem: [ { position: 150, label: 'Reference Type'  } ],
   identification: [{ position: 150, label: 'Reference Type', hidden :true }]
        }
@@ -311,6 +321,13 @@ annotate entity ZREFX_C_CLAIMS with
        }
   @UI.fieldGroup: [{ position: 120, label: 'Reference ID' , qualifier: 'tqRefInfo'}]
   Referenceid;
+  
+    @UI: { lineItem: [ { position: 165, label: 'Land ID'  } ],
+  identification: [{ position: 135, label: 'Land ID', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 125, label: 'Land ID' , qualifier: 'tqRefInfo'}]
+  Landid;
+  
 
   @UI: { lineItem: [ { position: 170, label: 'Contract Number'  } ],
   identification: [{ position: 170, label: 'Contract Number', hidden :true }]
@@ -345,6 +362,18 @@ annotate entity ZREFX_C_CLAIMS with
        }
   @UI.fieldGroup: [{ position: 190, label: ' Region ID' , qualifier: 'tqRefInfo'}]
   Region;
+
+  @UI: { lineItem: [ { position: 230, label: 'Main Division'  } ],
+  identification: [{ position: 230, label: 'Main Division', hidden :true }]
+       }
+  @UI.fieldGroup: [{ position: 200, label: 'Main Division' , qualifier: 'tqRefInfo'}]
+  MainDivision;
+
+  @UI: { lineItem: [ { position: 235, label: 'Title Deed No'  } ],
+  identification: [{ position: 235, label: 'Title Deed No', hidden :true }]
+     }
+  @UI.fieldGroup: [{ position: 210, label: 'Title Deed No' , qualifier: 'tqRefInfo'}]
+  Titledeedno;
 
   //  @UI: { lineItem: [ { position: 230, label: 'City'  } ],
   //  identification: [{ position: 230, label: 'City', hidden :true }]

@@ -147,7 +147,8 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 
         lo_request->set_header_field( i_name = 'Content-Type' i_value = 'application/json' ).
 *        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'SS2n8TwUGgvznptjvpM5QK1HkW9oUMTS' ).
-        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'tIz4x-XPQyPltaI8jA5wf3LEuL-wPFaU' ).
+*        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'tIz4x-XPQyPltaI8jA5wf3LEuL-wPFaU' ).
+        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
         lo_request->set_uri_path( '/workflow/rest/v1/workflow-instances' ).
 *        lo_request->set_query( query = 'environmentId=realestate' ).
         lo_request->set_query( query = 'environmentId=newrealestate' ).
@@ -234,7 +235,7 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
     gs_context-requestorowner       = requestorowner.
     gs_context-requireslegal        = requireslegal.
     gs_context-sourcechannel        = sourcechannel.
-    gs_context-status               = status.
+    gs_context-status               = 'SUBMITTED'.    "status.
     gs_context-submittedby          = submittedby.
     gs_context-submittedon          = submittedon.
 

@@ -19,6 +19,18 @@
     <REFKIND>D</REFKIND>
     <ABAP_LANGUAGE_VERSION>5</ABAP_LANGUAGE_VERSION>
    </DD04V>
+   <I18N_LANGS>
+    <LANGU>A</LANGU>
+   </I18N_LANGS>
+   <DD04_TEXTS>
+    <item>
+     <DDLANGUAGE>A</DDLANGUAGE>
+     <REPTEXT>فئة الشكوى</REPTEXT>
+     <SCRTEXT_S>فئة الشكوى</SCRTEXT_S>
+     <SCRTEXT_M>فئة الشكوى</SCRTEXT_M>
+     <SCRTEXT_L>فئة الشكوى</SCRTEXT_L>
+    </item>
+   </DD04_TEXTS>
   </asx:values>
  </asx:abap>
 </abapGit>

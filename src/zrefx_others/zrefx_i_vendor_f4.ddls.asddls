@@ -8,7 +8,7 @@ define custom entity ZREFX_I_VENDOR_F4
   key Vendorid             : abap.char( 10 );
 
       @UI.lineItem         : [{ position: 20 }]
-      @UI.selectionField   : [{ position: 20 }]
+      @Consumption.filter.hidden: true
       Vendorname           : abap.char( 80 );
 
       @UI.lineItem         : [{ position: 30 }]
@@ -31,7 +31,7 @@ define custom entity ZREFX_I_VENDOR_F4
       Vendorregistrationno : abap.char( 30 );
 
       @UI.lineItem         : [{ position: 70 }]
-      @Consumption.filter.hidden: true
+      @UI.selectionField   : [{ position: 20 }]
       Contactemail         : abap.char( 241 );
 
       //      @Consumption.filter.hidden: true

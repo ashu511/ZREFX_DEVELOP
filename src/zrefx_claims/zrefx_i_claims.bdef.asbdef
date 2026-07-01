@@ -11,17 +11,57 @@ late numbering
 with additional save
 {
   create;
-  update;
-  delete;
-  association _Attachments { create; with draft; }
+  update ( features : instance );
+  delete ( features : instance );
 
-  draft action Edit;
+  field ( mandatory ) Claimcategory;
+
+
+  association _Attachments { create; with draft; }
+  association _WorkflowInfo { create; with draft; }
+
+  determination setInitialDate on modify { create; }
+  determination setstatusdraft on modify { create; }
+  // For External Vendor
+  determination populateExternalVendor on modify { create; }
+  // For F4 help
+  determination fetchVendorDetails on modify { field Vendorid; }
+
+  side effects
+  {
+    //  field City affects field MainDivision, field SubDivision;
+    field Vendorid affects field Vendorname, field Vendorcompanyname,
+        field Contactpersonname, field Contactmobile,
+        field Vendoraltnum, field Vendorregistrationno,
+        field Contactemail;
+    //field Vendoraddress;
+  }
+
+  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
+  validation validateMandatoryFields on save { field Claimcategory, Vendorid; create; update; }
+
+  //To update From  UI(Fields are Legal flag)
+  action UpdateFromUi parameter ZREFX_A_UI_UPDATE result [1] $self;
+  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
+  action SetStatusSubmitted result [1] $self;
+
+  draft action ( features : instance ) Edit;
   draft action Activate optimized;
   draft action Discard;
   draft action Resume;
-  draft determine action Prepare;
+  draft determine action Prepare
+  {
+    validation validate_Confirminformation;
+    validation validateMandatoryFields;
+  }
 
-  field ( readonly ) Claimid;
+  field ( readonly ) Claimid, Createddate, Status, Legalflag, MainDivision;
+
+  field ( features : instance ) Vendorid, Vendorname,
+  Vendorcompanyname, Contactpersonname,
+  Contactmobile, Vendoraltnum,
+  Vendorregistrationno, Contactemail;
+  //  Vendoraddress;
 
   mapping for zrefx_claims
     {
@@ -50,12 +90,16 @@ with additional save
       Urgency              = urgency;
       Referencetype        = referencetype;
       Referenceid          = referenceid;
+      Landid               = landid;
       Contractnumber       = contractnumber;
       Leasenumber          = leasenumber;
       Projectid            = projectid;
       Projectname          = projectname;
       Claimreferenceno     = claimreferenceno;
       Region               = region;
+      MainDivision         = maindivision;
+      Titledeedno          = titledeedno;
+      City                 = city;
       Claimsubject         = claimsubject;
       Incidentdate         = incidentdate;
       Requestedpaymentdate = requestedpaymentdate;
@@ -63,6 +107,7 @@ with additional save
       Claimamount          = claimamount;
       Confirminformation   = confirminformation;
       Consentdate          = consentdate;
+      CreatedBy            = createdby;
       Lastchangedat        = lastchangedat;
       Locallastchangedat   = locallastchangedat;
     }
@@ -81,6 +126,10 @@ with additional save
   delete;
   field ( readonly ) ClaimId, AttachmentId;
 
+  static action download
+    parameter ZREFX_A_DMS_COM_DOW_IN
+    result [1] ZREFX_A_DMS_COM_DOW_OUT;
+
   association _claims { with draft; }
   mapping for zrefx_att_claims
     {
@@ -94,4 +143,51 @@ with additional save
       CreatedBy    = created_by;
     }
 
+}
+
+define behavior for ZREFX_I_WF_CLM alias WorkflowInfo
+persistent table zrefx_wf_clm
+draft table zrefx_d_wf_clm
+lock dependent by _Claims
+authorization dependent by _Claims
+late numbering
+with additional save
+{
+  update;
+  delete;
+  field ( readonly ) ClaimId, LogUuid;
+  association _Claims { with draft; }
+
+  mapping for zrefx_wf_clm
+    {
+      ClaimId            = claim_id;
+      LogUuid            = log_uuid;
+      WfInstanceId       = wf_instance_id;
+      CurrentOwnerDesig  = currentownerdesig;
+      Comments           = comments;
+      OrganizationField  = organization_field;
+      Region             = region;
+      ApprovalStep       = approvalstep;
+      ApprovalStepDesc   = approvalstepdesc;
+      ApproverEmail      = approver_email;
+      CurrentStatus      = current_status;
+      CurrentOwner       = current_owner;
+      SubmissionFromDate = submission_from_date;
+      SubmissionToDate   = submission_to_date;
+      DecisionOutcome    = decision_outcome;
+      SlaStatus          = sla_status;
+      DaysOpen           = days_open;
+      SettlementStatus   = settlement_status;
+      PostingFromDate    = posting_from_date;
+      PostingToDate      = posting_to_date;
+      PaymentStatus      = payment_status;
+      ApprovedAmount     = approved_amount;
+      PostedAmount       = posted_amount;
+      CurrencyCode       = currency_code;
+      AccountDocNo       = account_doc_no;
+      PaymentDate        = payment_date;
+      AgingFromDate      = aging_from_date;
+      AgingToDate        = aging_to_date;
+      EscalationFlag     = escalation_flag;
+    }
 }

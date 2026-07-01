@@ -77,8 +77,8 @@ CLASS zcl_refx_vendor_f4 IMPLEMENTATION.
                 ENDIF.
               ENDLOOP.
 
-            WHEN 'VENDORNAME'.
-              lv_odata_property = 'VENDOR_NAME'. " <-- Update to match your ECC OData name!
+            WHEN 'CONTACTEMAIL'.
+              lv_odata_property = 'VENDOR_EMAIL_ID'. " <-- Update to match your ECC OData name!
             WHEN OTHERS.
               CONTINUE. " Ignore any other fields
           ENDCASE.

@@ -6,5 +6,6 @@ define role ZREFX_I_COMPLAINTS_DCL {
             on
                 ZREFX_I_COMPLAINTS
                     where
-                        CreatedBy = $session.user;                       
+                        CreatedBy = $session.user
+                        OR $session.user = 'CC0000000001';                       
 }

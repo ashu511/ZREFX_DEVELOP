@@ -778,28 +778,8 @@ CLASS lhc_ZREFX_I_COMPLAINTS IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD validate_Confirminformation.
-*    READ ENTITIES OF zrefx_i_complaints IN LOCAL MODE
-*       ENTITY Complaints
-*       FIELDS ( Confirminformation )
-*       WITH CORRESPONDING #( keys )
-*       RESULT DATA(lt_data).
-*
-*    LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<fs_data>).
-*      DATA(lv_confiram) = to_lower( condense( <fs_data>-Confirminformation  ) ).
-*      IF lv_confiram = ' '.
-*        APPEND VALUE #( %tky = <fs_data>-%tky ) TO failed-complaints.
-*        APPEND VALUE #(
-*          %tky = <fs_data>-%tky
-*          %msg = new_message_with_text(
-*           text = 'Kindly Confirm the check box'
-*            severity = if_abap_behv_message=>severity-error
-*          )
-**  %element-  = if_abap_behv=>mk-on
-*        ) TO reported-complaints.
-*      ENDIF.
-*    ENDLOOP.
 
-    " 1. Read the necessary fields from the draft/active instance
+    " Read the necessary fields from the draft/active instance
     READ ENTITIES OF zrefx_i_complaints IN LOCAL MODE
       ENTITY Complaints
         FIELDS ( Confirminformation Consentdate ) WITH CORRESPONDING #( keys )
@@ -807,24 +787,43 @@ CLASS lhc_ZREFX_I_COMPLAINTS IMPLEMENTATION.
 
     LOOP AT lt_complaints ASSIGNING FIELD-SYMBOL(<fs_complaint>).
 
-      " 2. Clear any previous error messages for this specific validation
+      " Clear any previous error messages for this specific validation
       APPEND VALUE #( %tky        = <fs_complaint>-%tky
                       %state_area = 'VALIDATE_CONSENT' ) TO reported-complaints.
 
-      " 3. Check the condition: Checkbox is ticked ('X') but Date is blank
-      IF <fs_complaint>-Confirminformation = abap_true AND <fs_complaint>-Consentdate IS INITIAL.
+      " Check the condition: Checkbox is initial and Date is blank
+      IF <fs_complaint>-Confirminformation  IS INITIAL AND <fs_complaint>-Consentdate IS INITIAL.
 
-        " 4. Mark the instance as failed so the save process is aborted
+        " Mark the instance as failed so the save process is aborted
         APPEND VALUE #( %tky = <fs_complaint>-%tky ) TO failed-complaints.
 
-        " 5. Send the error message to the UI
+        " Send the error message to the UI
+        APPEND VALUE #( %tky = <fs_complaint>-%tky
+                        %state_area = 'VALIDATE_CONSENT'
+                        %msg = new_message_with_text(
+                                 text = 'Kindly Maintain Confirmation'
+                                 severity = if_abap_behv_message=>severity-error
+                               )
+                        " This highlights the 'Consentdate' field in red on the Fiori screen
+                        %element-Consentdate         = if_abap_behv=>mk-on
+                        %element-Confirminformation  = if_abap_behv=>mk-on
+                      ) TO reported-complaints.
+      ENDIF.
+
+      " Check the condition: Checkbox is ticked ('X') but Date is blank
+      IF <fs_complaint>-Confirminformation = abap_true AND <fs_complaint>-Consentdate IS INITIAL.
+
+        " Mark the instance as failed so the save process is aborted
+        APPEND VALUE #( %tky = <fs_complaint>-%tky ) TO failed-complaints.
+
+        " Send the error message to the UI
         APPEND VALUE #( %tky = <fs_complaint>-%tky
                         %state_area = 'VALIDATE_CONSENT'
                         %msg = new_message_with_text(
                                  text = 'Kindly Maintain Confirmation Date!'
                                  severity = if_abap_behv_message=>severity-error
                                )
-                        " 6. This highlights the 'Consentdate' field in red on the Fiori screen
+                        " This highlights the 'Consentdate' field in red on the Fiori screen
                         %element-Consentdate = if_abap_behv=>mk-on
                       ) TO reported-complaints.
       ENDIF.

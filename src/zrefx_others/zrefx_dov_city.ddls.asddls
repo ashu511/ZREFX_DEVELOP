@@ -11,13 +11,13 @@ dataClass: #MIXED
 
 define view entity ZREFX_DOV_CITY
   as select from DDCDS_CUSTOMER_DOMAIN_VALUE_T( p_domain_name: 'ZREFX_DO_CITY' )
-{
-      //  key domain_name,
-      //  key value_position,
+{  
+      @EndUserText.label: 'City'
   key value_low as Value,
       @Semantics.language: true
       @UI.hidden: true
   key language,
+      @EndUserText.label: 'City Name'
       @Semantics.text: true
       text      as City
 }
