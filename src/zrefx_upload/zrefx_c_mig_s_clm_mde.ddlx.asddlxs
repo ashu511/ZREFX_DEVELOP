@@ -1,0 +1,88 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: { typeName: 'Claim Staging Row', typeNamePlural: 'Claims Staging Rows' }
+@UI.createHidden: true
+@UI.updateHidden: true
+@UI.deleteHidden: true
+annotate entity ZREFX_C_MIG_S_CLM with
+{
+  @UI.hidden: true
+  ItemUuid;
+  @UI.hidden: true
+  JobUuid;
+
+  @UI.lineItem: [ { position: 10 } ]
+  ClaimId;
+
+  @UI.lineItem: [ { position: 20 } ]
+  Createddate;
+
+  @UI.lineItem: [ { position: 30 } ]
+  @EndUserText.label: 'Status'
+  Status;  
+
+  @UI.lineItem: [ { position: 40 } ]
+  Vendorid;
+
+  @UI.lineItem: [ { position: 50 } ]
+  Contactpersonname;
+
+  @UI.lineItem: [ { position: 60 } ]
+  Vendorregistrationno;
+
+  @UI.lineItem: [ { position: 70 } ]
+  Contactemail;
+
+  @UI.lineItem: [ { position: 80 } ]
+  Claimcategory;
+
+  @UI.lineItem: [ { position: 90 } ]
+  Sourcechannel;
+
+  @UI.lineItem: [ { position: 100 } ]
+  Claimtype;
+
+  @UI.lineItem: [ { position: 110 } ]
+  Urgency;
+
+  @UI.lineItem: [ { position: 120 } ]
+  Referencetype;
+
+  @UI.lineItem: [ { position: 130 } ]
+  Referenceid;
+
+  @UI.lineItem: [ { position: 140 } ]
+  Leasenumber;
+
+  @UI.lineItem: [ { position: 150 } ]
+  Projectid;
+
+  @UI.lineItem: [ { position: 160 } ]
+  Projectname;
+
+  @UI.lineItem: [ { position: 170 } ]
+  Claimreferenceno;
+
+  @UI.lineItem: [ { position: 180 } ]
+  Region;
+
+  @UI.lineItem: [ { position: 190 } ]
+  City;
+
+  @UI.lineItem: [ { position: 200 } ]
+  Claimsubject;
+
+  @UI.lineItem: [ { position: 210 } ]
+  Incidentdate;
+
+  @UI.lineItem: [ { position: 220 } ]
+  Requestedpaymentdate;
+
+  @UI.lineItem: [ { position: 230 } ]
+  Detaileddescription;
+
+  @UI.lineItem: [ { position: 240 } ]
+  Claimamount;
+
+  @UI.lineItem: [ { position: 250 } ]
+  Claimcurrency;
+}

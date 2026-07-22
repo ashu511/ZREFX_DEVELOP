@@ -78,7 +78,7 @@ CLASS zcl_refx_dms_calc_exit_clm IMPLEMENTATION.
               INSERT VALUE #( doc_id = <lv_doc_id> content = ls_stream-stream )
                      INTO TABLE mt_content_cache.
 
-            CATCH cx_cmis_root.
+             CATCH cx_cmis_root  ##NO_HANDLER.
               " Log failure; content remains empty
           ENDTRY.
         ENDIF.

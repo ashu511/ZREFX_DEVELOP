@@ -25,16 +25,16 @@ define view entity ZREFX_C_ATT_COMPLAINTS
       Category,
       Filename,
       Mediatype,
-      @Semantics.mimeType: true
+//      @Semantics.mimeType: true
       Mimetype,
-      @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_REFX_DMS_CALC_EXIT'
-      @Semantics.largeObject: {
-        mimeType: 'MimeType',
-        fileName: 'Filename',
-        contentDispositionPreference: #ATTACHMENT,
-        acceptableMimeTypes: ['application/pdf','image/jpeg','image/png',
-                              'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-      }
+//      @ObjectModel.virtualElementCalculatedBy: 'ABAP:ZCL_REFX_DMS_CALC_EXIT'
+//      @Semantics.largeObject: {
+//        mimeType: 'MimeType',
+//        fileName: 'Filename',
+//        contentDispositionPreference: #ATTACHMENT,
+//        acceptableMimeTypes: ['application/pdf','image/jpeg','image/png',
+//                              'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+//      }
       Content,
       Notes,
       CreatedBy,

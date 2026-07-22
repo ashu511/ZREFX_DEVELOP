@@ -32,7 +32,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_REFX_BGPF_COMP_DMS_UP IMPLEMENTATION.
+CLASS zcl_refx_bgpf_comp_dms_up IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.
@@ -127,18 +127,30 @@ CLASS ZCL_REFX_BGPF_COMP_DMS_UP IMPLEMENTATION.
 * Update active Z table with DMS document ID
           IF <ls_ctx>-documentid IS NOT INITIAL.
 
-            MODIFY ENTITIES OF zrefx_i_complaints " Use your root entity name
-              ENTITY Attachments
-                UPDATE FIELDS ( Dmsid Content )
-                WITH VALUE #( ( %tky-AttachmentId = <ls_ctx>-attachmentid
-                                %tky-ComplaintId  = <ls_ctx>-complaintid
-                                %is_draft         = if_abap_behv=>mk-off
-                                dmsid             = <ls_ctx>-documentid
-                                content           = lv_empty_content
-                                ) )
-              REPORTED DATA(lt_reported)
-              FAILED DATA(lt_failed).
+*            MODIFY ENTITIES OF zrefx_i_complaints " Use your root entity name
+*              ENTITY Attachments
+*                UPDATE FIELDS ( Dmsid Content )
+*                WITH VALUE #( ( %tky-AttachmentId = <ls_ctx>-attachmentid
+*                                %tky-ComplaintId  = <ls_ctx>-complaintid
+**                                %is_draft         = if_abap_behv=>mk-off
+*                                dmsid             = <ls_ctx>-documentid
+*                                content           = lv_empty_content
+*                                ) )
+*              REPORTED DATA(lt_reported)
+*              FAILED DATA(lt_failed).
+*
+*            IF lt_failed IS INITIAL.
+**              COMMIT ENTITIES. " This is the key for background processes
+*            ENDIF.
 
+            MODIFY ENTITIES OF zrefx_i_complaints
+                          ENTITY Attachments
+                            EXECUTE updateDmsId
+                            FROM VALUE #( ( ComplaintId  = <ls_ctx>-complaintid
+                                            AttachmentId = <ls_ctx>-attachmentid
+                                            %param       = VALUE #( documentid = <ls_ctx>-documentid ) ) )
+                          REPORTED DATA(lt_reported)
+                          FAILED DATA(lt_failed).
             IF lt_failed IS INITIAL.
 *              COMMIT ENTITIES. " This is the key for background processes
             ENDIF.

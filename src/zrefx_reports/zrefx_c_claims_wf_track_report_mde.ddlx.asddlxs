@@ -1,0 +1,173 @@
+@Metadata.layer: #PARTNER
+@EndUserText.label: 'Claim Payment Report'
+@UI: {
+  headerInfo: {
+    typeName: 'Claim',
+    typeNamePlural: 'Claims',
+    title: {
+             type:#STANDARD,
+            label: 'Claim Id',
+            value: 'ClaimId'
+           }
+  }
+}
+@UI.presentationVariant: [{
+    sortOrder: [{
+        by: 'ApprovalStep',
+        direction: #ASC
+    }]
+}]
+annotate entity ZREFX_C_CLAIMS_WF_TRACK_REPORT with
+{
+  @UI.facet: [
+      // --- TABS (Collections) ---
+      { id: 'idInfo',
+        type: #COLLECTION,
+        label: 'Complaint Information',
+         position: 10 },
+
+            {
+                            id : 'ClaimId',
+                            purpose: #STANDARD,
+                            type: #IDENTIFICATION_REFERENCE,
+                            label: 'Claim Id',
+                            parentId:'idInfo',
+                            position: 10
+                   }
+         ]
+
+
+
+  @UI: { lineItem: [ { position: 10, label: 'ClaimId'  } ],
+  identification: [{ position: 10, label: 'Claim Id' }],
+  selectionField: [ { position: 10 } ]
+       }
+  //  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_CLMP_ID_VH', element: 'ClaimId' } }]
+  ClaimId;
+  //   @UI: { lineItem: [ { position: 20, label: 'ClaimId'  } ],
+  //  identification: [{ position: 20, label: 'Claim Id' }],
+  //  selectionField: [ { position: 20 } ]
+  //       }
+  //  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_CLMP_ID_VH', element: 'ClaimId' } }]
+  //   WfInstanceId;
+  @UI: { lineItem: [ { position: 30, label: 'Region'  } ],
+  identification: [{ position: 30, label: 'Region' }],
+  selectionField: [ { position: 30 } ]
+      }
+
+  Region;
+  @UI: { lineItem: [ { position: 35, label: 'Approval Step'  } ],
+  identification: [{ position: 35, label: 'Approval Step' }],
+  selectionField: [ { position: 35 } ]
+    }
+
+  ApprovalStep;
+  @UI: { lineItem: [ { position: 40, label: 'Current Status'  } ],
+  identification: [{ position: 40, label: 'Current Status' }],
+  selectionField: [ { position: 40 } ]
+      }
+
+  CurrentStatus;
+  @UI: { lineItem: [ { position: 50, label: ' Current Owner'  } ],
+  identification: [{ position: 50, label: ' Current Owner' }],
+  selectionField: [ { position: 50 } ]
+      }
+
+  CurrentOwner;
+  @UI: { lineItem: [ { position: 10, label: 'Submission From Date'  } ],
+  identification: [{ position: 10, label: 'Submission From Date' }],
+  selectionField: [ { position: 10 } ]
+      }
+
+  SubmissionFromDate;
+  @UI: { lineItem: [ { position: 60, label: 'Submission To Date'  } ],
+  identification: [{ position: 60, label: 'Submission To Date' }],
+  selectionField: [ { position: 60 } ]
+      }
+
+  SubmissionToDate;
+  @UI: { lineItem: [ { position: 70, label: 'Sla Status'  } ],
+  identification: [{ position: 70, label: 'Sla Status' }],
+  selectionField: [ { position: 70 } ]
+      }
+
+  SlaStatus;
+  @UI: { lineItem: [ { position: 80, label: 'Days Open'  } ],
+  identification: [{ position: 80, label: 'Days Open' }],
+  selectionField: [ { position: 80 } ]
+      }
+
+  DaysOpen;
+  @UI: { lineItem: [ { position: 90, label: 'Settlement Status'  } ],
+  identification: [{ position: 90, label: 'Settlement Status' }],
+  selectionField: [ { position: 90 } ]
+      }
+
+  SettlementStatus;
+  @UI: { lineItem: [ { position: 100, label: 'Posting From Date'  } ],
+  identification: [{ position: 100, label: 'Posting From Date' }],
+  selectionField: [ { position: 100 } ]
+      }
+
+  PostingFromDate;
+  @UI: { lineItem: [ { position: 110, label: 'Posting To Date'  } ],
+  identification: [{ position: 110, label: 'Posting To Date' }],
+  selectionField: [ { position: 110 } ]
+      }
+
+  PostingToDate;
+  @UI: { lineItem: [ { position: 120, label: 'Payment Status'  } ],
+  identification: [{ position: 120, label: 'Payment Status' }],
+  selectionField: [ { position: 120 } ]
+      }
+
+  PaymentStatus;
+  @UI: { lineItem: [ { position: 130, label: 'Approved Amount'  } ],
+  identification: [{ position: 130, label: 'Approved Amount' }],
+  selectionField: [ { position: 130 } ]
+      }
+
+  ApprovedAmount;
+  @UI: { lineItem: [ { position: 140, label: 'Posted Amount'  } ],
+  identification: [{ position: 140, label: 'Posted Amount' }],
+  selectionField: [ { position: 140 } ]
+      }
+
+  PostedAmount;
+  @UI: { lineItem: [ { position: 150, label: 'Currency Code'  } ],
+  identification: [{ position: 150, label: 'Currency Code' }],
+  selectionField: [ { position: 150 } ]
+      }
+
+  CurrencyCode;
+  @UI: { lineItem: [ { position: 160, label: 'Account Doc No'  } ],
+  identification: [{ position: 160, label: 'Account Doc No' }],
+  selectionField: [ { position: 160 } ]
+      }
+
+  AccountDocNo;
+  @UI: { lineItem: [ { position: 170, label: 'Payment Date'  } ],
+  identification: [{ position: 170, label: 'Payment Date' }],
+  selectionField: [ { position: 170 } ]
+      }
+
+  PaymentDate;
+  @UI: { lineItem: [ { position: 180, label: 'Aging From Date'  } ],
+  identification: [{ position: 180, label: 'Aging From Date' }],
+  selectionField: [ { position: 180 } ]
+      }
+
+  AgingFromDate;
+  @UI: { lineItem: [ { position: 190, label: 'Aging To Date'  } ],
+  identification: [{ position: 190, label: 'Aging To Date' }],
+  selectionField: [ { position: 190 } ]
+      }
+
+  AgingToDate;
+  @UI: { lineItem: [ { position: 200, label: 'Escalation Flag'  } ],
+  identification: [{ position: 200, label: 'Escalation Flag' }],
+  selectionField: [ { position: 200 } ]
+      }
+  EscalationFlag;
+
+}

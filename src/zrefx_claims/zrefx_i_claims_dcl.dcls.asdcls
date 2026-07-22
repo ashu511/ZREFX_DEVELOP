@@ -1,0 +1,12 @@
+@EndUserText.label: 'Claims Access Control'
+@MappingRole: true
+define role ZREFX_I_CLAIMS_DCL {
+    grant
+        select
+            on
+                ZREFX_I_CLAIMS
+                        where
+                        CreatedBy = $session.user
+                        OR $session.user = 'CC0000000001';   
+                        
+}

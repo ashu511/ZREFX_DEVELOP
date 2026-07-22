@@ -1,0 +1,5 @@
+CLASS zbp_refx_i_migration DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zrefx_i_migration.
+ENDCLASS.
+
+CLASS zbp_refx_i_migration IMPLEMENTATION.
+ENDCLASS.

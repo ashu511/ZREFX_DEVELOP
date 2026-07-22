@@ -1,0 +1,79 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: { typeName: 'Complaint Staging Row', typeNamePlural: 'Complaints Staging Rows' }
+@UI.createHidden: true
+@UI.updateHidden: true
+@UI.deleteHidden: true
+annotate entity ZREFX_C_MIG_S_COMP with
+{
+  @UI.hidden: true
+  ItemUuid;
+  @UI.hidden: true
+  JobUuid;
+
+  @UI.lineItem: [ { position: 10 } ]
+  ComplaintId;
+
+  @UI.lineItem: [ { position: 20 } ]
+  Createddate;
+
+  @UI.lineItem: [ { position: 30 } ]
+  @EndUserText.label: 'Status'
+  Status;
+
+  @UI.lineItem: [ { position: 40 } ]
+  Vendorid;
+
+  @UI.lineItem: [ { position: 50 } ]
+  Vendorcompanyname;
+
+  @UI.lineItem: [ { position: 60 } ]
+  Contactpersonname;
+
+  @UI.lineItem: [ { position: 70 } ]
+  Contactmobile;
+
+  @UI.lineItem: [ { position: 80 } ]
+  Contactemail;
+
+  @UI.lineItem: [ { position: 90 } ]
+  Legalflag;
+
+  @UI.lineItem: [ { position: 100 } ]
+  Complaintcategory;
+
+  @UI.lineItem: [ { position: 110 } ]
+  Sourcechannel;
+
+  @UI.lineItem: [ { position: 120 } ]
+  Complainttype;
+
+  @UI.lineItem: [ { position: 130 } ]
+  Urgency;
+
+  @UI.lineItem: [ { position: 140 } ]
+  Referencetype;
+
+  @UI.lineItem: [ { position: 150 } ]
+  Referenceid;
+
+  @UI.lineItem: [ { position: 160 } ]
+  Landid;
+
+  @UI.lineItem: [ { position: 170 } ]
+  Titledeedno;
+
+  @UI.lineItem: [ { position: 180 } ]
+  Projectid;
+
+  @UI.lineItem: [ { position: 190 } ]
+  Claimreferenceno;
+
+  @UI.lineItem: [ { position: 200 } ]
+  Region;
+
+  @UI.lineItem: [ { position: 210 } ]
+  Detaileddescription;
+
+  @UI.lineItem: [ { position: 220 } ]
+  Financialimpact;
+}

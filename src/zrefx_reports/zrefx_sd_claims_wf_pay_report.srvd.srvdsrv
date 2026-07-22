@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Defination for Claim WF pay Report'
+define service ZREFX_SD_CLAIMS_WF_PAY_REPORT {
+  expose ZREFX_C_CLAIMS_WF_PAY_REPORT;
+}

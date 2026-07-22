@@ -1,0 +1,4 @@
+@EndUserText.label: 'SD for Claim WF TRacking Report'
+define service ZREFX_SD_CLAIMS_WF_REP {
+  expose ZREFX_C_CLAIMS_WF_TRACK_REPORT;
+}

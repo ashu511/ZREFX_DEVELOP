@@ -2,18 +2,23 @@
 @EndUserText.label: 'Projection for Complaints Workflow Track'
 @Metadata.ignorePropagatedAnnotations: true
 @Metadata.allowExtensions: true
+
 define root view entity ZREFX_C_COMP_WF_TRACK
   provider contract transactional_query
   as projection on ZREFX_I_COMP_WF_TRACK
 {
   key ComplaintId,
-  key Loguuid,
-      WfInstanceId,
+  key LogUuid,
+//      WfInstanceId,
       Category,
       Source,
       Region,
       Maindivision,
       Legalflag,
+      ApprovalStep,
+      ApprovalStepDesc,
+      ApproverEmail,
+      
       CurrentStatus,
       CurrentOwner,
       DaysOpen,
@@ -29,7 +34,8 @@ define root view entity ZREFX_C_COMP_WF_TRACK
       LegalReviewReq,
       LegalDecision,
       FinalDecision,
-      ClosureDate,
-      /* Associations */
-      _Complaints
-}
+      ClosureDate
+      
+//      /* Associations */
+//      _Complaints
+} 

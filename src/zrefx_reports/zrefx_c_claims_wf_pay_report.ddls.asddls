@@ -1,11 +1,13 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Consumption view for Patment and Settlement report for Claim'
 @Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
 define root view entity ZREFX_C_CLAIMS_WF_PAY_REPORT
   provider contract transactional_query
   as projection on ZREFX_I_CLAIMS_WF_PAY_REPORT
 {
   key ClaimId,
+  key log_uuid,
       WfInstanceId,
       VendorName,
       VendorId,

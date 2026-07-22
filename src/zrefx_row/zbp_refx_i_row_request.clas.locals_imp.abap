@@ -12,10 +12,51 @@ CLASS lsc_zrefx_i_row_request IMPLEMENTATION.
   METHOD cleanup_finalize.
   ENDMETHOD.
   METHOD adjust_numbers.
+*-------------------------------------------------------------------------------*
+* Get Next number using Number range Object for Claim Process
+*-------------------------------------------------------------------------------*
+    DATA lv_number_raw TYPE cl_numberrange_runtime=>nr_number. "value from number range
 
-*    DATA lv_uuid TYPE sysuuid_x16.
-*    DATA lv_proposalid TYPE sysuuid_x16.
-*
+    " Variables to Trigger the SBPA for created complaints
+*    DATA: lo_operation TYPE REF TO zcl_refx_bgpf_claims_sbpa,
+*          lo_process   TYPE REF TO if_bgmc_process_single_op,
+*          lx_bgmc      TYPE REF TO cx_bgmc.
+
+    LOOP AT mapped-row ASSIGNING FIELD-SYMBOL(<fs_row>). "REFERENCE INTO DATA(map).
+      TRY.
+          cl_numberrange_runtime=>number_get(
+            EXPORTING
+              nr_range_nr       = '01'
+              object            = 'ZREFX_RWNR'
+*              quantity          = 1
+            IMPORTING
+              number            = lv_number_raw
+          ).
+        CATCH cx_number_ranges INTO DATA(lx_error)  ##NO_HANDLER.
+
+      ENDTRY.
+      <fs_row>-RequestId = |{ CONV i( lv_number_raw ) }|.
+      DATA(current_date) = cl_abap_context_info=>get_system_date( ).
+      DATA(current_year) = current_date(4).
+      <fs_row>-RequestId  =  |{ 'ROW' } {  current_year } { <fs_row>-RequestId  }|.
+      CONDENSE <fs_row>-RequestId  NO-GAPS.
+    ENDLOOP.
+*Attachments
+    LOOP AT mapped-attachments ASSIGNING FIELD-SYMBOL(<lfs_att>).
+      TRY.
+          DATA(lv_attachid) = cl_system_uuid=>create_uuid_c32_static( ).
+        CATCH cx_uuid_error.
+          " Handle exception: Add message to reported or skip
+          CONTINUE.
+      ENDTRY.
+
+      DATA(lv_RequestId) = <lfs_att>-%tmp-RequestId.
+
+      <lfs_att>-RequestId  = lv_RequestId.
+      <lfs_att>-AttachmentId = lv_attachid.
+
+    ENDLOOP.
+
 *
 *    "--------------------------------------------------
 *    " ROOT: LAND REQUEST

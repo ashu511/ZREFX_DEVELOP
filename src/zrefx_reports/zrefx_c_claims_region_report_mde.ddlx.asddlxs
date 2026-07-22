@@ -1,0 +1,75 @@
+@Metadata.layer: #PARTNER
+@EndUserText.label: 'Claim Payment Report'
+@UI: {
+  headerInfo: {
+    typeName: 'Claim',
+    typeNamePlural: 'Claims',
+    title: {
+             type:#STANDARD,
+            label: 'Claim Id',
+            value: 'ClaimId'
+           }
+  }
+}
+annotate entity ZREFX_C_CLAIMS_REGION_REPORT with
+{
+  @UI.facet: [
+      // --- TABS (Collections) ---
+      { id: 'idInfo',
+        type: #COLLECTION,
+        label: 'Claim Information',
+         position: 10 },
+
+            {
+                            id : 'ClaimId',
+                            purpose: #STANDARD,
+                            type: #IDENTIFICATION_REFERENCE,
+                            label: 'Claim Id',
+                            parentId:'idInfo',
+                            position: 10
+                   }
+         ]
+
+  @UI: { lineItem: [ { position: 10, label: 'ClaimId'  } ],
+  identification: [{ position: 10, label: 'Claim Id' }],
+  selectionField: [ { position: 10 } ]
+       }
+
+  ClaimId;
+  @UI: { lineItem: [ { position: 20, label: 'Current Owner'  } ],
+  identification: [{ position: 20, label: 'Current Owner' }],
+  selectionField: [ { position: 20 } ]
+     }
+  CurrentOwner;
+  @UI: { lineItem: [ { position: 30, label: 'Region'  } ],
+  identification: [{ position: 30, label: 'Region' }],
+  selectionField: [ { position: 30 } ]
+     }
+  Region;
+  @UI: { lineItem: [ { position: 40, label: 'Sla Status'  } ],
+  identification: [{ position: 40, label: 'Sla Status' }],
+  selectionField: [ { position: 40 } ]
+     }
+  SlaStatus;
+  @UI: { lineItem: [ { position: 50, label: 'Days Open'  } ],
+  identification: [{ position: 50, label: 'Days Open' }],
+  selectionField: [ { position: 50 } ]
+     }
+  DaysOpen;
+  @UI: { lineItem: [ { position: 60, label: 'Aging From Date'  } ],
+  identification: [{ position: 60, label: 'Aging From Date' }],
+  selectionField: [ { position: 60 } ]
+     }
+  AgingFromDate;
+  @UI: { lineItem: [ { position: 70, label: 'Aging To Date'  } ],
+  identification: [{ position: 70, label: 'Aging To Date' }],
+  selectionField: [ { position: 70 } ]
+     }
+  AgingToDate;
+  @UI: { lineItem: [ { position: 80, label: ' Escalation Flag'  } ],
+  identification: [{ position: 80, label: ' Escalation Flag' }],
+  selectionField: [ { position: 80 } ]
+     }
+  EscalationFlag;
+
+}

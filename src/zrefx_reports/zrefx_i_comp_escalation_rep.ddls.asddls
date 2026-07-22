@@ -2,7 +2,7 @@
 @EndUserText.label: 'Interface view for Complaints Escalation'
 @Metadata.ignorePropagatedAnnotations: true
 define root view entity ZREFX_I_COMP_ESCALATION_REP as select from zrefx_wf_com
-  association to zrefx_complaints as _Complaints on $projection.ComplaintId = _Complaints.complaint_id
+  association to zrefx_complaint as _Complaints on $projection.ComplaintId = _Complaints.complaint_id
 {
   key complaint_id         as ComplaintId,
     key log_uuid                      as Loguuid,
@@ -30,4 +30,5 @@ define root view entity ZREFX_I_COMP_ESCALATION_REP as select from zrefx_wf_com
       closure_date         as ClosureDate,
       _Complaints
 
-}
+} 
+where sla_status != ''

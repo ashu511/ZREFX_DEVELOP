@@ -7,4 +7,5 @@ define service ZREFX_SD_COMPLAINTS {
   expose ZREFX_DOV_COMPCAT      as ComplaintCategoryF4;
   expose ZREFX_DOV_CITY         as CityF4;
   expose ZREFX_I_VENDOR_F4      as VendorF4;
+  expose ZREFX_DOV_STATUS       as StatusF4;
 }

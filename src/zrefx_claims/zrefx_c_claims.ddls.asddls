@@ -16,6 +16,8 @@ define root view entity ZREFX_C_CLAIMS
 
   key Claimid,
       Createddate,
+      @ObjectModel.text.element: [ 'StatusDescription' ]
+      @UI.textArrangement: #TEXT_ONLY
       Status,
       Vendorid,
       Vendorname,
@@ -32,6 +34,8 @@ define root view entity ZREFX_C_CLAIMS
       //      Vendorregistrationno,
       //      Contactemail,
       //      Preferredlanguage,
+      @ObjectModel.text.element: [ 'ClaimCategoryDescription' ]
+      @UI.textArrangement: #TEXT_FIRST
       Claimcategory,
       Sourcechannel,
       Claimtype,
@@ -59,15 +63,18 @@ define root view entity ZREFX_C_CLAIMS
       Claimamount,
       Confirminformation,
       Consentdate,
+      RequestorEmail,
       CreatedBy,
       Lastchangedat,
       Locallastchangedat,
-
+      _claimcat.Description as ClaimCategoryDescription,
+      _Status.Description   as StatusDescription,
       _City.City            as CityDescription,
       _MainDiv.MainDIVISION as MainDivDescription,
 
       _claimcat,
       _urgency,
+      _Status,
       _Attachments  : redirected to composition child ZREFX_C_ATT_CLAIMS,
       _WorkflowInfo : redirected to composition child ZREFX_C_WF_CLM
 }

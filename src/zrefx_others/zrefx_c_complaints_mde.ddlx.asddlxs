@@ -57,7 +57,7 @@ annotate entity ZREFX_C_COMPLAINTS with
   @UI.fieldGroup: [{ position: 10, qualifier: 'tqVendorInformation' }]
   @Search.defaultSearchElement: true
   @Search.fuzzinessThreshold: 0.7
-  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_I_VENDOR_F4', element: 'Vendorid' } }]
+  //  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_I_VENDOR_F4', element: 'Vendorid' } }]
   Vendorid;
 
   @EndUserText.label: 'Vendor Name'

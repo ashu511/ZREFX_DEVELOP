@@ -12,14 +12,20 @@ define view entity ZREFX_C_ATT_CLAIMS
       Filename,
       @Semantics.mimeType: true
       Mimetype,
-      @ObjectModel.virtualElementCalculatedBy: 'ZCL_REFX_DMS_CALC_EXIT_CLM'
-      @Semantics.largeObject: {
-        mimeType: 'MimeType',
-        fileName: 'Filename',
-        contentDispositionPreference: #ATTACHMENT,
-        acceptableMimeTypes: ['application/pdf','image/jpeg','image/png',
-                              'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-      }
+      Mediatype,
+      Documenttype,
+      Documentname,
+      Notes,
+      Category,
+
+      //      @ObjectModel.virtualElementCalculatedBy: 'ZCL_REFX_DMS_CALC_EXIT_CLM'
+      //      @Semantics.largeObject: {
+      //        mimeType: 'MimeType',
+      //        fileName: 'Filename',
+      //        contentDispositionPreference: #ATTACHMENT,
+      //        acceptableMimeTypes: ['application/pdf','image/jpeg','image/png',
+      //                              'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+      //      }
       Content,
       CreatedBy,
       CreatedAt,

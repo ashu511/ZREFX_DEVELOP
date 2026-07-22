@@ -8,7 +8,8 @@ define view entity ZREFX_I_ROW_REQUEST_ATTACHMENT
   association to parent ZREFX_I_ROW_REQUEST as _ROWRequest on $projection.RequestId = _ROWRequest.RequestId
 {
   key request_id   as RequestId,
-  key dmsid        as Dmsid,
+  key attachment_id as AttachmentId,
+  dmsid        as Dmsid,
       documenttype as Documenttype,
       documentname as Documentname,
       category     as Category,

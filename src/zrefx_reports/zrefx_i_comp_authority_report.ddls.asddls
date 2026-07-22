@@ -2,7 +2,7 @@
 @EndUserText.label: 'Legal and Aunthority Matrix Interface view'
 @Metadata.ignorePropagatedAnnotations: true
 define root view entity ZREFX_I_COMP_Authority_report as select from zrefx_wf_com
-  association to zrefx_complaints as _Complaints on $projection.ComplaintId = _Complaints.complaint_id
+  association to zrefx_complaint as _Complaints on $projection.ComplaintId = _Complaints.complaint_id
 {
   key complaint_id         as ComplaintId,
     key log_uuid                      as Loguuid,
@@ -30,4 +30,4 @@ define root view entity ZREFX_I_COMP_Authority_report as select from zrefx_wf_co
       closure_date         as ClosureDate,
       _Complaints
 
-}
+} where legal_involvement = 'true'

@@ -9,6 +9,9 @@ annotate entity ZREFX_C_ATT_CLAIMS
                           label: 'Attachment',
                           position: 10
                  }]
+@UI.hidden: true
+ ClaimId;                
+                 
                    @UI: { lineItem: [ { position: 60, label: 'File Name'  } ],
   identification: [{ position: 60, label: 'File Name' }] }
   Filename;

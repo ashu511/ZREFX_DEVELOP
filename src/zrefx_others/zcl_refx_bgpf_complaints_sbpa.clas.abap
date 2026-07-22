@@ -6,12 +6,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa DEFINITION
   PUBLIC SECTION.
 
     METHODS set_context_data
-*      IMPORTING complaintid     TYPE zrefx_i_complaints-ComplaintId OPTIONAL
-*                complaintnumber TYPE zrefx_i_complaints-ComplaintId OPTIONAL
-*                categorycode    TYPE zrefx_i_complaints-Complaintcategory OPTIONAL
-*                description     TYPE zrefx_i_complaints-Detaileddescription
-*                createdby       TYPE string OPTIONAL
-*                createdat       TYPE zrefx_i_complaints-Createddate OPTIONAL.
       IMPORTING complaintid          TYPE zrefx_i_complaints-ComplaintId OPTIONAL
                 categorycode         TYPE zrefx_i_complaints-Complaintcategory OPTIONAL
                 description          TYPE zrefx_i_complaints-Detaileddescription OPTIONAL
@@ -40,12 +34,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa DEFINITION
   PRIVATE SECTION.
 
     TYPES: BEGIN OF ty_context_data,
-*             complaintid     TYPE string,
-*             complaintnumber TYPE string,
-*             categorycode    TYPE string,
-*             description     TYPE string,
-*             createdby       TYPE string,
-*             createdat       TYPE string,
              complaintid          TYPE string,
              categorycode         TYPE string,
              description          TYPE string,
@@ -79,8 +67,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa DEFINITION
 
 ENDCLASS.
 
-
-
 CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 
 
@@ -91,14 +77,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 *      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintProcess' " Found in SBPA Monitoring
       definition_id = 'sa30.sec-rs-dev-6durkmdm.re04newcomplaintmanagement.complaintProcess' " Found in SBPA Monitoring
       context-complaint_context = gs_context
-*      context-complaint_context = VALUE ty_context_data(
-*        complaintid     = gs_context-ComplaintId
-*        complaintnumber = gs_context-ComplaintId
-*        categorycode    = gs_context-Categorycode
-*        description     = gs_context-Description
-*        createdby       = gs_context-createdby
-*        createdat       = gs_context-createdat
-*      )
     ).
 
     "Serialize to JSON (camelCase + PascalCase)
@@ -107,13 +85,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
       compress      = abap_true
       pretty_name   = /ui2/cl_json=>pretty_mode-camel_case
       name_mappings = VALUE /ui2/cl_json=>name_mappings(
-*                        ( abap = 'COMPLAINT_CONTEXT' json = 'ComplaintContext' )
-*                        ( abap = 'COMPLAINTID'       json = 'Complaintid' )
-*                        ( abap = 'COMPLAINTNUMBER'   json = 'Complaintnumber' )
-*                        ( abap = 'CATEGORYCODE'      json = 'Categorycode' )
-*                        ( abap = 'DESCRIPTION'       json = 'Description' )
-*                        ( abap = 'CREATEDBY'         json = 'Createdby' )
-*                        ( abap = 'CREATEDAT'         json = 'Createdat' )
                         ( abap = 'COMPLAINT_CONTEXT'    json = 'ComplaintContext' )
                         ( abap = 'COMPLAINTID'          json = 'Complaintid' )
                         ( abap = 'CATEGORYCODE'         json = 'Categorycode' )
@@ -183,7 +154,7 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 
             MODIFY ENTITIES OF zrefx_i_complaints
               ENTITY Complaints
-                EXECUTE SetStatusSubmitted FROM VALUE #( ( ComplaintId = gs_context-complaintid ) )
+*                EXECUTE SetStatusSubmitted FROM VALUE #( ( ComplaintId = gs_context-complaintid ) )
                 CREATE BY \_WorkflowInfo
                 FIELDS ( ApprovalStep ApprovalStepDesc WfInstanceId CurrentStatus CurrentOwner SubmissionFromDate )
                 WITH VALUE #( ( ComplaintId = gs_context-complaintid
@@ -217,13 +188,6 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 
   METHOD set_context_data.
 
-*    gs_context-complaintid      = complaintid.
-*    gs_context-categorycode     = categorycode.
-*    gs_context-complaintnumber  = complaintid.
-*    gs_context-createdat        = createdat.
-*    gs_context-createdby        = createdby.
-*    gs_context-description      = description.
-
     gs_context-categorycode         = categorycode.
     gs_context-complainant          = complainant.
     gs_context-complantype          = complaintype.
@@ -250,4 +214,5 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
     gs_context-vendorname_en        = vendorname_en.
 
   ENDMETHOD.
+
 ENDCLASS.

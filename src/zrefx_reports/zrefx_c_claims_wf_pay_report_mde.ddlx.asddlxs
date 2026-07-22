@@ -1,0 +1,64 @@
+@Metadata.layer: #PARTNER
+@EndUserText.label: 'Work Flow Tracking Report'
+@UI: {
+  headerInfo: {
+    typeName: 'Claim',
+    typeNamePlural: 'Claims',
+    title: {
+             type:#STANDARD,
+            label: 'Claim',
+            value: 'ClaimId'
+           }
+  }
+}
+annotate entity ZREFX_C_CLAIMS_WF_PAY_REPORT with
+{
+  @UI: { lineItem: [ { position: 10, label: 'Claim Id'  } ],
+  identification: [{ position: 10, label: 'Claim Id' }],
+  selectionField: [ { position: 10 } ]
+       }
+  ClaimId;
+  //  log_uuid;
+  //  WfInstanceId;
+  @UI: { lineItem: [ { position: 20, label: 'Vendor Name'  } ],
+  identification: [{ position: 20, label: 'Vendor Name' }]
+       }
+  VendorName;
+  @UI: { lineItem: [ { position: 30, label: 'Vendor ID'  } ],
+  identification: [{ position: 30, label: 'Vendor ID' }],
+  selectionField: [ { position: 30 } ]
+     }
+  VendorId;
+  @UI: { lineItem: [ { position: 40, label: 'Posting From Date'  } ],
+  identification: [{ position: 40, label: 'Posting From Date' }],
+  selectionField: [ { position: 40 } ]
+     }
+  PostingFromDate;
+  @UI: { lineItem: [ { position: 50, label: 'Posting To Date'  } ],
+  identification: [{ position: 50, label: 'Posting To Date' }],
+  selectionField: [ { position: 50 } ]
+     }
+  PostingToDate;
+  @UI: { lineItem: [ { position: 60, label: 'Payment Status'  } ],
+  identification: [{ position: 60, label: 'Payment Status' }]
+     }
+  PaymentStatus;
+  @UI: { lineItem: [ { position: 70, label: 'Currency Code'  } ],
+  identification: [{ position: 70, label: 'Currency Code' }]
+     }
+  CurrencyCode;
+  @UI: { lineItem: [ { position: 80, label: 'Account Doc No'  } ],
+  identification: [{ position: 80, label: 'Account Doc No' }]
+   }
+  AccountDocNo;
+  @UI: { lineItem: [ { position: 90, label: 'Payment Date'  } ],
+  identification: [{ position: 90, label: 'Payment Date' }]
+   }
+  PaymentDate;
+  @UI: { lineItem: [ { position: 100, label: 'Posted Amount;'  } ],
+  identification: [{ position: 100, label: 'Posted Amount;' }]
+   }
+  PostedAmount;
+
+
+}

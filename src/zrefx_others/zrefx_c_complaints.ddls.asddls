@@ -14,6 +14,8 @@ define root view entity ZREFX_C_COMPLAINTS
 {
   key ComplaintId,
       Createddate,
+      @ObjectModel.text.element: [ 'StatusDescription' ]
+      @UI.textArrangement: #TEXT_ONLY
       Status,
       Vendorid,
       Vendorname,
@@ -29,12 +31,12 @@ define root view entity ZREFX_C_COMPLAINTS
       //      Preferredlanguage,
       //      Legalflag,
       Vendoraddress,
-      @ObjectModel.text.element: [ 'ComplaintCatagiryDescription' ]
+      @ObjectModel.text.element: [ 'ComplaintCategoryDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       Complaintcategory,
       Sourcechannel,
       Complainttype,
-      @ObjectModel.text.element: [ 'Description' ]
+      @ObjectModel.text.element: [ 'UrgencyDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       Urgency,
       Referencetype,
@@ -48,12 +50,13 @@ define root view entity ZREFX_C_COMPLAINTS
       @ObjectModel.text.element: [ 'CityDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       City,
-      @ObjectModel.text.element: [ 'MainDivDescription' ]
-      @UI.textArrangement: #TEXT_FIRST
+      //      @ObjectModel.text.element: [ 'MainDivDescription' ]
+      //      @UI.textArrangement: #TEXT_FIRST
       MainDivision,
-      @ObjectModel.text.element: [ 'SubDivDescription' ]
-      @UI.textArrangement: #TEXT_FIRST
-      SubDivision,
+      //      MainDivDescription,
+      //      @ObjectModel.text.element: [ 'SubDivDescription' ]
+      //      @UI.textArrangement: #TEXT_FIRST
+      //      SubDivision,
       Subject,
       Incidentdate,
       Requestedoutcome,
@@ -61,21 +64,24 @@ define root view entity ZREFX_C_COMPLAINTS
       Financialimpact,
       Confirminformation,
       Consentdate,
+      RequestorEmail,
       Createdby,
       Lastchangedat,
       Locallastchangedat,
-      _urgency.Description  as Description,
-      _compcat.Description  as ComplaintCatagiryDescription,
+      _urgency.Description as UrgencyDescription,
+      _compcat.Description as ComplaintCategoryDescription,
       //      _Language.LangText    as Language,
-      _City.City            as CityDescription,
-      _MainDiv.MainDIVISION as MainDivDescription,
-      _SubDiv.SubDIVISION   as SubDivDescription,
+      _City.City           as CityDescription,
+      //      _MainDiv.MainDIVISION as MainDivDescription,
+      //      _SubDiv.SubDIVISION  as SubDivDescription,
+      _Status.Description  as StatusDescription,
       _compcat,
       _urgency,
       //      _Language,
       _City,
-      _MainDiv,
-      _SubDiv,
+      _Status,
+      //      _MainDiv,
+      //      _SubDiv,
       _Attachments  : redirected to composition child ZREFX_C_ATT_COMPLAINTS,
       _WorkflowInfo : redirected to composition child ZREFX_C_WF_COM
 }

@@ -1,13 +1,16 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Projection view for Claims Tacking Report'
 @Metadata.ignorePropagatedAnnotations: true
+@Metadata.allowExtensions: true
 define root view entity ZREFX_C_CLAIMS_WF_TRACK_REPORT
   provider contract transactional_query
   as projection on ZREFX_I_CLAIMS_WF_TRACK_REPORT
 {
   key ClaimId,
+  key LogUuid,
       WfInstanceId,
       Region,
+      ApprovalStep,      
       CurrentStatus,
       CurrentOwner,
       SubmissionFromDate,
@@ -27,7 +30,5 @@ define root view entity ZREFX_C_CLAIMS_WF_TRACK_REPORT
       PaymentDate,
       AgingFromDate,
       AgingToDate,
-      EscalationFlag,
-      /* Associations */
-      _Claims
+      EscalationFlag
 }

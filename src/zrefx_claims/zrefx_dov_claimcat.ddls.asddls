@@ -22,3 +22,5 @@ define view entity ZREFX_DOV_CLAIMCAT
       @Semantics.text: true
       text      as Description
 }
+where
+  language = $session.system_language

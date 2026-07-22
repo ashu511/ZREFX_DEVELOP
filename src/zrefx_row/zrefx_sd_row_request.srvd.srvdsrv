@@ -1,6 +1,6 @@
 @EndUserText.label: 'Service defination for ROW'
 define service ZREFX_SD_ROW_REQUEST {
-  expose ZREFX_C_ROW_REQUEST            as LandRequest;
+  expose ZREFX_C_ROW_REQUEST            as ROWRequest;
   expose ZREFX_C_ROW_CLARIFICATION      as Clarification;
   expose ZREFX_C_ROW_PROPOSAL           as Proposal;
   expose ZREFX_C_ROW_PROPOSEDLAND       as ProposedLand;

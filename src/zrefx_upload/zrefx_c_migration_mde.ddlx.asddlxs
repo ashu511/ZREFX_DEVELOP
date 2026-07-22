@@ -1,0 +1,51 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+typeName: 'Migration Job',
+typeNamePlural: 'Migration Jobs',
+title: { value: 'TargetObject' },
+description: { value: 'Status' }
+}
+annotate entity ZREFX_C_MIGRATION with
+{
+  @UI.facet: [
+  { id: 'General', type: #IDENTIFICATION_REFERENCE, label: 'Upload Settings', position: 10 },
+  { id: 'CompPreview', type: #LINEITEM_REFERENCE, label: 'Complaints Preview Data', targetElement: '_ComplaintsItems', position: 20, hidden:#(HideComplaints) },
+  { id: 'ClaimPreview', type: #LINEITEM_REFERENCE, label: 'Claims Preview Data', targetElement: '_ClaimsItems', position: 30, hidden: #(HideClaims) }
+  ]
+
+  @UI.hidden: true
+  JobUuid;
+
+  @UI.identification: [ { position: 10 } ]
+  @UI.textArrangement: #TEXT_FIRST
+  @UI.lineItem: [ { position: 10 } ]
+  TargetObject;
+
+  @UI.identification: [ { position: 20 } ]
+  FileContent;
+
+  @UI.identification: [ { position: 30 } ]
+  @UI.lineItem: [ { position: 20 } ]
+  @EndUserText.label: 'Status'
+  Status;
+
+  @UI.lineItem: [ { position: 30 } ]
+  CreatedBy;
+
+  @UI.lineItem: [ { position: 40 } ]
+  @EndUserText.label: 'Created At'
+  CreatedAt;
+
+  @UI.hidden: true
+  LastChangedAt;
+
+  @UI.hidden: true
+  MimeType;
+
+  @UI.hidden: true
+  FileName;
+
+  @UI.identification: [ { position: 40 } ]
+  TemplateContent;
+
+}

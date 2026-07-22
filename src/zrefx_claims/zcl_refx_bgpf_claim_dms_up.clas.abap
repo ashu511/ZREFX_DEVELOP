@@ -127,18 +127,30 @@ CLASS zcl_refx_bgpf_claim_dms_up IMPLEMENTATION.
 * Update active Z table with DMS document ID
           IF <ls_ctx>-documentid IS NOT INITIAL.
 
-            MODIFY ENTITIES OF zrefx_i_claims " Use your root entity name
-              ENTITY Attachments
-                UPDATE FIELDS ( Dmsid Content )
-                WITH VALUE #( ( %tky-AttachmentId = <ls_ctx>-attachmentid
-                                %tky-ClaimId      = <ls_ctx>-claimid
-                                %is_draft         = if_abap_behv=>mk-off
-                                dmsid             = <ls_ctx>-documentid
-                                content           = lv_empty_content
-                                ) )
-              REPORTED DATA(lt_reported)
-              FAILED DATA(lt_failed).
+*            MODIFY ENTITIES OF zrefx_i_claims " Use your root entity name
+*              ENTITY Attachments
+*                UPDATE FIELDS ( Dmsid Content )
+*                WITH VALUE #( ( %tky-AttachmentId = <ls_ctx>-attachmentid
+*                                %tky-ClaimId      = <ls_ctx>-claimid
+*                                %is_draft         = if_abap_behv=>mk-off
+*                                dmsid             = <ls_ctx>-documentid
+*                                content           = lv_empty_content
+*                                ) )
+*              REPORTED DATA(lt_reported)
+*              FAILED DATA(lt_failed).
+*
+*            IF lt_failed IS INITIAL.
+**              COMMIT ENTITIES. " This is the key for background processes
+*            ENDIF.
 
+            MODIFY ENTITIES OF zrefx_i_claims
+                          ENTITY Attachments
+                            EXECUTE updateDmsId
+                            FROM VALUE #( ( claimid  = <ls_ctx>-claimid
+                                            AttachmentId = <ls_ctx>-attachmentid
+                                            %param       = VALUE #( documentid = <ls_ctx>-documentid ) ) )
+                          REPORTED DATA(lt_reported)
+                          FAILED DATA(lt_failed).
             IF lt_failed IS INITIAL.
 *              COMMIT ENTITIES. " This is the key for background processes
             ENDIF.

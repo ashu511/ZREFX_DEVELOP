@@ -1,7 +1,7 @@
 managed implementation in class zbp_refx_i_row_request unique;
 strict ( 2 );
 
-define behavior for ZREFX_I_ROW_REQUEST //alias <alias_name>
+define behavior for ZREFX_I_ROW_REQUEST alias Row
 persistent table zrefx_row
 lock master
 authorization master ( instance )
@@ -331,7 +331,7 @@ late numbering
     }
 }
 
-define behavior for ZREFX_I_ROW_REQUEST_ATTACHMENT //alias <alias_name>
+define behavior for ZREFX_I_ROW_REQUEST_ATTACHMENT alias Attachments
 persistent table zrefx_row_req_a
 lock dependent by _ROWRequest
 authorization dependent by _ROWRequest
@@ -345,6 +345,7 @@ late numbering
   mapping for zrefx_row_req_a
     {
       RequestId    = request_id;
+      AttachmentId = attachment_id;
       Category     = category;
       Dmsid        = dmsid;
       Documentname = documentname;

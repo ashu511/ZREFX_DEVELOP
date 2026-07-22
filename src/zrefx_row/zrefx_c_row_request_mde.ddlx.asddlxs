@@ -29,354 +29,222 @@
   qualifier: 'Default',
   visualizations: [{ type: #AS_LINEITEM }]
 }]
-annotate entity ZREFX_C_ROW_REQUEST
-    with 
+annotate entity ZREFX_C_ROW_REQUEST with
 {
-   
 
+
+  /* =====================================================================
+       1. FACET LAYOUT
+       ===================================================================== */
   @UI.facet: [
-  {
-    id:            'LandAllocation',
-    purpose:       #STANDARD,
-    type:          #IDENTIFICATION_REFERENCE,
-    label:         'Land Allocation Details',
-    position:      10,
-    targetElement: '_LandAllocations'
-  },
-     {
-    id:            'WorkFlowInstance',
-    purpose:       #STANDARD,
-    type:          #PRESENTATIONVARIANT_REFERENCE,
-    label:         'Land Request Logs',
-    position:      20,
-    targetElement: '_WorkflowInstance'
-  }
+    // --- TABS (Collections) ---
+    { id: 'idReqestorDetails',         type: #COLLECTION, label: 'Requestor and Requestor Details',        position: 10 },
+    { id: 'idRequestDetails',          type: #COLLECTION, label: 'Request Details',                        position: 20 },
+    { id: 'idProjectDetails',          type: #COLLECTION, label: 'Project Details',                        position: 30 },
+  //    { id: 'idProjSpecs',               type: #COLLECTION, label: 'Project/Station Specification',          position: 40 },
+    { id: 'idDimension',               type: #COLLECTION, label: 'Land Dimension',                         position: 50 },
+   { id: 'idGis',               type: #COLLECTION, label: 'Geographical Location Details',                 position: 60 },
+  //   { id: 'idDocs',                 type: #LINEITEM_REFERENCE, label: 'Documents',                      position: 70, targetElement: '_Attachments' },
 
+    { id: 'idDisc',                    type: #COLLECTION, label: 'Disclaimer',                             position: 80 },
+
+    // --- SECTIONS (Inside the Tabs) ---
+    { id: 'IdReqestorDetails',  type: #FIELDGROUP_REFERENCE, label: 'Requestor and Requestor Details',    parentId: 'idReqestorDetails',  targetQualifier: 'tqReqestorDetails', position: 10 },
+    { id: 'IdRequestDetails',   type: #FIELDGROUP_REFERENCE, label: 'Request Details',                    parentId: 'idRequestDetails',   targetQualifier: 'tqRequestDetails',  position: 10 },
+    { id: 'IdProjectDetails',   type: #FIELDGROUP_REFERENCE, label: 'Project Details',                    parentId: 'idProjectDetails',   targetQualifier: 'tqProjectDetails',  position: 10 },
+  //    { id: 'IdProjSpecs',        type: #FIELDGROUP_REFERENCE, label: 'Project/Station Specification',      parentId: 'idProjSpecs',        targetQualifier: 'tqProjSpecs',       position: 10 },
+    { id: 'IdDimension',        type: #FIELDGROUP_REFERENCE, label: 'Land Dimension',                     parentId: 'idDimension',        targetQualifier: 'tqDimension',       position: 10 },
+     { id: 'IdGis',        type: #FIELDGROUP_REFERENCE, label: 'Geographical Location Details',           parentId: 'idGis',              targetQualifier: 'tqGis',             position: 10 },
+    { id: 'IdDisc',             type: #FIELDGROUP_REFERENCE, label: 'Disclaimer',                         parentId: 'idDisc',             targetQualifier: 'tqDisc',            position: 10 }
   ]
 
-
-
-
-  //  @Consumption.semanticObject: 'LandRequest'
-  //  @UI.lineItem: [
-  //  { position : 10, semanticObjectAction: 'display', importance: #HIGH,
-  //    type: #WITH_INTENT_BASED_NAVIGATION, navigationAvailable: true }
-  //  ]
-
-  @UI.lineItem: [
-  { position : 10, importance: #HIGH }]
-  @Consumption.valueHelpDefinition: [{
-    entity: {
-      name: 'ZREFX_I_ROW_LANDREQUEST_VH',
-      element: 'RequestId'
-    }
-  }]
-  @UI.selectionField: [{ position: 10 }]
+  // Request Details
+  @EndUserText.label: 'Request  ID'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqRequestDetails' }]
+  @Search.defaultSearchElement: true
   RequestId;
-
-
-
-  @Consumption.valueHelpDefinition: [{
-    entity: {
-      name: 'ZREFX_I_ROW_COMPANYCODE_VH',
-      element: 'Companycode'
-    }
-  }]
-  @UI.selectionField: [{ position: 20 }]
-  @UI.lineItem: [{ position: 20, importance: #HIGH }]
-  @EndUserText.label: 'Requestor company'
-  Companycode;
-
-
-
-  @Consumption.valueHelpDefinition: [{
-      entity: {
-        name: 'ZREFX_I_ROW_REQUESTOR_VH',
-        element: 'Requestor'
-      }
-    }]
-  @UI.selectionField: [{ position: 30 }]
-  @UI.lineItem: [{ position: 40, importance: #HIGH }]
-  @EndUserText.label: 'Requestor (Name)'
-  Requestor;
-
-
-  @Consumption.valueHelpDefinition: [{
-    entity: {
-      name: 'ZREFX_I_ROW_REQUESTTYPES_VH',
-      element: 'RequestType'
-    }
-  }]
-
-  @UI.selectionField: [{ position: 40 }]
-  @UI.lineItem: [{ position: 50, importance: #HIGH }]
-  @EndUserText.label: 'Request Type'
-  Requesttype;
-
-
-
-
-
-  @Consumption.valueHelpDefinition: [{
-      entity: {
-        name: 'ZREFX_I_ROW_STAGEGATEPROJ_VH',
-        element: 'Stagegateprojectno'
-      }
-    }]
-  @UI.selectionField: [{ position: 60 }]
-  @UI.lineItem: [{ position: 80, importance: #HIGH }]
-  @EndUserText.label: 'Stage Gate Project No'
-  Stagegateprojectno;
-
-
-
-
-
-  //  @UI.lineItem: [
-  //     { position: 140, type: #WITH_NAVIGATION_PATH, importance: #HIGH,
-  //       navigationAvailable: true, targetElement: '_Clarifications',
-  //       label: 'Request Status'  }
-  //  ]
-
-
-  @UI.lineItem: [
-     { position: 140, importance: #HIGH,
-       label: 'Request Status'  }
-  ]
-
-  Status;
-
-
-
-
-
-  @UI.lineItem: [{ position: 60, importance: #HIGH }]
-  @EndUserText.label: 'Request Date'
-  @Consumption.filter.selectionType: #INTERVAL
-  @UI.selectionField: [{ position: 60 }]
+  @EndUserText.label: 'Request  Date'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqRequestDetails' }]
 
   Requestdate;
-
-
-//
-  @Consumption.valueHelpDefinition: [{
-       entity: {
-         name: 'ZREFX_I_ROW_BUSINESSAREA_VH',
-         element: 'Businessarea'
-       }
-     }]
-  @UI.selectionField: [{ position: 50 }]
-
-  @EndUserText.label: 'Business Area'
-  Businessarea;
-
-  @UI.lineItem: [{ position: 50 }]
+  @EndUserText.label: 'Request  type'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqRequestDetails' }]
+  Requesttype;
   @EndUserText.label: 'Request Description'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqRequestDetails' }]
   Requestdescription;
-
-
-  @UI.lineItem: [{ position: 70 }]
+  @EndUserText.label: 'Request Purpose'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqRequestDetails' }]
+  Requestpurpose;
+  @EndUserText.label: 'Requestor Name'
+  @UI.lineItem: [{ position: 60 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqRequestDetails' }]
+  Requestor;
   @EndUserText.label: 'Business Justification'
+  @UI.lineItem: [{ position: 70 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqRequestDetails' }]
   Businessjustification;
-
-
-
-  @Consumption.filter: {
-        mandatory: false,
-        multipleSelections: true,
-        selectionType: #SINGLE
-    }
-
-  @Consumption.valueHelpDefinition: [{
-      entity: {
-        name: 'ZREFX_I_ROW_STATUS_VH',
-        element: 'StatusCode'
-      }
-    }]
-
-
-  @EndUserText.label: 'Request Status'
-  @UI.selectionField: [{ position: 70}]
-  @UI.lineItem: [{ position: 80, label: 'Request Status Code' }]
-
-  Statuscode;
-
-
-//  @Consumption.valueHelpDefinition: [{
-//     entity: {
-//       name: 'ZREFX_I_WBSPROJECTNO_VH',
-//       element: 'WbsProjectNo'
-//     }
-//   }]
-  @UI.selectionField: [{ position: 80 }]
-  @UI.lineItem: [{ position: 90, importance: #HIGH }]
-  @EndUserText.label: 'WBS / Budget Reference'
-  Wbsprojectno;
-
-  @UI.lineItem: [{ position: 100 }]
-  @EndUserText.label: 'Current Step'
-  Currentstep;
-
-  @UI.lineItem: [{ position: 110, importance: #HIGH }]
-  @EndUserText.label: 'Technical Requirement - Capacity'
-  Capacitymva;
-
-  @UI.lineItem: [{ position: 120, importance: #HIGH }]
-  @EndUserText.label: 'Technical Requirement - Voltage'
-  Voltagekv;
-
-  @UI.lineItem: [{ position: 120, importance: #HIGH }]
-  @EndUserText.label: 'Land Area Required'
-  Areasqmrequested;
-
-  @UI.lineItem: [{ position: 140 }]
-  @EndUserText.label: 'Current Processor Role'
-  Currentprocessorrole;
-
-  @UI.lineItem: [{ position: 150 }]
-  @EndUserText.label: 'Current Processor User'
-  Currentprocessoruser;
-
-  @UI.lineItem: [{ position: 160 }]
-  @EndUserText.label: 'Priority'
-  Priority;
-
-  @UI.lineItem: [{ position: 170 }]
-  @EndUserText.label: 'Source Subsidiary'
-  Sourcesubsidiary;
-
-  @UI.lineItem: [{ position: 30, importance: #HIGH }]
-  @EndUserText.label: 'Requesting Department'
-  Department;
-
-  @UI.lineItem: [{ position: 100, importance: #HIGH }]
-  @EndUserText.label: 'Estimated Cost'
-  Projectcostsar;
-
-  @UI.lineItem: [{ position: 200 }]
-  @EndUserText.label: 'Initiated By Role'
-  Initiatedbyrole;
-
-  @UI.lineItem: [{ position: 210 }]
-  @EndUserText.label: 'Previous Request Number'
+  @EndUserText.label: 'Previous Requestno'
+  @UI.lineItem: [{ position: 80 }]
+  @UI.fieldGroup: [{ position: 80, qualifier: 'tqRequestDetails' }]
   Previousrequestno;
-
-  @UI.lineItem: [{ position: 240 }]
-  @EndUserText.label: 'Profit Center'
-  Profitcenter;
-
-  @UI.lineItem: [{ position: 250 }]
-  @EndUserText.label: 'Cost Center'
-  Costcenter;
-
-  @UI.lineItem: [{ position: 260 }]
-  @EndUserText.label: 'Project Name'
-  Projectname;
-
-  @UI.lineItem: [{ position: 290 }]
-  @EndUserText.label: 'External Project Account Number'
-  Externalprojectaccountno;
-
-  @UI.lineItem: [{ position: 300 }]
-  @EndUserText.label: 'Project Budget Year'
-  Projectbudgetyear;
-
-  @UI.lineItem: [{ position: 310 }]
-  @EndUserText.label: 'Project Approval Year'
-  Projectapprovalyear;
-
-
-  @UI.lineItem: [{ position: 330 }]
-  @EndUserText.label: 'Project Start Date'
-  Projectstartdate;
-
-  @UI.lineItem: [{ position: 340 }]
-  @EndUserText.label: 'Project End Date'
-  Projectenddate;
-
-  @UI.lineItem: [{ position: 350 }]
-  @EndUserText.label: 'Hijri Start Date'
-  Hijristartdate;
-
-  @UI.lineItem: [{ position: 360 }]
-  @EndUserText.label: 'Hijri End Date'
-  Hijrienddate;
-
-  @UI.lineItem: [{ position: 370 }]
-  @EndUserText.label: 'Planned Completion Date'
-  Plancompletiondate;
-
-  @UI.lineItem: [{ position: 380 }]
-  @EndUserText.label: 'Actual Completion Date'
-  Actualcompletiondate;
-
-  @UI.lineItem: [{ position: 390 }]
-  @EndUserText.label: 'Station Type'
-  Stationtype;
-
-  @UI.lineItem: [{ position: 420 }]
-  @EndUserText.label: 'Cable Length KM'
-  Cablelengthkm;
-
-  @UI.lineItem: [{ position: 430 }]
-  @EndUserText.label: 'Facility Type'
-  Facilitytype;
-
-  @UI.lineItem: [{ position: 440 }]
-  @EndUserText.label: 'Land Category'
-  Landcategory;
-
-  @UI.lineItem: [{ position: 450 }]
-  @EndUserText.label: 'Width M Requested'
-  Widthmrequested;
-
-  @UI.lineItem: [{ position: 460 }]
-  @EndUserText.label: 'Length M Requested'
-  Lengthmrequested;
-
-  @UI.lineItem: [{ position: 480 }]
-  @EndUserText.label: 'GIS Location Link'
-  Gislocationlink;
-
-  @UI.lineItem: [{ position: 490 }]
-  @EndUserText.label: 'GIS Project ID'
-  Gisprojectid;
-
-  @UI.lineItem: [{ position: 500 }]
   @EndUserText.label: 'Requestor Comments'
+  @UI.lineItem: [{ position: 90 }]
+  @UI.fieldGroup: [{ position: 90, qualifier: 'tqRequestDetails' }]
   Requestorcomments;
-
-  @UI.lineItem: [{ position: 510 }]
   @EndUserText.label: 'Additional Comments'
+  @UI.lineItem: [{ position: 100 }]
+  @UI.fieldGroup: [{ position: 100, qualifier: 'tqRequestDetails' }]
   Additionalcomments;
 
 
-  @UI.lineItem: [{ position: 60 }]
-  @EndUserText.label: 'Request Purpose'
-  Requestpurpose;
+  //Project Details
+  @EndUserText.label: 'Wbs project No'
+  @UI.lineItem: [{ position: 200 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqProjectDetails' }]
+  Wbsprojectno;
+  @EndUserText.label: 'Stagegate Projectno'
+  @UI.lineItem: [{ position: 210 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqProjectDetails' }]
+  Stagegateprojectno;
+  @EndUserText.label: 'Project Start Date'
+  @UI.lineItem: [{ position: 220 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqProjectDetails' }]
+  Projectstartdate;
+  @EndUserText.label: 'Hijri Start Date'
+  @UI.lineItem: [{ position: 230 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqProjectDetails' }]
+  Hijristartdate;
+  @EndUserText.label: 'Plan Completion Date'
+  @UI.lineItem: [{ position: 240 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqProjectDetails' }]
+  Plancompletiondate;
+  @EndUserText.label: 'Project Budget Year'
+  @UI.lineItem: [{ position: 250 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqProjectDetails' }]
+  Projectbudgetyear;
+  @EndUserText.label: 'Volt age kv'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Voltagekv;
 
-  @UI.lineItem: [{ position: 110 }]
-  @EndUserText.label: 'Current Step Changed At'
-  Currentstepchangedat;
 
-  //  @UI.lineItem: [{ position: 120 }]
-  //  @EndUserText.label: 'Approval Status Code'
-  //  Approvalstatuscode;
+  @EndUserText.label: ' Project Name'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Projectname;
+  @EndUserText.label: 'Project Approval Year'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Projectapprovalyear;
+  @EndUserText.label: 'Project End Date'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Projectenddate;
+  @EndUserText.label: 'Hijri End Date'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Hijrienddate;
+  @EndUserText.label: 'Actual Completion Date'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Actualcompletiondate;
+  @EndUserText.label: 'Project Cost SAR'
+  @UI.lineItem: [{ position: 260 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  Projectcostsar;
+
+  //Ritght of way Requirement Details
+  @EndUserText.label: 'Length'
+  @UI.lineItem: [{ position: 300 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqDimension' }]
+  Lengthmrequested;
+  @EndUserText.label: 'Area'
+  @UI.lineItem: [{ position: 310 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqDimension' }]
+  Areasqmrequested;
+  @EndUserText.label: 'Width'
+  @UI.lineItem: [{ position: 320 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqDimension' }]
+  Widthmrequested;
 
 
 
-  //    @UI.lineItem: [{ position: 130 }]
-  //  @EndUserText.label: 'Approval Status'
-  //  Approvalstatus;
+  //Geographic Location
+    @EndUserText.label: 'GIS Id'
+  @UI.lineItem: [{ position: 400 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqGis' }]
+  Gisprojectid;
+  
+  @EndUserText.label: 'Gis Link'
+  @UI.lineItem: [{ position: 410 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqGis' }]
+  Gislocationlink;
+
+
+
+
+
+  //Externalprojectaccountno;
+  //Stationtype;
+  //Capacitymva;
+  //Cablelengthkm;
+  //Facilitytype;
+  //Landcategory;
+
+
   //
-  @UI.lineItem: [{ position: 150 }]
-  @EndUserText.label: 'Current Processor Name'
-  Currentprocessorname;
+  //Statuscode;
+  //Status;
+  //Currentstep;
+  //Currentstepchangedat;
+  //Approvalstatuscode;
+  //Approvalstatus;
+  //Currentprocessorrole;
+  //Currentprocessoruser;
+  //Priority;
+  //Sourcesubsidiary;
+  //Sourcedepartment;
+  //
+  //Initiatedbyrole;
+  //
+  //Companycode;
+  //Businessarea;
+  //Profitcenter;
+  //Costcenter;
 
 
-  @UI.lineItem: [{ position: 130 }]
-  @EndUserText.label: 'Current Processor Department'
-  Currentprocessordepartment;
+  //Department;
+  //Title;
+  //Userid;
+  //Username;
+  //CurrentStepDesc;
+  //Currentprocessorname;
+  //Currentprocessordepartment;
+  //MileStoneDescription;
+  //Milestone;
+  //Workflowinstanceid;
+  //MilestoneSequence;
 
-    
+
+  /* Associations */
+  //_Clarifications;
+  //_LandAllocations;
+  //_ProcessorRole;
+  //_Proposal;
+  //_RequestAttachments;
+  //_RequestType;
+  //_StationType;
+  //_Status;
+  //_StepMilestone;
+  //_Subsidiary;
+  //_Workflow;
+  //_WorkflowInstance;
+
+
 }

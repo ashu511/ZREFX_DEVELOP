@@ -1,0 +1,7 @@
+@EndUserText.label: 'Service Definition for Migration'
+define service ZREFX_SD_MIGRATION {
+  expose ZREFX_C_MIGRATION  as Migration;
+  expose ZREFX_C_MIG_S_COMP as ComplaintsItems;
+  expose ZREFX_C_MIG_S_CLM  as ClaimsItems;
+  expose ZREFX_VH_TARGETS   as TargetVH;
+}

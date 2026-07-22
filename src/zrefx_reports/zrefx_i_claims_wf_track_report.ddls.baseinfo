@@ -3,12 +3,11 @@
 {
 "FROM":
 [
-"ZREFX_WF_CLM"
-],
-"ASSOCIATED":
-[
+"ZREFX_I_CLAIMS_WF_ALL_STEPS",
 "ZREFX_CLAIMS"
 ],
+"ASSOCIATED":
+[],
 "BASE":
 [],
 "ANNO_REF":

@@ -1,66 +1,72 @@
 managed implementation in class zbp_refx_i_complaints unique;
 strict ( 2 );
-with draft;
+//with draft;
 define behavior for ZREFX_I_COMPLAINTS alias Complaints
-persistent table zrefx_complaints
-draft table zrefx_draft_comp
-lock master total etag Locallastchangedat
+persistent table zrefx_complaint
+//draft table zrefx_draft_comp
+//lock master total etag Locallastchangedat
+lock master
 authorization master ( global )
 etag master Lastchangedat
 late numbering
 with additional save
 {
   create;
-  update ( features : instance );
-  delete ( features : instance );
+  //  update ( features : instance );
+  update;
+  //  delete ( features : instance );
+  delete;
 
   field ( mandatory ) Complaintcategory;
 
-  association _Attachments { create; with draft; }
-  association _WorkflowInfo { create; with draft; }
+  //  association _Attachments { create; with draft; }
+  //  association _WorkflowInfo { create; with draft; }
+  association _Attachments { create; }
+  association _WorkflowInfo { create; }
 
   determination setInitialDate on modify { create; }
-  determination setStatusDraft on modify { create; }
-  //  determination updateDivisions on modify { field City; }
-  determination populateExternalVendor on modify { create; }
-  determination fetchVendorDetails on modify { field Vendorid; }
+  //  determination setStatusDraft on modify { create; }
+  //  //  determination updateDivisions on modify { field City; }
+  //  determination populateExternalVendor on modify { create; }
+  //  determination fetchVendorDetails on modify { field Vendorid; }
 
-  side effects
-  {
-    //  field City affects field MainDivision, field SubDivision;
-    field Vendorid affects field Vendorname, field Vendorcompanyname,
-        field Contactpersonname, field Contactmobile,
-        field Vendoraltnum, field Vendorregistrationno,
-        field Contactemail, field Vendoraddress;
-  }
+  //  side effects
+  //  {
+  //    //  field City affects field MainDivision, field SubDivision;
+  //    field Vendorid affects field Vendorname, field Vendorcompanyname,
+  //        field Contactpersonname, field Contactmobile,
+  //        field Vendoraltnum, field Vendorregistrationno,
+  //        field Contactemail, field Vendoraddress;
+  //  }
 
-  //  validation validateEmail on save { field Contactemail; create; update; }
-  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
-  validation validateMandatoryFields on save { field Complaintcategory, Vendorid; create; update; }
+  //  //  validation validateEmail on save { field Contactemail; create; update; }
+  //  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
+  //  validation validateMandatoryFields on save { field Complaintcategory, Vendorid; create; update; }
 
-  field ( readonly ) ComplaintId, Createddate, Status, MainDivision, Legalflag;
+  //  field ( readonly ) ComplaintId, Createddate, Status, MainDivision, Legalflag;
+  field ( readonly ) ComplaintId, Createddate, MainDivision, Legalflag;
 
-  field ( features : instance ) Vendorid, Vendorname,
-  Vendorcompanyname, Contactpersonname,
-  Contactmobile, Vendoraltnum,
-  Vendorregistrationno, Contactemail,
-  Vendoraddress;
+  //  field ( features : instance ) Vendorid, Vendorname,
+  //  Vendorcompanyname, Contactpersonname,
+  //  Contactmobile, Vendoraltnum,
+  //  Vendorregistrationno, Contactemail,
+  //  Vendoraddress;
 
-  action UpdateDivision parameter ZREFX_A_UPDATE_DIVISION result [1] $self;
-  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
-  action SetStatusSubmitted result [1] $self;
+  static action UpdateDivision parameter ZREFX_A_UPDATE_DIVISION result [1] $self;
+  //  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
+  //  action SetStatusSubmitted result [1] $self;
 
-  draft action ( features : instance ) Edit;
-  draft action Activate optimized;
-  draft action Discard;
-  draft action Resume;
-  draft determine action Prepare
-  {
-    validation validate_Confirminformation;
-    validation validateMandatoryFields;
-  }
+  //  draft action ( features : instance ) Edit;
+  //  draft action Activate optimized;
+  //  draft action Discard;
+  //  draft action Resume;
+  //  draft determine action Prepare
+  //  {
+  //    validation validate_Confirminformation;
+  //    validation validateMandatoryFields;
+  //  }
 
-  mapping for zrefx_complaints
+  mapping for zrefx_complaint
     {
       ComplaintId          = complaint_id;
       Createddate          = createddate;
@@ -89,7 +95,8 @@ with additional save
       Region               = region;
       City                 = city;
       MainDivision         = maindivision;
-      SubDivision          = subdivision;
+      //      SubDivision          = subdivision;
+      MainDivDescription   = maindivdescription;
       Subject              = subject;
       Incidentdate         = incidentdate;
       Requestedoutcome     = requestedoutcome;
@@ -97,36 +104,44 @@ with additional save
       Financialimpact      = financialimpact;
       Confirminformation   = confirminformation;
       Consentdate          = consentdate;
+      RequestorEmail       = requestoremail;
       Createdby            = createdby;
+      Lastchangedat        = lastchangedat;
+      Locallastchangedat   = locallastchangedat;
     }
 
 }
 
 define behavior for ZREFX_I_ATT_COMPlAINTS alias Attachments
 persistent table zrefx_att_comp
-draft table zrefx_d_att_comp
+//draft table zrefx_d_att_comp
 lock dependent by _Complaints
 authorization dependent by _Complaints
 etag master Lastchangedat
 late numbering
 with additional save
 {
-  update ( features : instance );
+  //  update ( features : instance );
+  update;
   delete;
   field ( readonly ) ComplaintId, AttachmentId;
 
-  ////  static action upload
-  ////    parameter ZREFX_A_DMS_UPD_COM_IN
-  ////    result [1] ZREFX_A_DMS_UPD_COM_OUT;
-  ////  static action delete
-  ////    parameter ZREFX_A_DMS_DDEL_COM_IN
-  ////    result [1] $self;
+  action updateDmsId parameter ZREFX_A_DMS_UPD_COM_OUT result [1] $self;
+
+  //  static action upload
+  //    parameter ZREFX_A_DMS_UPD_COM_IN
+  //    result [1] ZREFX_A_DMS_UPD_COM_OUT;
+
+  static action delete
+    parameter ZREFX_A_DMS_DDEL_COM_IN
+    result [1] $self;
 
   static action download
     parameter ZREFX_A_DMS_COM_DOW_IN
     result [1] ZREFX_A_DMS_COM_DOW_OUT;
 
-  association _Complaints { with draft; }
+  //  association _Complaints { with draft; }
+  association _Complaints;
   mapping for zrefx_att_comp
     {
       ComplaintId  = complaint_id;
@@ -147,7 +162,7 @@ with additional save
 
 define behavior for ZREFX_I_WF_COM alias WorkflowInfo
 persistent table zrefx_wf_com
-draft table zrefx_d_wf_com
+//draft table zrefx_d_wf_com
 lock dependent by _Complaints
 authorization dependent by _Complaints
 late numbering
@@ -156,7 +171,11 @@ with additional save
   update;
   delete;
   field ( readonly ) ComplaintId, LogUuid;
-  association _Complaints { with draft; }
+  //  association _Complaints { with draft; }
+  association _Complaints;
+
+  // Every time SBPA does a POST to this entity, this logic will run.
+  determination updateParentStatus on modify { create; }
 
   mapping for zrefx_wf_com
     {

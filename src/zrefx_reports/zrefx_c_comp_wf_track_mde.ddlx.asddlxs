@@ -11,49 +11,54 @@
            }
   }
 }
-
+@UI.presentationVariant: [{
+    sortOrder: [{
+        by: 'ApprovalStep',
+        direction: #ASC
+    }]
+}]
 annotate entity ZREFX_C_COMP_WF_TRACK with
 {
 
-@UI.facet: [
-    // --- TABS (Collections) ---
-    { id: 'idInfo',         
-      type: #COLLECTION, 
-      label: 'Complaint Information',       
-       position: 10 },
-       
-          {
-                          id : 'ComplaintId',
-                          purpose: #STANDARD,
-                          type: #IDENTIFICATION_REFERENCE,
-                          label: 'Complaint Id',
-                          parentId:'idInfo',
-                          position: 10
-                 }
-       ]
+  @UI.facet: [
+      // --- TABS (Collections) ---
+      { id: 'idInfo',
+        type: #COLLECTION,
+        label: 'Complaint Information',
+         position: 10 },
+
+            {
+                            id : 'ComplaintId',
+                            purpose: #STANDARD,
+                            type: #IDENTIFICATION_REFERENCE,
+                            label: 'Complaint Id',
+                            parentId:'idInfo',
+                            position: 10
+                   }
+         ]
 
   @UI: { lineItem: [ { position: 10, label: 'Complaint Id'  } ],
   identification: [{ position: 10, label: 'Complaint Id' }],
   selectionField: [ { position: 10 } ]
        }
-   @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_ID_VH', element: 'ComplaintId' } }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_ID_VH', element: 'ComplaintId' } }]
   ComplaintId;
   //WfInstanceId;
-  @UI: { lineItem: [ { position: 20, label: 'Complaint Category'  } ],
-  identification: [{ position: 20, label: 'Complaint Category' }],
-  selectionField: [ { position: 20 } ]
-      }
-  Category;
-  @UI: { lineItem: [ { position: 30, label: 'Source'  } ],
-  identification: [{ position: 30, label: 'Source' }],
-  selectionField: [ { position: 30 } ]
-    }
-  Source;
+//  @UI: { lineItem: [ { position: 20, label: 'Complaint Category'  } ],
+//  identification: [{ position: 20, label: 'Complaint Category' }],
+//  selectionField: [ { position: 20 } ]
+//      }
+//  Category;
+//  @UI: { lineItem: [ { position: 30, label: 'Source'  } ],
+//  identification: [{ position: 30, label: 'Source' }],
+//  selectionField: [ { position: 30 } ]
+//    }
+//  Source;
   @UI: { lineItem: [ { position: 40, label: 'Region'  } ],
   identification: [{ position: 40, label: 'Region' }],
   selectionField: [ { position: 40 } ]
    }
-    @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_REGION_VH', element: 'Region' } }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_REGION_VH', element: 'Region' } }]
   Region;
   @UI: { lineItem: [ { position: 50, label: 'Main Division'  } ],
   identification: [{ position: 50, label: 'Main Division' }],
@@ -61,11 +66,14 @@ annotate entity ZREFX_C_COMP_WF_TRACK with
   }
   Maindivision;
   @UI: { lineItem: [ { position: 60, label: 'Current Status'  } ],
-  identification: [{ position: 60, label: 'Current Status' }],
-  selectionField: [ { position: 60 } ]
+  identification: [{ position: 60, label: 'Current Status' }]
+//  ,
+//  selectionField: [ { position: 60 } ]
   }
-  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'CurrentStatus'} }]
+//  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'CurrentStatus'} }]
+
   CurrentStatus;
+
   @UI: { lineItem: [ { position: 70, label: 'Submission From Date'  } ],
   identification: [{ position: 70, label: 'Submission From Date' }],
   selectionField: [ { position: 70 } ]
@@ -75,7 +83,20 @@ annotate entity ZREFX_C_COMP_WF_TRACK with
   identification: [{ position: 80, label: 'Submission To Date' }],
   selectionField: [ { position: 80 } ]
   }
+
   SubmissionToDate;
+
+  @UI: { lineItem: [ { position: 85, label: 'Approval Step'  } ],
+  identification: [{ position: 85, label: 'Approval Step' }],
+  selectionField: [ { position: 85 } ]
+  }
+
+  ApprovalStep;
+  @UI: { lineItem: [ { position: 87, label: 'Approval Step Dec'  } ],
+  identification: [{ position: 87, label: 'Approval Step Dec' }],
+  selectionField: [ { position: 87 } ]
+  }
+  ApprovalStepDesc;
   @UI: { lineItem: [ { position: 90, label: 'Current Owner'  } ],
   identification: [{ position: 90, label: 'Current Owner' }],
   selectionField: [ { position: 90 } ]

@@ -3,7 +3,7 @@
 {
 "FROM":
 [
-"ZREFX_COMPLAINTS"
+"ZREFX_COMPLAINT"
 ],
 "ASSOCIATED":
 [],

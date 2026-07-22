@@ -1,66 +1,71 @@
 managed implementation in class zbp_refx_i_claims unique;
 strict ( 2 );
-with draft;
+//with draft;
 define behavior for ZREFX_I_CLAIMS alias claims
 persistent table zrefx_claims
-draft table zrefx_dr_claims
-lock master total etag Lastchangedat
+//draft table zrefx_dr_claims
+//lock master total etag Lastchangedat
+lock master
 authorization master ( global )
 etag master Lastchangedat
 late numbering
 with additional save
 {
   create;
-  update ( features : instance );
-  delete ( features : instance );
+  //update ( features : instance );
+  update;
+  //delete ( features : instance );
+  delete;
 
   field ( mandatory ) Claimcategory;
 
 
-  association _Attachments { create; with draft; }
-  association _WorkflowInfo { create; with draft; }
+  //association _Attachments { create; with draft; }
+  //association _WorkflowInfo { create; with draft; }
+
+  association _Attachments { create; }
+  association _WorkflowInfo { create; }
 
   determination setInitialDate on modify { create; }
-  determination setstatusdraft on modify { create; }
+  //  determination setstatusdraft on modify { create; }
   // For External Vendor
-  determination populateExternalVendor on modify { create; }
+  //  determination populateExternalVendor on modify { create; }
   // For F4 help
-  determination fetchVendorDetails on modify { field Vendorid; }
+  //  determination fetchVendorDetails on modify { field Vendorid; }
+  //  side effects
+  //  {
+  //    //  field City affects field MainDivision, field SubDivision;
+  //    field Vendorid affects field Vendorname, field Vendorcompanyname,
+  //        field Contactpersonname, field Contactmobile,
+  //        field Vendoraltnum, field Vendorregistrationno,
+  //        field Contactemail;
+  //    //field Vendoraddress;
+  //  }
 
-  side effects
-  {
-    //  field City affects field MainDivision, field SubDivision;
-    field Vendorid affects field Vendorname, field Vendorcompanyname,
-        field Contactpersonname, field Contactmobile,
-        field Vendoraltnum, field Vendorregistrationno,
-        field Contactemail;
-    //field Vendoraddress;
-  }
-
-  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
-  validation validateMandatoryFields on save { field Claimcategory, Vendorid; create; update; }
+  //  validation validate_Confirminformation on save { field Confirminformation, Consentdate; create; update; }
+  //  validation validateMandatoryFields on save { field Claimcategory, Vendorid; create; update; }
 
   //To update From  UI(Fields are Legal flag)
-  action UpdateFromUi parameter ZREFX_A_UI_UPDATE result [1] $self;
-  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
-  action SetStatusSubmitted result [1] $self;
+  static action UpdateDivision parameter ZREFX_A_UI_UPDATE result [1] $self;
+  //  action UpdateWorkflowInfo parameter ZREFX_A_WF_UPDATE result [1] $self;
+  //  action SetStatusSubmitted result [1] $self;
 
-  draft action ( features : instance ) Edit;
-  draft action Activate optimized;
-  draft action Discard;
-  draft action Resume;
-  draft determine action Prepare
-  {
-    validation validate_Confirminformation;
-    validation validateMandatoryFields;
-  }
+  //  draft action ( features : instance ) Edit;
+  //  draft action Activate optimized;
+  //  draft action Discard;
+  //  draft action Resume;
+  //  draft determine action Prepare
+  //  {
+  //    validation validate_Confirminformation;
+  //    validation validateMandatoryFields;
+  //  }
 
-  field ( readonly ) Claimid, Createddate, Status, Legalflag, MainDivision;
+  field ( readonly ) Claimid, Createddate, Legalflag, MainDivision;
 
-  field ( features : instance ) Vendorid, Vendorname,
-  Vendorcompanyname, Contactpersonname,
-  Contactmobile, Vendoraltnum,
-  Vendorregistrationno, Contactemail;
+  //  field ( features : instance ) Vendorid, Vendorname,
+  //  Vendorcompanyname, Contactpersonname,
+  //  Contactmobile, Vendoraltnum,
+  //  Vendorregistrationno, Contactemail;
   //  Vendoraddress;
 
   mapping for zrefx_claims
@@ -107,6 +112,7 @@ with additional save
       Claimamount          = claimamount;
       Confirminformation   = confirminformation;
       Consentdate          = consentdate;
+      RequestorEmail       = requestoremail;
       CreatedBy            = createdby;
       Lastchangedat        = lastchangedat;
       Locallastchangedat   = locallastchangedat;
@@ -115,39 +121,63 @@ with additional save
 
 define behavior for ZREFX_I_ATT_CLAIMS alias Attachments
 persistent table zrefx_att_claims
-draft table zrefx_d_att_clms
+//draft table zrefx_d_att_clms
 lock dependent by _claims
 authorization dependent by _claims
 etag master Lastchangedat
 late numbering
 with additional save
 {
-  update ( features : instance );
+
+  // update; ( features : instance );
+  update;
   delete;
   field ( readonly ) ClaimId, AttachmentId;
+  action updateDmsId parameter ZREFX_A_DMS_UPD_COM_OUT result [1] $self;
+  //  static action upload
+  //    parameter ZREFX_A_DMS_UPD_CLM_IN
+  //    result [1] ZREFX_A_DMS_UPD_CLM_OUT;
+
+  static action delete
+    parameter ZREFX_A_DMS_DDEL_CLM_IN
+    result [1] $self;
+
+
 
   static action download
-    parameter ZREFX_A_DMS_COM_DOW_IN
-    result [1] ZREFX_A_DMS_COM_DOW_OUT;
+    parameter ZREFX_A_DMS_CLM_DOW_IN
+    result [1] ZREFX_A_DMS_CLM_DOW_OUT;
 
-  association _claims { with draft; }
+  association _claims;
+  //  association _claims { with draft; }
   mapping for zrefx_att_claims
     {
       ClaimId      = claim_id;
+      //      AttachmentId = attachment_id;
+      //      Dmsid        = dmsid;
+      //      Filename     = filename;
+      //      Mimetype     = mimetype;
+      //      Content      = content;
+      //      CreatedAt    = created_at;
+      //      CreatedBy    = created_by;
       AttachmentId = attachment_id;
       Dmsid        = dmsid;
-      Filename     = filename;
-      Mimetype     = mimetype;
-      Content      = content;
       CreatedAt    = created_at;
       CreatedBy    = created_by;
+      Documentname = documentname;
+      Documenttype = documenttype;
+      Filename     = filename;
+      Mediatype    = mediatype;
+      Mimetype     = mimetype;
+      Content      = content;
+      Notes        = notes;
     }
 
 }
 
 define behavior for ZREFX_I_WF_CLM alias WorkflowInfo
 persistent table zrefx_wf_clm
-draft table zrefx_d_wf_clm
+//draft table zrefx_d_wf_clm
 lock dependent by _Claims
 authorization dependent by _Claims
 late numbering
@@ -156,8 +186,10 @@ with additional save
   update;
   delete;
   field ( readonly ) ClaimId, LogUuid;
-  association _Claims { with draft; }
-
+  //  association _Claims { with draft; }
+  association _Claims;
+  // Every time SBPA does a POST to this entity, this logic will run.
+  determination updateParentStatus on modify { create; }
   mapping for zrefx_wf_clm
     {
       ClaimId            = claim_id;

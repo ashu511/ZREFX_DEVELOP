@@ -1,0 +1,14 @@
+managed implementation in class zbp_refx_i_claims_region_repor unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_CLAIMS_REGION_REPORT //alias <alias_name>
+persistent table zrefx_wf_clm
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( readonly ) ClaimId;
+}

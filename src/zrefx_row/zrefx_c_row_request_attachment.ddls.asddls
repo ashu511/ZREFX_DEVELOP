@@ -6,7 +6,8 @@ define view entity ZREFX_C_ROW_REQUEST_ATTACHMENT as projection on ZREFX_I_ROW_R
 
     
     key RequestId,
-    key Dmsid,
+    key  AttachmentId,
+    Dmsid,
      
       Documenttype,
       Documentname,

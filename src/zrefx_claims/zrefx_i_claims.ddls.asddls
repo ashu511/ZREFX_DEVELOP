@@ -16,11 +16,13 @@ define root view entity ZREFX_I_CLAIMS
   association     to ZREFX_DOV_URGENCY         as _urgency  on $projection.Urgency = _urgency.Value
   association [1] to ZREFX_DOV_CITY        as _City         on $projection.City = _City.Value
   association [1] to ZREFX_DOV_MAIN_DIV    as _MainDiv      on $projection.MainDivision = _MainDiv.Value
+  association [1] to ZREFX_DOV_STATUS      as _Status       on $projection.Status = _Status.Value
 
 {
 
   key claim_id             as Claimid,
       createddate          as Createddate,
+      @ObjectModel.text.association: '_Status'
       status               as Status,
       vendorid             as Vendorid,
       vendorname           as Vendorname,
@@ -31,13 +33,14 @@ define root view entity ZREFX_I_CLAIMS
       vendorregistrationno as Vendorregistrationno,
       contactemail         as Contactemail,
       legalflag            as Legalflag,
+      @ObjectModel.text.association: '_claimcat'
       claimcategory        as Claimcategory,
       sourcechannel        as Sourcechannel,
       claimtype            as Claimtype,
       urgency              as Urgency,
       referencetype        as Referencetype,
       referenceid          as Referenceid,
-        landid             as landid,
+      landid               as Landid,
       contractnumber       as Contractnumber,
       leasenumber          as Leasenumber,
       projectid            as Projectid,
@@ -49,7 +52,7 @@ define root view entity ZREFX_I_CLAIMS
       //      @ObjectModel.text.association: '_MainDiv'
       maindivision         as MainDivision,
       //      @ObjectModel.text.association: '_SubDiv'
-      titledeedno       as Titledeedno,
+      titledeedno          as Titledeedno,
       claimsubject         as Claimsubject,
       incidentdate         as Incidentdate,
       requestedpaymentdate as Requestedpaymentdate,
@@ -57,6 +60,8 @@ define root view entity ZREFX_I_CLAIMS
       claimamount          as Claimamount,
       confirminformation   as Confirminformation,
       consentdate          as Consentdate,
+      requestoremail       as RequestorEmail,
+      @Semantics.user.createdBy: true
       createdby            as CreatedBy,
       lastchangedat        as Lastchangedat,
       locallastchangedat   as Locallastchangedat,
@@ -65,6 +70,7 @@ define root view entity ZREFX_I_CLAIMS
       _urgency,
       _WorkflowInfo,
       _City,
+      _Status,
       _MainDiv
 
 }

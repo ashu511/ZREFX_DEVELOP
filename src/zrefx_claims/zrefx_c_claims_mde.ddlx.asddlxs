@@ -275,6 +275,8 @@ annotate entity ZREFX_C_CLAIMS with
 
        }
   @Consumption.valueHelpDefinition: [{entity : { name: 'ZREFX_DOV_CLAIMCAT', element: 'Value'}}]
+
+  //@Consumption.valueHelpDefinition: [{entity : { name: 'ZREFX_DOV_COMPCAT', element: 'Value'}}]
   @UI.fieldGroup: [{ position: 80, label: 'Claim Category', qualifier: 'tqClaimClass'}]
   Claimcategory;
 

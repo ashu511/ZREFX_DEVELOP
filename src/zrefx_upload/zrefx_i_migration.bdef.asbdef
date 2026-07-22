@@ -1,0 +1,147 @@
+managed implementation in class zbp_refx_i_migration unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZREFX_I_MIGRATION alias Migration
+persistent table zrefx_mig_job
+draft table zrefx_mig_job_d
+lock master total etag LastChangedAt
+authorization master ( global )
+{
+  create;
+  update;
+  delete;
+  field ( readonly, numbering : managed ) JobUuid;
+
+  // Make system fields read-only
+  field ( readonly ) Status, CreatedAt, CreatedBy, LastChangedAt;
+  field ( readonly ) HideComplaints, HideClaims, TemplateContent, TemplateMime, TemplateName;
+
+  association _ComplaintsItems { create; with draft; }
+  association _ClaimsItems { create; with draft; }
+
+  // AUTOMATED DETERMINATIONS
+  determination parseExcel on modify { create; field FileContent, TargetObject; }
+  determination executeMigration on save { create; }
+
+  // --- INTERFACE SIDE EFFECTS ---
+  side effects
+  {
+    field TargetObject affects field HideComplaints, field HideClaims, field Status,
+                               field TemplateContent, field TemplateName, field TemplateMime,
+                               entity _ComplaintsItems, entity _ClaimsItems;
+    field FileContent affects entity _ComplaintsItems, entity _ClaimsItems, field Status;
+  }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  // --- MAPPING ---
+  mapping for zrefx_mig_job
+    {
+      JobUuid         = job_uuid;
+      TargetObject    = target_object;
+      FileContent     = file_content;
+      MimeType        = mime_type;
+      FileName        = file_name;
+      Status          = status;
+      CreatedBy       = created_by;
+      CreatedAt       = created_at;
+      LastChangedAt   = last_changed_at;
+      HideComplaints  = hide_complaints;
+      HideClaims      = hide_claims;
+      TemplateContent = template_content;
+      TemplateMime    = template_mime;
+      TemplateName    = template_name;
+    }
+}
+
+define behavior for ZREFX_I_MIG_S_COMP alias ComplaintsItems
+persistent table zrefx_mig_s_comp
+draft table zrefx_mg_comp_d
+lock dependent by _Job
+authorization dependent by _Job
+{
+  update ( features : global );
+  delete ( features : global );
+  field ( readonly, numbering : managed ) ItemUuid;
+  field ( readonly ) JobUuid;
+  association _Job { with draft; }
+
+  // --- MAPPING ---
+  mapping for zrefx_mig_s_comp
+    {
+      ItemUuid            = item_uuid;
+      JobUuid             = job_uuid;
+      ComplaintId         = complaint_id;
+      Createddate         = createddate;
+      Status              = status;
+      Vendorid            = vendorid;
+      Vendorcompanyname   = vendorcompanyname;
+      Contactpersonname   = contactpersonname;
+      Contactmobile       = contactmobile;
+      Contactemail        = contactemail;
+      Legalflag           = legalflag;
+      Complaintcategory   = complaintcategory;
+      Sourcechannel       = sourcechannel;
+      Complainttype       = complainttype;
+      Urgency             = urgency;
+      Referencetype       = referencetype;
+      Referenceid         = referenceid;
+      Landid              = landid;
+      Titledeedno         = titledeedno;
+      Projectid           = projectid;
+      Claimreferenceno    = claimreferenceno;
+      Region              = region;
+      Detaileddescription = detaileddescription;
+      Financialimpact     = financialimpact;
+    }
+}
+
+define behavior for ZREFX_I_MIG_S_CLM alias ClaimsItems
+persistent table zrefx_mig_s_clm
+draft table zrefx_mg_clm_d
+lock dependent by _Job
+authorization dependent by _Job
+{
+  update ( features : global );
+  delete ( features : global );
+  field ( readonly, numbering : managed ) ItemUuid;
+  field ( readonly ) JobUuid;
+  association _Job { with draft; }
+
+  // --- MAPPING ---
+  mapping for zrefx_mig_s_clm
+    {
+      ItemUuid             = item_uuid;
+      JobUuid              = job_uuid;
+      ClaimId              = claim_id;
+      Createddate          = createddate;
+      Status               = status;
+      Vendorid             = vendorid;
+      Contactpersonname    = contactpersonname;
+      Vendorregistrationno = vendorregistrationno;
+      Contactemail         = contactemail;
+      Claimcategory        = claimcategory;
+      Sourcechannel        = sourcechannel;
+      Claimtype            = claimtype;
+      Urgency              = urgency;
+      Referencetype        = referencetype;
+      Referenceid          = referenceid;
+      Leasenumber          = leasenumber;
+      Projectid            = projectid;
+      Projectname          = projectname;
+      Claimreferenceno     = claimreferenceno;
+      Region               = region;
+      City                 = city;
+      Claimsubject         = claimsubject;
+      Incidentdate         = incidentdate;
+      Requestedpaymentdate = requestedpaymentdate;
+      Detaileddescription  = detaileddescription;
+      Claimamount          = claimamount;
+      Claimcurrency        = claimcurrency;
+    }
+}

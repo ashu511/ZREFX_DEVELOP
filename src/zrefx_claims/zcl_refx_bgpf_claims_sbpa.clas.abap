@@ -21,10 +21,10 @@ CLASS zcl_refx_bgpf_claims_sbpa DEFINITION
         Claimamount   TYPE zrefx_i_claims-Claimamount            OPTIONAL
         Description   TYPE zrefx_i_claims-Detaileddescription    OPTIONAL
         Status        TYPE zrefx_i_claims-Status                 OPTIONAL
-        CreatedBy     TYPE string OPTIONAL
-*        submittedby   TYPE string OPTIONAL
-        CreatedDate   TYPE zrefx_i_claims-Createddate            OPTIONAL
-
+*        CreatedBy     TYPE string OPTIONAL
+*        CreatedDate   TYPE zrefx_i_claims-Createddate            OPTIONAL
+        SubmittedBy   TYPE string OPTIONAL
+        SubmittedOn   TYPE zrefx_i_claims-Createddate            OPTIONAL
         landid        TYPE zrefx_i_complaints-Landid             OPTIONAL
         vendoremail   TYPE zrefx_i_complaints-Contactemail       OPTIONAL
         vendorname_en TYPE zrefx_i_complaints-Vendorname         OPTIONAL
@@ -50,9 +50,10 @@ CLASS zcl_refx_bgpf_claims_sbpa DEFINITION
              Claimamount   TYPE string,
              Description   TYPE string,
              Status        TYPE string,
-             CreatedBy     TYPE string,
-*             submittedby   TYPE string,
-             CreatedDate   TYPE string,
+*             CreatedBy     TYPE string,
+*             CreatedDate   TYPE string,
+             SubmittedBy   TYPE string,
+             SubmittedOn   TYPE string,
              landid        TYPE string,
              titledeed     TYPE string,
              vendoremail   TYPE string,
@@ -104,8 +105,11 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
         vendorname_ar    = gs_context-vendorname_ar
         vendorname_en    = gs_context-vendorname_en
 *        submittedby      = gs_context-submittedby
-        createdby        =  gs_context-createdby
-        CreatedDate      = gs_context-CreatedDate
+*        createdby        =  gs_context-createdby
+*        CreatedDate      = gs_context-CreatedDate
+         SubmittedBy  =  gs_context-submittedby
+         SubmittedOn  =  gs_context-submittedon
+
        )
       )
     ).
@@ -129,9 +133,10 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
                         ( abap = 'CLAIMAMOUNT'   json = 'Claimamount' )
                         ( abap = 'DESCRIPTION'   json = 'Description' )
                         ( abap = 'STATUS'        json = 'Status' )
-                        ( abap = 'CREATEDBY'     json = 'CreatedBy' )
-*                        ( abap = 'SUBMITTEDBY'  json = 'SubmittedBy' )
-                        ( abap = 'CREATEDDATE'   json = 'CreatedDate' )
+*                        ( abap = 'CREATEDBY'     json = 'CreatedBy' )
+*                        ( abap = 'CREATEDDATE'   json = 'CreatedDate' )
+                        ( abap = 'SUBMITTEDBY'  json = 'SubmittedBy' )
+                        ( abap = 'SUBMITTEDON'  json = 'SubmittedOn' )
                         ( abap = 'VENDOREMAIL'   json = 'vendorEmail' )
                         ( abap = 'VENDORNAME_EN' json = 'vendorName_en' )
                         ( abap = 'VENDORNAME_AR' json = 'vendorName_ar' )
@@ -182,7 +187,7 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
 
             MODIFY ENTITIES OF zrefx_i_claims
               ENTITY claims
-                EXECUTE SetStatusSubmitted FROM VALUE #( ( Claimid = gs_context-claimid ) )
+*                EXECUTE SetStatusSubmitted FROM VALUE #( ( Claimid = gs_context-claimid ) )
                 CREATE BY \_WorkflowInfo
                 FIELDS ( ApprovalStep ApprovalStepDesc WfInstanceId CurrentStatus CurrentOwner SubmissionFromDate )
                 WITH VALUE #( ( Claimid = gs_context-claimid
@@ -192,7 +197,7 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
                                                      WfInstanceId       = ls_response-id
                                                      " You can map 'RUNNING' directly or hardcode 'SUBMITTED'
                                                      CurrentStatus      = 'SUBMITTED'
-                                                     CurrentOwner       = gs_context-createdby
+                                                     CurrentOwner       = gs_context-submittedby
                                                      SubmissionFromDate = cl_abap_context_info=>get_system_date( ) ) ) ) )
               REPORTED DATA(ls_reported)
               FAILED DATA(ls_failed).
@@ -205,10 +210,10 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
 
 
 
-      CATCH cx_http_dest_provider_error INTO DATA(lx_dest).
+      CATCH cx_http_dest_provider_error INTO DATA(lx_dest)  ##NO_HANDLER.
         " Log - do not abort
 
-      CATCH cx_web_http_client_error INTO DATA(lx_http).
+      CATCH cx_web_http_client_error INTO DATA(lx_http)  ##NO_HANDLER.
         " Log - do not abort
 
     ENDTRY.
@@ -227,13 +232,15 @@ CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
     gs_context-description   = description.
     gs_context-status        = 'SUBMITTED'.    "status.
     "gs_context-"CreatedBy   .
-    gs_context-createdby     = createdby.
-    gs_context-createddate   = createddate.
+*    gs_context-createdby     = createdby.
+*    gs_context-createddate   = createddate.
+    gs_context-submittedby    = submittedby.
+    gs_context-submittedon    = submittedon.
     gs_context-landid        = landid.
 
-    IF gs_context-createddate IS NOT INITIAL AND strlen( gs_context-createddate ) = 8.
-      DATA(lv_formatted_date) = |{ gs_context-createddate+6(2) }.{ gs_context-createddate+4(2) }.{ gs_context-createddate(4) }|.
-      gs_context-createddate = lv_formatted_date.
+    IF gs_context-submittedon IS NOT INITIAL AND strlen( gs_context-submittedon ) = 8.
+      DATA(lv_formatted_date) = |{ gs_context-submittedon+6(2) }.{ gs_context-submittedon+4(2) }.{ gs_context-submittedon(4) }|.
+      gs_context-submittedon = lv_formatted_date.
     ENDIF.
 
     gs_context-titledeed            = titledeed.

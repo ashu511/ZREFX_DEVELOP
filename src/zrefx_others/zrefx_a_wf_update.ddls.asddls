@@ -1,6 +1,7 @@
 @EndUserText.label: 'SBPA Workflow Update Payload'
 define abstract entity ZREFX_A_WF_UPDATE
 {
+  ComplaintID       : abap.char(16);
   WfInstanceId      : abap.char(36);
   approvalstep      : abap.char(1);
   approvalstepdesc  : abap.char(40);

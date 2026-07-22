@@ -6,7 +6,8 @@ CLASS zsam_rap_dummy DEFINITION
   PUBLIC SECTION.
     CONSTANTS c_object TYPE cl_numberrange_objects=>nr_attributes-object
 *      VALUE 'ZREFX_CMNR'.   "Your number-range object
-       VALUE 'ZREFX_CLNR'.   "Your number-range object
+*       VALUE 'ZREFX_CLNR'.   "Your number-range object
+              VALUE 'ZREFX_RWNR'.   "Your number-range object
 
 
     INTERFACES if_oo_adt_classrun.
@@ -52,6 +53,7 @@ CLASS zsam_rap_dummy IMPLEMENTATION.
         RAISE SHORTDUMP lx_error.
     ENDTRY.
 *--------------Number range changes-------------------*
+
 *    SELECT * FROM zrefx_d_att_comp  INTO TABLE @DATA(lt_data1).
 *    out->write(
 *        EXPORTING
@@ -93,7 +95,8 @@ CLASS zsam_rap_dummy IMPLEMENTATION.
 *    DELETE FROM zrefx_draft_comp.
 *    DELETE FROM zrefx_att_comp.
 *    DELETE FROM zrefx_d_att_comp.
-*delete fROM zrefx_complaints wHERE complaint_id = 'CMP2026250038'.
-*
+*    DELETE FROM zrefx_wf_com.
+*    DELETE FROM zrefx_d_wf_com.
+
   ENDMETHOD.
 ENDCLASS.
