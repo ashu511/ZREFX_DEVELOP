@@ -18,4 +18,6 @@ define service ZREFX_SD_ROW_REQUEST {
   expose ZREFX_C_ROW_STEP_MILESTONE     as Milestones;
   expose ZREFX_C_ROW_LAND_ALLOCATION    as LandAllocations;
   expose ZREFX_C_ROW_CONFIGS            as Configs;
+  expose ZREFX_DOV_CITY                 as City_F4;
+  expose ZREFX_DOV_STATUS               as StatusF4;
 }

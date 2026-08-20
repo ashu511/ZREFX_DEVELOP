@@ -1,0 +1,108 @@
+managed with additional save implementation in class ZBP_I_BTPCONFIGURATIONSDA_S unique;
+strict ( 1 );
+with draft;
+define behavior for ZI_BtpConfigurationsDa_S alias BtpConfigurationAll
+draft table ZREFX_ROW_C_D_S
+with unmanaged save
+lock master total etag LastChangedAtMax
+authorization master( global )
+{
+  field ( readonly )
+   SingletonID;
+
+  field ( features : instance )
+   TransportRequestID;
+
+  field ( notrigger )
+   SingletonID,
+   LastChangedAtMax;
+
+
+  update;
+  internal create;
+  internal delete;
+
+  draft action ( features : instance ) Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare {
+    validation BtpConfigurationsDa ~ ValidateDataConsistency;
+  }
+  action ( features : instance ) SelectCustomizingTransptReq parameter D_SelectCustomizingTransptReqP result [1] $self;
+
+  association _BtpConfigurationsDa { create ( features : instance ); with draft; }
+
+  validation ValidateTransportRequest on save ##NOT_ASSIGNED_TO_DETACT
+  {
+    create;
+    update;
+  }
+
+  side effects
+  {
+    action SelectCustomizingTransptReq affects
+        $self;
+  }
+
+}
+
+define behavior for ZI_BtpConfigurationsDa alias BtpConfigurationsDa ##UNMAPPED_FIELD[SingletonID] ##UNMAPPED_FIELD[ConfigDeprecationCode_Critlty]
+persistent table ZREFX_ROW_CONFIG
+draft table ZREFX_ROW_CON_D
+etag master LocChangedAt
+lock dependent by _BtpConfigurationAll
+authorization dependent by _BtpConfigurationAll
+{
+  field ( mandatory : create )
+   ObjectId;
+
+  field ( readonly )
+   SingletonID,
+   ChangedAt,
+   LocChangedAt,
+   ConfigDeprecationCode,
+   ConfigDeprecationCode_Critlty;
+
+  field ( readonly : update )
+   ObjectId;
+
+  field ( notrigger )
+   SingletonID,
+   ChangedAt,
+   LocChangedAt;
+
+
+  update( features : global );
+  delete( features : instance );
+
+  action ( features : instance ) Deprecate result [1] $self;
+  action ( features : instance ) Invalidate result [1] $self;
+  factory action ( features : instance ) Copy parameter ZD_CopyROWConfigP [1];
+
+  mapping for ZREFX_ROW_CONFIG
+  {
+    ObjectId = OBJECT_ID;
+    Environment = ENVIRONMENT;
+    ConfigValue = CONFIG_VALUE;
+    Description = DESCRIPTION;
+    ConfigDeprecationCode = CONFIGDEPRECATIONCODE;
+    ChangedAt = CHANGED_AT;
+    LocChangedAt = LOC_CHANGED_AT;
+  }
+
+  association _BtpConfigurationAll { with draft; }
+
+  validation ValidateTransportRequest on save ##NOT_ASSIGNED_TO_DETACT
+  {
+    create;
+    update;
+    delete;
+  }
+  validation ValidateDataConsistency on save
+  {
+    create;
+    update;
+  }
+
+}

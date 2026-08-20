@@ -7,7 +7,8 @@ CLASS zsam_rap_dummy DEFINITION
     CONSTANTS c_object TYPE cl_numberrange_objects=>nr_attributes-object
 *      VALUE 'ZREFX_CMNR'.   "Your number-range object
 *       VALUE 'ZREFX_CLNR'.   "Your number-range object
-              VALUE 'ZREFX_RWNR'.   "Your number-range object
+*              VALUE 'ZREFX_RWNR'.   "Your number-range object
+              VALUE 'ZREFX_GLNR'.   "Your number-range object
 
 
     INTERFACES if_oo_adt_classrun.
@@ -18,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS zsam_rap_dummy IMPLEMENTATION.
+CLASS ZSAM_RAP_DUMMY IMPLEMENTATION.
 
 
   METHOD if_oo_adt_classrun~main.

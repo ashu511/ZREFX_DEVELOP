@@ -7,10 +7,12 @@ define root view entity ZREFX_C_CLAIMS_WF_TRACK_REPORT
   as projection on ZREFX_I_CLAIMS_WF_TRACK_REPORT
 {
   key ClaimId,
+      @UI.hidden: true
   key LogUuid,
+      @UI.hidden: true
       WfInstanceId,
       Region,
-      ApprovalStep,      
+      ApprovalStep,
       CurrentStatus,
       CurrentOwner,
       SubmissionFromDate,

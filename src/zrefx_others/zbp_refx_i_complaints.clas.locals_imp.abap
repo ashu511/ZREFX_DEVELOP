@@ -624,6 +624,65 @@ CLASS lsc_zrefx_i_complaints IMPLEMENTATION.
 
     ENDIF.
 
+    IF create-attachments IS NOT INITIAL.
+
+      " 1. Read the parent status to ensure we don't upload Draft files
+      DATA lt_parent_keys TYPE TABLE FOR READ IMPORT zrefx_i_complaints.
+      LOOP AT create-attachments ASSIGNING FIELD-SYMBOL(<ls_att_keys>).
+        APPEND VALUE #( ComplaintId = <ls_att_keys>-ComplaintId ) TO lt_parent_keys.
+      ENDLOOP.
+
+      SORT lt_parent_keys BY ComplaintId.
+      DELETE ADJACENT DUPLICATES FROM lt_parent_keys COMPARING ComplaintId.
+
+      READ ENTITIES OF zrefx_i_complaints IN LOCAL MODE
+        ENTITY Complaints FIELDS ( Status )
+        WITH lt_parent_keys RESULT DATA(lt_parents).
+
+      DATA lt_dms_create_api TYPE zcl_refx_bgpf_comp_dms_up=>tt_context.
+
+      LOOP AT create-attachments ASSIGNING FIELD-SYMBOL(<lfs_attachment>).
+        " Skip if there's no content to upload
+        IF <lfs_attachment>-Content IS INITIAL.
+          CONTINUE.
+        ENDIF.
+
+        " === GUARD 1: DOUBLE TRIGGER PREVENTION ===
+        " If this complaint was JUST submitted in this transaction,
+        " the lt_submitted_complaints block above already queued this file.
+        IF line_exists( lt_submitted_complaints[ table_line = <lfs_attachment>-ComplaintId ] ).
+          CONTINUE.
+        ENDIF.
+
+        " === GUARD 2: DRAFT PREVENTION ===
+        " If the parent is still a Draft ('01' or blank), do not upload yet.
+        READ TABLE lt_parents INTO DATA(ls_parent)
+        WITH KEY entity COMPONENTS
+        ComplaintId = <lfs_attachment>-ComplaintId.
+        IF sy-subrc = 0 AND ( ls_parent-Status = '01' OR ls_parent-Status IS INITIAL ).
+          CONTINUE.
+        ENDIF.
+
+        APPEND VALUE #(
+          complaintid  = <lfs_attachment>-ComplaintId
+          attachmentid = <lfs_attachment>-AttachmentId
+          content      = <lfs_attachment>-Content
+          filename     = <lfs_attachment>-Filename
+          mimetype     = <lfs_attachment>-Mimetype
+        ) TO lt_dms_create_api.
+      ENDLOOP.
+
+      " Only schedule BgPF if we have valid files to process
+      IF lt_dms_create_api IS NOT INITIAL.
+        TRY.
+            DATA(lo_dms_op_api) = NEW zcl_refx_bgpf_comp_dms_up( ).
+            lo_dms_op_api->set_context_data( it_context = lt_dms_create_api ).
+            cl_bgmc_process_factory=>get_default( )->create( )->set_name( 'DMSAttachmentAPIUpload' )->set_operation( lo_dms_op_api )->save_for_execution( ).
+          CATCH cx_bgmc INTO DATA(lx_bgmc_api) ##NO_HANDLER.
+        ENDTRY.
+      ENDIF.
+    ENDIF.
+
 *    IF create-attachments IS NOT INITIAL.
 *
 *      LOOP AT create-attachments ASSIGNING FIELD-SYMBOL(<lfs_attachment>).

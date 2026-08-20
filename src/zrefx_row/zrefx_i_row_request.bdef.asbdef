@@ -7,6 +7,7 @@ lock master
 authorization master ( instance )
 late numbering
 //etag master <field_name>
+with additional save
 {
   create ( authorization : global );
   update;
@@ -21,7 +22,7 @@ late numbering
   association _Proposal { create; }
   association _RequestAttachments { create; }
   association _WorkflowInstance { create; }
-
+  association _ROWWorkflowInfo { create; }
   mapping for zrefx_row
     {
       RequestId                  = request_id;
@@ -31,6 +32,13 @@ late numbering
       Approvalstatuscode         = approvalstatuscode;
       Areasqmrequested           = areasqmrequested;
       Businessarea               = businessarea;
+      Initiatorid                = initiatorid;
+      Initiatorfullname          = initiatorfullname;
+      Initiatororganization      = initiatororganization;
+      Employeenumber             = employeenumber;
+      Emailaddress               = emailaddress;
+      Contactnumber              = contactnumber;
+      Othercity                  = othercity;
       Businessjustification      = businessjustification;
       Cablelengthkm              = cablelengthkm;
       Capacitymva                = capacitymva;
@@ -44,6 +52,7 @@ late numbering
       Facilitytype               = facilitytype;
       Gislocationlink            = gislocationlink;
       Gisprojectid               = gisprojectid;
+      Gisdrawing                 = gisdrawing;
       Hijrienddate               = hijrienddate;
       Hijristartdate             = hijristartdate;
       Initiatedbyrole            = initiatedbyrole;
@@ -56,6 +65,7 @@ late numbering
       Projectapprovalyear        = projectapprovalyear;
       Projectbudgetyear          = projectbudgetyear;
       Projectcostsar             = projectcostsar;
+      EstimatedProjectCost       = estimatedprojectcost;
       Projectenddate             = projectenddate;
       Projectname                = projectname;
       Projectstartdate           = projectstartdate;
@@ -69,7 +79,6 @@ late numbering
       Sourcesubsidiary           = sourcesubsidiary;
       Stagegateprojectno         = stagegateprojectno;
       Stationtype                = stationtype;
-      Status                     = status;
       Statuscode                 = statuscode;
       Voltagekv                  = voltagekv;
       Wbsprojectno               = wbsprojectno;
@@ -86,6 +95,11 @@ late numbering
       Milestone                  = milestone;
       WorkflowInstanceId         = workflowinstanceid;
       MilestoneSequence          = milestonesequence;
+      City                       = city;
+      Region                     = region;
+      Sitearea                   = sitearea;
+      ConfirmInformation         = confirminformation;
+      ConsentDate                = consentdate;
     }
 
 
@@ -111,7 +125,7 @@ late numbering
       Answeredby = answeredby;
       Question   = question;
       Raisedby   = raisedby;
-      Statuscode = statuscode;
+      //      Statuscode = statuscode;
       UserId     = userid;
       UserName   = username;
       Title      = title;
@@ -337,10 +351,12 @@ lock dependent by _ROWRequest
 authorization dependent by _ROWRequest
 late numbering
 //etag master <field_name>
+with additional save
 {
   update;
   delete;
-  field ( readonly ) RequestId, Dmsid;
+  field ( readonly ) RequestId, AttachmentId;
+  action updateDmsId parameter ZREFX_A_DMS_UPD_COM_OUT result [1] $self;
   association _ROWRequest;
   mapping for zrefx_row_req_a
     {
@@ -349,8 +365,11 @@ late numbering
       Category     = category;
       Dmsid        = dmsid;
       Documentname = documentname;
+      Documenttype = documenttype;
       Filename     = filename;
       Mediatype    = mediatype;
+      Mimetype     = mimetype;
+      Content      = content;
       Notes        = notes;
       CreatedAt    = created_at;
       CreatedBy    = created_by;
@@ -368,7 +387,8 @@ late numbering
   delete;
   field ( readonly ) Objectid, RequestId;
   association _ROWRequest;
-  determination initWorkflowDetails on modify { create; }
+  determination updateParentStatus on modify { create; }
+  //  determination initWorkflowDetails on modify { create; }
   mapping for zrefx_row_workin
     {
       RequestId            = request_id;
@@ -390,5 +410,47 @@ late numbering
       DivisionManagerId    = divmanagerid;
       DivisionManagerName  = divmanagername;
       BusinessArea         = businessarea;
+      WfInstanceId         = wf_instance_id;
+      Approvalstep         = approvalstep;
+      Approvalstepdesc     = approvalstepdesc;
+      ApproverEmail        = approver_email;
+      CurrentStatus        = current_status;
+      CurrentOwner         = current_owner;
+      Currentownerdesig    = currentownerdesig;
+      OrganizationField    = organization_field;
+      Region               = region;
+      SubmissionDate       = submission_date;
+
+    }
+}
+
+define behavior for ZREFX_I_WF_ROW //alias <alias_name>
+persistent table zrefx_wf_row
+lock dependent by _RowWorkflow
+authorization dependent by _RowWorkflow
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) LogUuid, RequestId;
+  association _RowWorkflow;
+  mapping for zrefx_wf_row
+    {
+      RequestId          = request_id;
+      LogUuid            = log_uuid;
+      WfInstanceId       = wf_instance_id;
+      Approvalstep       = approvalstep;
+      Approvalstepdesc   = approvalstepdesc;
+      ApproverEmail      = approver_email;
+      CurrentStatus      = current_status;
+      CurrentOwner       = current_owner;
+      Currentownerdesig  = currentownerdesig;
+      OrganizationField  = organization_field;
+      Comments           = comments;
+      Region             = region;
+      SubmissionFromDate = submission_from_date;
+      SubmissionToDate   = submission_to_date;
+      DecisionOutcome    = decision_outcome;
     }
 }

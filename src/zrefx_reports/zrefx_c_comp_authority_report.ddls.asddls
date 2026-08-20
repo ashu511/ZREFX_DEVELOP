@@ -7,7 +7,8 @@ define root view entity ZREFX_C_COMP_AUTHORITY_REPORT
   as projection on ZREFX_I_COMP_Authority_report
 {
   key ComplaintId,
-    key Loguuid,
+      @UI.hidden: true
+  key Loguuid,
       WfInstanceId,
       Category,
       Source,
@@ -32,5 +33,4 @@ define root view entity ZREFX_C_COMP_AUTHORITY_REPORT
       ClosureDate,
       /* Associations */
       _Complaints
-
 }

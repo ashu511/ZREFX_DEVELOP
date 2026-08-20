@@ -7,7 +7,9 @@ define root view entity ZREFX_C_CLAIMS_WF_PAY_REPORT
   as projection on ZREFX_I_CLAIMS_WF_PAY_REPORT
 {
   key ClaimId,
+      @UI.hidden: true
   key log_uuid,
+      @UI.hidden: true
       WfInstanceId,
       VendorName,
       VendorId,

@@ -53,6 +53,7 @@ define root view entity ZREFX_I_COMPLAINTS
       region               as Region,
       @ObjectModel.text.association: '_City'
       city                 as City,
+      othercity           as OtherCity,
       //      @ObjectModel.text.association: '_MainDiv'
       maindivision         as MainDivision,
       //      @ObjectModel.text.association: '_SubDiv'

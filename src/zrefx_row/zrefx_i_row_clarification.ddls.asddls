@@ -7,8 +7,7 @@ association        to parent ZREFX_I_ROW_REQUEST as _ROWRequest on $projection.R
     
     key id                     as Id,
      key request_id                 as RequestId,
-   
-      statuscode                 as Statuscode,
+//      statuscode                as Statuscode,
       raisedby          as Raisedby,
       question                   as Question,
       answeredby            as Answeredby,

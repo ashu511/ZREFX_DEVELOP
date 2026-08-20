@@ -88,6 +88,8 @@ with additional save
       Vendorregistrationno = vendorregistrationno;
       Contactemail         = contactemail;
       Legalflag            = Legalflag;
+      PaymentTerm          = paymentterm;
+      BudgetCheck          = budgetcheck;
       //      Vendoraddress        = vendoraddress;
       Claimcategory        = claimcategory;
       Sourcechannel        = sourcechannel;
@@ -105,6 +107,7 @@ with additional save
       MainDivision         = maindivision;
       Titledeedno          = titledeedno;
       City                 = city;
+      OtherCity            = othercity;
       Claimsubject         = claimsubject;
       Incidentdate         = incidentdate;
       Requestedpaymentdate = requestedpaymentdate;

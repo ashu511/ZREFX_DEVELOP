@@ -13,7 +13,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_vendor_f4 IMPLEMENTATION.
+CLASS ZCL_REFX_VENDOR_F4 IMPLEMENTATION.
 
 
   METHOD if_rap_query_provider~select.
@@ -191,5 +191,4 @@ CLASS zcl_refx_vendor_f4 IMPLEMENTATION.
     ENDTRY.
 
   ENDMETHOD.
-
 ENDCLASS.

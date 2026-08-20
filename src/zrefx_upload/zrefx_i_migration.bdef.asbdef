@@ -9,12 +9,14 @@ lock master total etag LastChangedAt
 authorization master ( global )
 {
   create;
-  update;
-  delete;
+  update ( features : instance );
+  delete ( features : instance );
   field ( readonly, numbering : managed ) JobUuid;
 
+  field ( mandatory ) TargetObject;
+
   // Make system fields read-only
-  field ( readonly ) Status, CreatedAt, CreatedBy, LastChangedAt;
+  field ( readonly ) Status, StatusCriticality, CreatedAt, CreatedBy, LastChangedAt;
   field ( readonly ) HideComplaints, HideClaims, TemplateContent, TemplateMime, TemplateName;
 
   association _ComplaintsItems { create; with draft; }
@@ -27,13 +29,13 @@ authorization master ( global )
   // --- INTERFACE SIDE EFFECTS ---
   side effects
   {
-    field TargetObject affects field HideComplaints, field HideClaims, field Status,
-                               field TemplateContent, field TemplateName, field TemplateMime,
-                               entity _ComplaintsItems, entity _ClaimsItems;
-    field FileContent affects entity _ComplaintsItems, entity _ClaimsItems, field Status;
+    field TargetObject affects field HideComplaints, field HideClaims, field Status, field StatusCriticality,
+        field TemplateContent, field TemplateName, field TemplateMime, field FileContent,
+        entity _ComplaintsItems, entity _ClaimsItems;
+    field FileContent affects entity _ComplaintsItems, entity _ClaimsItems, field Status, field StatusCriticality;
   }
 
-  draft action Edit;
+  draft action ( features : instance ) Edit;
   draft action Activate optimized;
   draft action Discard;
   draft action Resume;

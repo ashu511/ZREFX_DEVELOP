@@ -44,7 +44,8 @@ with additional save
   //  validation validateMandatoryFields on save { field Complaintcategory, Vendorid; create; update; }
 
   //  field ( readonly ) ComplaintId, Createddate, Status, MainDivision, Legalflag;
-  field ( readonly ) ComplaintId, Createddate, MainDivision, Legalflag;
+//  field ( readonly ) ComplaintId, Createddate, MainDivision, Legalflag;
+  field ( readonly ) ComplaintId, MainDivision, Legalflag;
 
   //  field ( features : instance ) Vendorid, Vendorname,
   //  Vendorcompanyname, Contactpersonname,
@@ -94,6 +95,7 @@ with additional save
       Claimreferenceno     = claimreferenceno;
       Region               = region;
       City                 = city;
+      OtherCity            = othercity;
       MainDivision         = maindivision;
       //      SubDivision          = subdivision;
       MainDivDescription   = maindivdescription;

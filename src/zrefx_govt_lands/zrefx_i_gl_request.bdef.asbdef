@@ -2,16 +2,16 @@ managed with additional save implementation in class zbp_refx_i_gl_request
 unique;
 strict ( 2 );
 
-define behavior for ZREFX_I_GL_REQUEST //alias <alias_name>
+define behavior for ZREFX_I_GL_REQUEST alias GovtLand
 persistent table zrefx_gl
 lock master
 authorization master ( instance )
 late numbering
-//etag master <field_name>
 {
   create ( authorization : global );
   update;
   delete;
+
   field ( readonly ) RequestId;
   field ( mandatory ) Statuscode;
 
@@ -89,12 +89,11 @@ late numbering
 
 }
 
-define behavior for ZREFX_I_GL_CLARIFICATION //alias <alias_name>
+define behavior for ZREFX_I_GL_CLARIFICATION alias Clarification
 persistent table zrefx_gl_clarif
 lock dependent by _LandRequest
 authorization dependent by _LandRequest
 late numbering
-//etag master <field_name>
 {
   update;
   delete;
@@ -116,12 +115,11 @@ late numbering
     }
 }
 
-define behavior for ZREFX_I_GL_LAND_ALLOCATION //alias <alias_name>
+define behavior for ZREFX_I_GL_LAND_ALLOCATION alias LandAllocation
 persistent table zrefx_gl_landal
 lock dependent by _LandRequest
 late numbering
 authorization dependent by _LandRequest
-//etag master <field_name>
 {
   update;
   delete;
@@ -137,12 +135,11 @@ authorization dependent by _LandRequest
     }
 }
 
-define behavior for ZREFX_I_GL_PROPOSAL //alias <alias_name>
+define behavior for ZREFX_I_GL_PROPOSAL alias Proposal
 persistent table zrefx_gl_psl
 lock dependent by _LandRequest
 authorization dependent by _LandRequest
 late numbering
-//etag master <field_name>
 {
   update;
   delete;
@@ -177,12 +174,11 @@ late numbering
     }
 }
 
-define behavior for ZREFX_I_GL_PROPOSEDLAND //alias <alias_name>
+define behavior for ZREFX_I_GL_PROPOSEDLAND alias ProposedLand
 persistent table zrefx_row_propl
 lock dependent by _LandRequest
 late numbering
 authorization dependent by _LandRequest
-//etag master <field_name>
 {
   update;
   delete;
@@ -215,12 +211,11 @@ authorization dependent by _LandRequest
     }
 }
 
-define behavior for ZREFX_I_GL_SITEVISIT //alias <alias_name>
+define behavior for ZREFX_I_GL_SITEVISIT alias SiteVisit
 persistent table zrefx_row_sitevi
 lock dependent by _LandRequest
 late numbering
 authorization dependent by _LandRequest
-//etag master <field_name>
 {
   update;
   delete;
@@ -255,12 +250,11 @@ authorization dependent by _LandRequest
     }
 }
 
-define behavior for ZREFX_I_GL_SITEVISIT_ATT //alias <alias_name>
+define behavior for ZREFX_I_GL_SITEVISIT_ATT alias SiteVisitAttachment
 persistent table zrefx_gl_visita
 late numbering
 lock dependent by _LandRequest
 authorization dependent by _LandRequest
-//etag master <field_name>
 {
   update;
   delete;
@@ -292,12 +286,11 @@ authorization dependent by _LandRequest
 
 }
 
-define behavior for ZREFX_I_GL_SITEVISITNOM //alias <alias_name>
+define behavior for ZREFX_I_GL_SITEVISITNOM alias SiteVisitNom
 persistent table zrefx_gl_svn
 lock dependent by _LandRequest
 late numbering
 authorization dependent by _LandRequest
-//etag master <field_name>
 {
   update;
   delete;
@@ -335,16 +328,19 @@ authorization dependent by _LandRequest
     }
 }
 
-define behavior for ZREFX_I_GL_REQUEST_ATTACHMENT //alias <alias_name>
+define behavior for ZREFX_I_GL_REQUEST_ATTACHMENT alias ReqAttachment
 persistent table zrefx_gl_req_a
-late numbering
 lock dependent by _GLRequest
 authorization dependent by _GLRequest
-//etag master <field_name>
+late numbering
+with additional save
 {
   update;
   delete;
-  field ( readonly ) RequestId, Dmsid;
+  field ( readonly ) RequestId, AttachmentId;
+
+  // Action to allow BgPF Class to update DMSID
+  action updateDmsId parameter ZREFX_A_DMS_UPD_COM_OUT result [1] $self;
 
   //    static action upload
   //    parameter ZREFX_A_DMS_UPLOAD_IN
@@ -358,15 +354,23 @@ authorization dependent by _GLRequest
   //    parameter ZREFX_A_DMS_DOWNLOAD_IN
   //    result [1] ZREFX_A_DMS_DOWNLOAD_OUT;
 
+  static action download
+    parameter ZREFX_A_DMS_COM_DOW_IN
+    result [1] ZREFX_A_DMS_COM_DOW_OUT;
+
   association _GLRequest;
   mapping for zrefx_gl_req_a
     {
       RequestId    = request_id;
+      AttachmentId = attachment_id;
       Category     = category;
       Dmsid        = dmsid;
       Documentname = documentname;
+      Documenttype = documenttype;
       Filename     = filename;
       Mediatype    = mediatype;
+      Mimetype     = mimetype;
+      Content      = content;
       Notes        = notes;
       CreatedAt    = created_at;
       CreatedBy    = created_by;
@@ -374,38 +378,37 @@ authorization dependent by _GLRequest
 
 }
 
-define behavior for ZREFX_I_GL_WORKFLOW_INSTANCE //alias <alias_name>
+define behavior for ZREFX_I_GL_WORKFLOW_INSTANCE alias WorkflowInstance
 persistent table zrefx_gl_workin
 lock dependent by _GLRequest
 authorization dependent by _GLRequest
 late numbering
-//etag master <field_name>
+with additional save
 {
   update;
   delete;
-  field ( readonly ) Objectid, RequestId;
+  field ( readonly ) LogUuid, RequestId;
   association _GLRequest;
-  //  determination initWorkflowDetails on modify { create; }
+
+  // Every time SBPA does a POST to this entity, this logic will run.
+  determination updateParentStatus on modify { create; }
+
   mapping for zrefx_gl_workin
     {
-      RequestId            = request_id;
-      Comments             = comments;
-      CreatedBy            = createdby;
-      Definitionid         = definitionid;
-      Department           = department;
-      Instanceid           = instanceid;
-      Objectid             = objectid;
-      Objecttype           = objecttype;
-      Status               = status;
-      UserId               = userid;
-      ActionDate           = actiondate;
-      UserName             = username;
-      Title                = title;
-      Statuscode           = statuscode;
-      DivisionEmployeeId   = divemplid;
-      DivisionEmployeeName = divemplname;
-      DivisionManagerId    = divmanagerid;
-      DivisionManagerName  = divmanagername;
-      BusinessArea         = businessarea;
+      RequestId         = request_id;
+      LogUuid           = log_uuid;
+      WfInstanceId      = wf_instance_id;
+      Objecttype        = objecttype;
+      Approvalstep      = approvalstep;
+      Approvalstepdesc  = approvalstepdesc;
+      ApproverEmail     = approver_email;
+      CurrentStatus     = current_status;
+      CurrentOwner      = current_owner;
+      Currentownerdesig = currentownerdesig;
+      OrganizationField = organization_field;
+      Comments          = comments;
+      Region            = region;
+      SubmissionDate    = submission_date;
+      DecisionOutcome   = decision_outcome;
     }
 }

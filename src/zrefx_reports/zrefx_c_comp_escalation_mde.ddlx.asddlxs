@@ -19,58 +19,71 @@ annotate entity ZREFX_C_COMP_ESCALATION_REP with
        }
   @EndUserText.label: 'SLA Status'
   SlaStatus;
+
   @UI: { lineItem: [ { position: 20, label: 'Escalation Triggered'  } ],
-  identification: [{ position: 20, label: 'Escalation Triggered', hidden :true }],
-  selectionField: [ { position: 20 } ]
+  identification: [{ position: 20, label: 'Escalation Triggered', hidden :true }]
      }
   EscalationTriggered;
+
   @UI: { lineItem: [ { position: 30, label: 'Authority Level'  } ],
-  identification: [{ position: 30, label: 'Authority Level', hidden :true }],
-  selectionField: [ { position: 30 } ]
+  identification: [{ position: 30, label: 'Authority Level', hidden :true }]
      }
   AuthorityLevel;
+
   @UI: { lineItem: [ { position: 40, label: 'Region'  } ],
-  identification: [{ position: 40, label: 'Region', hidden :true }],
-  selectionField: [ { position: 40 } ]
+    identification: [{ position: 40, label: 'Region', hidden :true }],
+  selectionField: [ { position: 20 } ]
      }
+  @EndUserText.label: 'Region'
   Region;
+
   @UI: { lineItem: [ { position: 50, label: 'Complaint Id'  } ],
-  identification: [{ position: 50, label: 'Complaint Id', hidden :true }],
-  selectionField: [ { position: 50 } ]
+         identification: [{ position: 50, label: 'Complaint Id', hidden :true }],
+         selectionField: [ { position: 30 } ]
      }
+  @EndUserText.label: 'Complaint Id'
   ComplaintId;
+
   @UI: { lineItem: [ { position: 60, label: 'Days Pending'  } ],
-  identification: [{ position: 60, label: 'Days Pending', hidden :true }],
-  selectionField: [ { position: 60 } ]
+  identification: [{ position: 60, label: 'Days Pending', hidden :true }]
      }
   DaysPending;
+
   @UI: { lineItem: [ { position: 70, label: 'Escalation Date'  } ],
-  identification: [{ position: 70, label: 'Escalation Date', hidden :true }],
-  selectionField: [ { position: 70 } ]
+  identification: [{ position: 70, label: 'Escalation Date', hidden :true }]
      }
   EscalationDate;
-  //   WfInstanceId;
-  //   Category;
-  //   Source;
-  //
-  //   Maindivision;
-  //   Legalflag;
-  //   CurrentStatus;
-  //   CurrentOwner;
-  //   DaysOpen;
-  //
-  //   SubmissionFromDate;
-  //   SubmissionToDate;
-  //
-  //
-  //
-  //
-  //   LegalInvolvement;
-  //   DecisionOutcome;
-  //   LegalReviewReq;
-  //   LegalDecision;
-  //   FinalDecision;
-  //   ClosureDate;
 
-
+  @UI.hidden: true
+  WfInstanceId;
+  @UI.hidden: true
+  Category;
+  @UI.hidden: true
+  Source;
+  @UI.hidden: true
+  Maindivision;
+  @UI.hidden: true
+  Legalflag;
+  @UI.hidden: true
+  CurrentStatus;
+  @UI.hidden: true
+  CurrentOwner;
+  @UI.hidden: true
+  DaysOpen;
+  @UI.hidden: true
+  SubmissionFromDate;
+  @UI.hidden: true
+  SubmissionToDate;
+  @UI.hidden: true
+  LegalInvolvement;
+  @UI.hidden: true
+  DecisionOutcome;
+  @UI.hidden: true
+  LegalReviewReq;
+  @UI.hidden: true
+  LegalDecision;
+  @UI.hidden: true
+  FinalDecision;
+  @UI.hidden: true
+  ClosureDate;
 }

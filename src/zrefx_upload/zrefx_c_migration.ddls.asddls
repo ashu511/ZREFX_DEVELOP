@@ -7,14 +7,15 @@ define root view entity ZREFX_C_MIGRATION
 {
   key JobUuid,
       @ObjectModel.text.element: ['TargetDescription']
-      @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_VH_TARGETS', element: 'Value' } }]
       TargetObject,
       @UI.hidden: true
       _TargetVH.Description as TargetDescription,
+      @Semantics.largeObject: { mimeType: 'MimeType', fileName: 'FileName', contentDispositionPreference: #ATTACHMENT }
       FileContent,
       MimeType,
       FileName,
       Status,
+      StatusCriticality,
       CreatedBy,
       CreatedAt,
       LastChangedAt,
@@ -23,13 +24,11 @@ define root view entity ZREFX_C_MIGRATION
       HideComplaints,
       @UI.hidden: true
       HideClaims,
-      
+
       @EndUserText.label: 'Download Template'
       @Semantics.largeObject: { mimeType: 'TemplateMime', fileName: 'TemplateName', contentDispositionPreference: #ATTACHMENT }
       TemplateContent,
-      @UI.hidden: true
       TemplateMime,
-      @UI.hidden: true
       TemplateName,
 
       /* Associations */

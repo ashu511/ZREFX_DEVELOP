@@ -6,8 +6,7 @@ define view entity ZREFX_C_ROW_CLARIFICATION as projection on ZREFX_I_ROW_CLARIF
     
      key Id,
      key RequestId,
-   
-      Statuscode,
+//      Statuscode,
       Raisedby,
       Question,
       Answeredby,

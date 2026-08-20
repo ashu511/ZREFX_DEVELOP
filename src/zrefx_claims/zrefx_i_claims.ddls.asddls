@@ -33,6 +33,8 @@ define root view entity ZREFX_I_CLAIMS
       vendorregistrationno as Vendorregistrationno,
       contactemail         as Contactemail,
       legalflag            as Legalflag,
+      paymentterm          as PaymentTerm,
+      budgetcheck          as BudgetCheck,
       @ObjectModel.text.association: '_claimcat'
       claimcategory        as Claimcategory,
       sourcechannel        as Sourcechannel,
@@ -49,6 +51,7 @@ define root view entity ZREFX_I_CLAIMS
       region               as Region,
       @ObjectModel.text.association: '_City'
       city                 as City,
+      othercity            as OtherCity,
       //      @ObjectModel.text.association: '_MainDiv'
       maindivision         as MainDivision,
       //      @ObjectModel.text.association: '_SubDiv'

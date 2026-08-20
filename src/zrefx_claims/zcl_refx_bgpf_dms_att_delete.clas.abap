@@ -29,7 +29,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_bgpf_dms_att_delete IMPLEMENTATION.
+CLASS ZCL_REFX_BGPF_DMS_ATT_DELETE IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.

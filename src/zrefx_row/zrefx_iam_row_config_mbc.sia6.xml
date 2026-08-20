@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SIA6" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SIA6>
+    <MAIN_OBJECT>
+     <NAME>ZREFX_IAM_ROW_CONFIG_MBC</NAME>
+     <TYPE>SIA6</TYPE>
+     <DESCRIPTION>IAM ROW Config</DESCRIPTION>
+     <RESPONSIBLE>CB9980000061</RESPONSIBLE>
+     <MASTER_LANGUAGE>EN</MASTER_LANGUAGE>
+     <MASTER_SYSTEM>DV3</MASTER_SYSTEM>
+     <PACKAGE_REF>
+      <PACKAGE_NAME>ZREFX_ROW</PACKAGE_NAME>
+     </PACKAGE_REF>
+     <ABAP_LANGU_VERSION>5</ABAP_LANGU_VERSION>
+    </MAIN_OBJECT>
+    <APP_ID>ZREFX_IAM_ROW_CONFIG_MBC</APP_ID>
+    <APP_TYPE>MBC</APP_TYPE>
+    <ABAP_LANGUAGE_VERSION>5</ABAP_LANGUAGE_VERSION>
+    <SERVICE>
+     <item>
+      <REL_NAME>ZUI_BTPCONFIGURATIONSDA_O4</REL_NAME>
+      <REL_TYPE>G4BA</REL_TYPE>
+      <APP_ID>ZREFX_IAM_ROW_CONFIG_MBC</APP_ID>
+      <SRVC_NAME>DB7DB199956B7A4B7CE80F9AFEEC86</SRVC_NAME>
+      <SRVC_TYPE>HT</SRVC_TYPE>
+      <TEXT>Maintain BTP Configurations Data</TEXT>
+      <TYPE_TEXT>OData V4</TYPE_TEXT>
+     </item>
+    </SERVICE>
+    <AUTH>
+     <item>
+      <AUTH_OBJECT>S_TABU_NAM</AUTH_OBJECT>
+      <STATUS>U</STATUS>
+      <TEXT>Table Access by Generic Standard Tools</TEXT>
+      <AUTH_ITEM>
+       <item>
+        <UUID>LiiR7bmPH+Gm3x1858x4tQ==</UUID>
+        <AUTH_OBJECT>S_TABU_NAM</AUTH_OBJECT>
+        <AUTH_OBJECT_INSTANCE>0001</AUTH_OBJECT_INSTANCE>
+        <TEXT>Table Access by Generic Standard Tools</TEXT>
+        <STATUS>U</STATUS>
+        <VALUES>
+         <item>
+          <FIELD>ACTVT</FIELD>
+          <VALUE>Change,Display</VALUE>
+          <VALUES>
+           <item>
+            <UUID>rkCoYy1HH9GngRyOcqWW4g==</UUID>
+            <LOW_VALUE>02</LOW_VALUE>
+           </item>
+           <item>
+            <UUID>rkCoYy1HH9GngRyOcqW24g==</UUID>
+            <LOW_VALUE>03</LOW_VALUE>
+           </item>
+          </VALUES>
+          <TEXT>Activity</TEXT>
+          <STATUS>U</STATUS>
+          <IS_ACTVT>X</IS_ACTVT>
+         </item>
+         <item>
+          <FIELD>TABLE</FIELD>
+          <VALUE>ZI_BTPCONFIGURATIONSDA,ZREFX_ROW_CONFIG</VALUE>
+          <VALUES>
+           <item>
+            <UUID>rkCoYy1HH9GngRyOcqX24g==</UUID>
+            <LOW_VALUE>ZI_BTPCONFIGURATIONSDA</LOW_VALUE>
+           </item>
+           <item>
+            <UUID>rkCoYy1HH9GngRyOcqXW4g==</UUID>
+            <LOW_VALUE>ZREFX_ROW_CONFIG</LOW_VALUE>
+           </item>
+          </VALUES>
+          <TEXT>Table Name</TEXT>
+          <STATUS>U</STATUS>
+         </item>
+        </VALUES>
+       </item>
+      </AUTH_ITEM>
+     </item>
+    </AUTH>
+    <PUBLISH_STATUS>p</PUBLISH_STATUS>
+    <RTYPE_MIG_STATUS>3</RTYPE_MIG_STATUS>
+   </SIA6>
+  </asx:values>
+ </asx:abap>
+</abapGit>

@@ -13,62 +13,61 @@
 }
 annotate entity ZREFX_C_CLAIMS_REGION_REPORT with
 {
-  @UI.facet: [
-      // --- TABS (Collections) ---
-      { id: 'idInfo',
-        type: #COLLECTION,
-        label: 'Claim Information',
-         position: 10 },
-
-            {
-                            id : 'ClaimId',
-                            purpose: #STANDARD,
-                            type: #IDENTIFICATION_REFERENCE,
-                            label: 'Claim Id',
-                            parentId:'idInfo',
-                            position: 10
-                   }
-         ]
-
+  //  @UI.facet: [
+  //      // --- TABS (Collections) ---
+  //      { id: 'idInfo',
+  //        type: #COLLECTION,
+  //        label: 'Claim Information',
+  //         position: 10 },
+  //
+  //            {
+  //                            id : 'ClaimId',
+  //                            purpose: #STANDARD,
+  //                            type: #IDENTIFICATION_REFERENCE,
+  //                            label: 'Claim Id',
+  //                            parentId:'idInfo',
+  //                            position: 10
+  //                   }
+  //         ]
+  @EndUserText.label: 'Claim Id'
   @UI: { lineItem: [ { position: 10, label: 'ClaimId'  } ],
   identification: [{ position: 10, label: 'Claim Id' }],
   selectionField: [ { position: 10 } ]
        }
-
   ClaimId;
+
   @UI: { lineItem: [ { position: 20, label: 'Current Owner'  } ],
-  identification: [{ position: 20, label: 'Current Owner' }],
-  selectionField: [ { position: 20 } ]
+  identification: [{ position: 20, label: 'Current Owner' }]
      }
   CurrentOwner;
+
   @UI: { lineItem: [ { position: 30, label: 'Region'  } ],
-  identification: [{ position: 30, label: 'Region' }],
-  selectionField: [ { position: 30 } ]
+  identification: [{ position: 30, label: 'Region' }]
      }
   Region;
+
   @UI: { lineItem: [ { position: 40, label: 'Sla Status'  } ],
-  identification: [{ position: 40, label: 'Sla Status' }],
-  selectionField: [ { position: 40 } ]
+  identification: [{ position: 40, label: 'Sla Status' }]
      }
   SlaStatus;
+
   @UI: { lineItem: [ { position: 50, label: 'Days Open'  } ],
-  identification: [{ position: 50, label: 'Days Open' }],
-  selectionField: [ { position: 50 } ]
+  identification: [{ position: 50, label: 'Days Open' }]
      }
   DaysOpen;
+
   @UI: { lineItem: [ { position: 60, label: 'Aging From Date'  } ],
-  identification: [{ position: 60, label: 'Aging From Date' }],
-  selectionField: [ { position: 60 } ]
+  identification: [{ position: 60, label: 'Aging From Date' }]
      }
   AgingFromDate;
+
   @UI: { lineItem: [ { position: 70, label: 'Aging To Date'  } ],
-  identification: [{ position: 70, label: 'Aging To Date' }],
-  selectionField: [ { position: 70 } ]
+  identification: [{ position: 70, label: 'Aging To Date' }]
      }
   AgingToDate;
+
   @UI: { lineItem: [ { position: 80, label: ' Escalation Flag'  } ],
-  identification: [{ position: 80, label: ' Escalation Flag' }],
-  selectionField: [ { position: 80 } ]
+  identification: [{ position: 80, label: ' Escalation Flag' }]
      }
   EscalationFlag;
 

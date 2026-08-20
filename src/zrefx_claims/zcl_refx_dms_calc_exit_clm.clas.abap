@@ -20,7 +20,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_dms_calc_exit_clm IMPLEMENTATION.
+CLASS ZCL_REFX_DMS_CALC_EXIT_CLM IMPLEMENTATION.
 
 
   METHOD if_sadl_exit_calc_element_read~calculate.

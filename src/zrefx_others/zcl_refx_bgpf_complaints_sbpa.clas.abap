@@ -67,10 +67,47 @@ CLASS zcl_refx_bgpf_complaints_sbpa DEFINITION
 
 ENDCLASS.
 
-CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
+
+
+CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.
+
+    " =======================================================================
+    " ENHANCE CONTEXT WITH BILINGUAL CATEGORY DESCRIPTION
+    " =======================================================================
+    DATA: lv_desc_en        TYPE string,
+          lv_desc_ar        TYPE string,
+          lv_bilingual_desc TYPE string.
+
+    CLEAR: lv_desc_en, lv_desc_ar, lv_bilingual_desc.
+
+    " Get English Description ('E')
+    SELECT SINGLE text FROM ddcds_customer_domain_value_t( p_domain_name = 'ZREFX_DO_COMPCAT' )
+      WHERE value_low = @gs_context-categorycode AND language = 'E'
+      INTO @lv_desc_en.
+
+    " Get Arabic Description ('A')
+    SELECT SINGLE text FROM ddcds_customer_domain_value_t( p_domain_name = 'ZREFX_DO_COMPCAT' )
+      WHERE value_low = @gs_context-categorycode AND language = 'A'
+      INTO @lv_desc_ar.
+
+    " Combine them with a pipe. Fallback to raw code if missing.
+    IF lv_desc_en IS NOT INITIAL AND lv_desc_ar IS NOT INITIAL.
+      lv_bilingual_desc = |{ lv_desc_en } \| { lv_desc_ar }|.
+    ELSEIF lv_desc_en IS NOT INITIAL.
+      lv_bilingual_desc = lv_desc_en.
+    ELSEIF lv_desc_ar IS NOT INITIAL.
+      lv_bilingual_desc = lv_desc_ar.
+    ELSE.
+      lv_bilingual_desc = gs_context-categorycode. " Fallback to raw ID
+    ENDIF.
+
+    " OVERWRITE the raw code in the context with the new bilingual string
+    " before it gets serialized into JSON!
+    gs_context-categorycode = lv_bilingual_desc.
+    " =======================================================================
 
     DATA(ls_payload) = VALUE ty_sbpa_payload(
 **      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintApprovalProcess' " Found in SBPA Monitoring
@@ -214,5 +251,4 @@ CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
     gs_context-vendorname_en        = vendorname_en.
 
   ENDMETHOD.
-
 ENDCLASS.

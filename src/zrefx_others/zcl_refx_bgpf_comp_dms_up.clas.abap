@@ -32,7 +32,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_bgpf_comp_dms_up IMPLEMENTATION.
+CLASS ZCL_REFX_BGPF_COMP_DMS_UP IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.

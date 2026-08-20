@@ -17,3 +17,5 @@ define view entity ZREFX_DOV_STATUS
       @Semantics.text: true
       text      as Description
 }
+where
+  language = $session.system_language

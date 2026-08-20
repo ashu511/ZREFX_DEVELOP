@@ -82,7 +82,7 @@ define behavior for ZREFX_C_GL_REQUEST_ATTACHMENT //alias <alias_name>
 {
   use update;
   use delete;
-
+  use action download;
   use association _GLRequest;
 }
 

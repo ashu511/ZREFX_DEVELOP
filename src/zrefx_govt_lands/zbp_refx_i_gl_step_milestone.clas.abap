@@ -1,5 +1,7 @@
 CLASS zbp_refx_i_gl_step_milestone DEFINITION PUBLIC ABSTRACT FINAL FOR BEHAVIOR OF zrefx_i_gl_step_milestone.
 ENDCLASS.
 
-CLASS zbp_refx_i_gl_step_milestone IMPLEMENTATION.
+
+
+CLASS ZBP_REFX_I_GL_STEP_MILESTONE IMPLEMENTATION.
 ENDCLASS.

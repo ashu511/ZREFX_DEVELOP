@@ -52,6 +52,9 @@ CLASS lhc_Migration DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS executeMigration FOR DETERMINE ON SAVE
       IMPORTING keys FOR Migration~executeMigration.
 
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      IMPORTING keys REQUEST requested_features FOR Migration RESULT result.
+
 ENDCLASS.
 
 CLASS lhc_Migration IMPLEMENTATION.
@@ -225,154 +228,234 @@ CLASS lhc_Migration IMPLEMENTATION.
 
       " C. GUARD CLAUSES: Single COMBINED Modify!
       IF ls_header-TargetObject IS INITIAL.
-        lv_status = 'Please select a Target Application'.
+        lv_status = 'Select a Target Application first.'.
         CLEAR: lv_template_content, lv_template_name, lv_template_mime.
-        MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                  ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status TemplateContent TemplateName TemplateMime )
-                  WITH VALUE #( ( %tky            = ls_header-%tky
-                                  HideComplaints  = lv_hide_comp
-                                  HideClaims      = lv_hide_clm
-                                  Status          = lv_status
-                                  TemplateContent = lv_template_content
-                                  TemplateName    = lv_template_name
-                                  TemplateMime    = lv_template_mime ) ).
+        IF ls_header-Status <> lv_status OR ls_header-FileContent IS NOT INITIAL.
+          MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                    ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status StatusCriticality FileContent FileName MimeType TemplateContent TemplateName TemplateMime )
+                    WITH VALUE #( ( %tky              = ls_header-%tky
+                                    HideComplaints    = lv_hide_comp
+                                    HideClaims        = lv_hide_clm
+                                    Status            = lv_status
+                                    StatusCriticality = 1 " Red
+                                    FileContent       = VALUE #( )
+                                    FileName          = ''
+                                    MimeType          = ''
+                                    TemplateContent   = lv_template_content
+                                    TemplateName      = lv_template_name
+                                    TemplateMime      = lv_template_mime ) ).
+        ENDIF.
         CONTINUE.
       ENDIF.
 
+      "EXCEL FILE UPLOAD MESSAGE
       IF ls_header-FileContent IS INITIAL.
-        lv_status = 'Waiting for Excel file upload'.
-        MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                  ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status TemplateContent TemplateName TemplateMime )
-                  WITH VALUE #( ( %tky            = ls_header-%tky
-                                  HideComplaints  = lv_hide_comp
-                                  HideClaims      = lv_hide_clm
-                                  Status          = lv_status
-                                  TemplateContent = lv_template_content
-                                  TemplateName    = lv_template_name
-                                  TemplateMime    = lv_template_mime ) ).
+        "Do not overwrite the success message OR the file extension error!
+        IF ls_header-Status <> 'Migrated Successfully' AND ls_header-Status NS 'Error'.
+          lv_status = 'Waiting for Excel file upload'.
+          IF ls_header-Status <> lv_status OR ls_header-TemplateName <> lv_template_name.
+            MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                      ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status StatusCriticality TemplateContent TemplateName TemplateMime )
+                      WITH VALUE #( ( %tky            = ls_header-%tky
+                                      HideComplaints  = lv_hide_comp
+                                      HideClaims      = lv_hide_clm
+                                      Status          = lv_status
+                                      StatusCriticality = 2 " Yellow/Orange
+                                      TemplateContent = lv_template_content
+                                      TemplateName    = lv_template_name
+                                      TemplateMime    = lv_template_mime ) ).
+          ENDIF.
+        ENDIF.
+        CONTINUE.
+      ENDIF.
+
+      " FILE EXTENSION VALIDATION
+      DATA(lv_filename_lower) = to_lower( ls_header-FileName ).
+      IF lv_filename_lower IS INITIAL OR lv_filename_lower NS '.xlsx'.
+        lv_status = 'Error: Only .xlsx files are supported.'.
+        IF ls_header-Status <> lv_status OR ls_header-FileContent IS NOT INITIAL.
+          MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+            ENTITY Migration UPDATE FIELDS ( Status StatusCriticality FileContent FileName MimeType )
+            WITH VALUE #( ( %tky        = ls_header-%tky
+                            Status      = lv_status
+                            StatusCriticality = 1 " Red
+                            FileContent = VALUE #( ) " Wipe the bad file
+                            FileName    = ''
+                            MimeType    = '' ) ).
+        ENDIF.
         CONTINUE.
       ENDIF.
 
       " D. PARSE FILE
+      DATA(lv_parsing_error) = abap_false.
+      DATA(lv_error_message) = |Error: Failed to parse Excel sheet.|.
+
       TRY.
           DATA(lo_document) = xco_cp_xlsx=>document->for_file_content( ls_header-FileContent ).
           DATA(lo_worksheet) = lo_document->read_access( )->get_workbook( )->worksheet->at_position( 1 ).
+
+          " Pattern for Data (Row 2 to end)
           DATA(lo_pattern) = xco_cp_xlsx_selection=>pattern_builder->simple_from_to(
             )->from_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'A' )
             )->from_row( xco_cp_xlsx=>coordinate->for_numeric_value( 2 )
             )->get_pattern( ).
 
+          " Pattern for Header Validation (Row 1 ONLY)
+          DATA(lo_pattern_header) = xco_cp_xlsx_selection=>pattern_builder->simple_from_to(
+            )->from_column( xco_cp_xlsx=>coordinate->for_alphabetic_value( 'A' )
+            )->from_row( xco_cp_xlsx=>coordinate->for_numeric_value( 1 )
+            )->to_row( xco_cp_xlsx=>coordinate->for_numeric_value( 1 ) )->get_pattern( ).
+
           CASE ls_header-TargetObject.
             WHEN '01'. " Complaints
-              DATA lt_comp_excel TYPE STANDARD TABLE OF ty_comp_excel.
-              lo_worksheet->select( lo_pattern )->row_stream( )->operation->write_to( REF #( lt_comp_excel ) )->execute( ).
+              " 1. HEADER VALIDATION
+              DATA lt_check_comp TYPE STANDARD TABLE OF ty_comp_excel.
 
-              DATA lt_create_comp TYPE TABLE FOR CREATE zrefx_i_migration\_ComplaintsItems.
-              APPEND VALUE #(
-                %tky = ls_header-%tky
-                %target = VALUE #( FOR ls_c IN lt_comp_excel INDEX INTO i (
-                    %cid                = |COMP_{ i }|
-                    %is_draft           = if_abap_behv=>mk-on
-                    Status              = '06' " Closed
-                    Createddate         = ls_c-createddate
-                    Vendorid            = ls_c-vendorid
-                    Vendorcompanyname   = ls_c-vendorcompanyname
-                    Contactpersonname   = ls_c-contactpersonname
-                    Contactmobile       = ls_c-contactmobile
-                    Contactemail        = ls_c-contactemail
-                    Legalflag           = COND #( WHEN ls_c-legalflag = 'X' OR ls_c-legalflag = 'Y' THEN abap_true ELSE abap_false )
-                    Complaintcategory   = ls_c-complaintcategory
-                    Sourcechannel       = ls_c-sourcechannel
-                    Complainttype       = ls_c-complainttype
-                    Urgency             = ls_c-urgency
-                    Referencetype       = ls_c-referencetype
-                    Referenceid         = ls_c-referenceid
-                    Landid              = ls_c-landid
-                    Titledeedno         = ls_c-titledeedno
-                    Projectid           = ls_c-projectid
-                    Claimreferenceno    = ls_c-claimreferenceno
-                    Region              = ls_c-region
-                    Detaileddescription = ls_c-detaileddescription
-                    Financialimpact     = ls_c-financialimpact
-                ) )
-              ) TO lt_create_comp.
+              lo_worksheet->select( lo_pattern_header )->row_stream( )->operation->write_to( REF #( lt_check_comp ) )->execute( ).
 
-              MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                ENTITY Migration CREATE BY \_ComplaintsItems FIELDS (
-                  Status Createddate Vendorid Vendorcompanyname Contactpersonname Contactmobile
-                  Contactemail Legalflag Complaintcategory Sourcechannel Complainttype Urgency Referencetype
-                  Referenceid Landid Titledeedno Projectid Claimreferenceno Region Detaileddescription Financialimpact
-                ) WITH lt_create_comp.
+              IF lt_check_comp IS INITIAL OR lt_check_comp[ 1 ]-complaint_id <> 'COMPLAINT_ID'.
+                lv_parsing_error = abap_true.
+                lv_error_message = 'Invalid File: Please upload the Complaints template.'.
+              ELSE.
+                " 2. HEADERS VALID -> Parse Data
+                DATA lt_comp_excel TYPE STANDARD TABLE OF ty_comp_excel.
 
-              DATA(lv_rows) = lines( lt_comp_excel ).
+                lo_worksheet->select( lo_pattern )->row_stream( )->operation->write_to( REF #( lt_comp_excel ) )->execute( ).
+
+                DATA lt_create_comp TYPE TABLE FOR CREATE zrefx_i_migration\_ComplaintsItems.
+                APPEND VALUE #(
+                  %tky = ls_header-%tky
+                  %target = VALUE #( FOR ls_c IN lt_comp_excel INDEX INTO i (
+                      %cid                = |COMP_{ i }|
+                      %is_draft           = if_abap_behv=>mk-on
+                      Status              = '06' " Closed
+                      Createddate         = ls_c-createddate
+                      Vendorid            = ls_c-vendorid
+                      Vendorcompanyname   = ls_c-vendorcompanyname
+                      Contactpersonname   = ls_c-contactpersonname
+                      Contactmobile       = ls_c-contactmobile
+                      Contactemail        = ls_c-contactemail
+                      Legalflag           = COND #( WHEN ls_c-legalflag = 'X' OR ls_c-legalflag = 'Y' THEN abap_true ELSE abap_false )
+                      Complaintcategory   = ls_c-complaintcategory
+                      Sourcechannel       = ls_c-sourcechannel
+                      Complainttype       = ls_c-complainttype
+                      Urgency             = ls_c-urgency
+                      Referencetype       = ls_c-referencetype
+                      Referenceid         = ls_c-referenceid
+                      Landid              = ls_c-landid
+                      Titledeedno         = ls_c-titledeedno
+                      Projectid           = ls_c-projectid
+                      Claimreferenceno    = ls_c-claimreferenceno
+                      Region              = ls_c-region
+                      Detaileddescription = ls_c-detaileddescription
+                      Financialimpact     = ls_c-financialimpact
+                  ) )
+                ) TO lt_create_comp.
+
+                MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                  ENTITY Migration CREATE BY \_ComplaintsItems FIELDS (
+                    Status Createddate Vendorid Vendorcompanyname Contactpersonname Contactmobile
+                    Contactemail Legalflag Complaintcategory Sourcechannel Complainttype Urgency Referencetype
+                    Referenceid Landid Titledeedno Projectid Claimreferenceno Region Detaileddescription Financialimpact
+                  ) WITH lt_create_comp.
+
+                DATA(lv_rows) = lines( lt_comp_excel ).
+
+              ENDIF.
 
             WHEN '02'. " Claims
-              DATA lt_clm_excel TYPE STANDARD TABLE OF ty_clm_excel.
-              lo_worksheet->select( lo_pattern )->row_stream( )->operation->write_to( REF #( lt_clm_excel ) )->execute( ).
+              " 1. HEADER VALIDATION
+              DATA lt_check_clm TYPE STANDARD TABLE OF ty_clm_excel.
+              lo_worksheet->select( lo_pattern_header )->row_stream( )->operation->write_to( REF #( lt_check_clm ) )->execute( ).
 
-              DATA lt_create_clm TYPE TABLE FOR CREATE zrefx_i_migration\_ClaimsItems.
-              APPEND VALUE #(
-                %tky = ls_header-%tky
-                %target = VALUE #( FOR ls_l IN lt_clm_excel INDEX INTO j (
-                    %cid                 = |CLM_{ j }|
-                    %is_draft            = if_abap_behv=>mk-on
-                    Status               = '06' " Closed
-                    Createddate          = ls_l-createddate
-                    Vendorid             = ls_l-vendorid
-                    Contactpersonname    = ls_l-contactpersonname
-                    Vendorregistrationno = ls_l-vendorregistrationno
-                    Contactemail         = ls_l-contactemail
-                    Claimcategory        = ls_l-claimcategory
-                    Sourcechannel        = ls_l-sourcechannel
-                    Claimtype            = ls_l-claimtype
-                    Urgency              = ls_l-urgency
-                    Referencetype        = ls_l-referencetype
-                    Referenceid          = ls_l-referenceid
-                    Leasenumber          = ls_l-leasenumber
-                    Projectid            = ls_l-projectid
-                    Projectname          = ls_l-projectname
-                    Claimreferenceno     = ls_l-claimreferenceno
-                    Region               = ls_l-region
-                    City                 = ls_l-city
-                    Claimsubject         = ls_l-claimsubject
-                    Incidentdate         = ls_l-incidentdate
-                    Requestedpaymentdate = ls_l-requestedpaymentdate
-                    Detaileddescription  = ls_l-detaileddescription
-                    Claimamount          = ls_l-claimamount
-                ) )
-              ) TO lt_create_clm.
+              IF lt_check_clm IS INITIAL OR lt_check_clm[ 1 ]-claim_id <> 'CLAIM_ID'.
+                lv_parsing_error = abap_true.
+                lv_error_message = 'Invalid File: Please upload the Claims template.'.
+              ELSE.
+                " 2. HEADERS VALID -> Parse Data
+                DATA lt_clm_excel TYPE STANDARD TABLE OF ty_clm_excel.
+                lo_worksheet->select( lo_pattern )->row_stream( )->operation->write_to( REF #( lt_clm_excel ) )->execute( ).
 
-              MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                ENTITY Migration CREATE BY \_ClaimsItems FIELDS (
-                  Status Createddate Vendorid Contactpersonname Vendorregistrationno Contactemail
-                  Claimcategory Sourcechannel Claimtype Urgency Referencetype Referenceid Leasenumber
-                  Projectid Projectname Claimreferenceno Region City Claimsubject Incidentdate
-                  Requestedpaymentdate Detaileddescription Claimamount
-                ) WITH lt_create_clm.
+                DATA lt_create_clm TYPE TABLE FOR CREATE zrefx_i_migration\_ClaimsItems.
+                APPEND VALUE #(
+                  %tky = ls_header-%tky
+                  %target = VALUE #( FOR ls_l IN lt_clm_excel INDEX INTO j (
+                      %cid                 = |CLM_{ j }|
+                      %is_draft            = if_abap_behv=>mk-on
+                      Status               = '06' " Closed
+                      Createddate          = ls_l-createddate
+                      Vendorid             = ls_l-vendorid
+                      Contactpersonname    = ls_l-contactpersonname
+                      Vendorregistrationno = ls_l-vendorregistrationno
+                      Contactemail         = ls_l-contactemail
+                      Claimcategory        = ls_l-claimcategory
+                      Sourcechannel        = ls_l-sourcechannel
+                      Claimtype            = ls_l-claimtype
+                      Urgency              = ls_l-urgency
+                      Referencetype        = ls_l-referencetype
+                      Referenceid          = ls_l-referenceid
+                      Leasenumber          = ls_l-leasenumber
+                      Projectid            = ls_l-projectid
+                      Projectname          = ls_l-projectname
+                      Claimreferenceno     = ls_l-claimreferenceno
+                      Region               = ls_l-region
+                      City                 = ls_l-city
+                      Claimsubject         = ls_l-claimsubject
+                      Incidentdate         = ls_l-incidentdate
+                      Requestedpaymentdate = ls_l-requestedpaymentdate
+                      Detaileddescription  = ls_l-detaileddescription
+                      Claimamount          = ls_l-claimamount
+                  ) )
+                ) TO lt_create_clm.
 
-              lv_rows = lines( lt_clm_excel ).
+                MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                  ENTITY Migration CREATE BY \_ClaimsItems FIELDS (
+                    Status Createddate Vendorid Contactpersonname Vendorregistrationno Contactemail
+                    Claimcategory Sourcechannel Claimtype Urgency Referencetype Referenceid Leasenumber
+                    Projectid Projectname Claimreferenceno Region City Claimsubject Incidentdate
+                    Requestedpaymentdate Detaileddescription Claimamount
+                  ) WITH lt_create_clm.
+
+                lv_rows = lines( lt_clm_excel ).
+              ENDIF.
           ENDCASE.
 
-          " Single COMBINED Modify for success!
-          lv_status = |Data Staged: { lv_rows } rows parsed. Review below.|.
-          MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                      ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status TemplateContent TemplateName TemplateMime )
-                      WITH VALUE #( ( %tky            = ls_header-%tky
-                                      HideComplaints  = lv_hide_comp
-                                      HideClaims      = lv_hide_clm
-                                      Status          = lv_status
-                                      TemplateContent = lv_template_content
-                                      TemplateName    = lv_template_name
-                                      TemplateMime    = lv_template_mime ) ).
+          IF lv_parsing_error = abap_true.
+            " Single COMBINED Modify for ERROR!
+            MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+              ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status StatusCriticality TemplateContent TemplateName TemplateMime )
+              WITH VALUE #( ( %tky            = ls_header-%tky
+                              HideComplaints  = lv_hide_comp
+                              HideClaims      = lv_hide_clm
+                              Status          = lv_error_message  " <-- Uses the specific validation error
+                              StatusCriticality = 1 " Red
+                              TemplateContent = lv_template_content
+                              TemplateName    = lv_template_name
+                              TemplateMime    = lv_template_mime ) ).
+          ELSE.
+            " Single COMBINED Modify for SUCCESS!
+            lv_status = |Data Staged: { lv_rows } rows parsed. Review below.|.
+            MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+              ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status StatusCriticality TemplateContent TemplateName TemplateMime )
+              WITH VALUE #( ( %tky            = ls_header-%tky
+                              HideComplaints  = lv_hide_comp
+                              HideClaims      = lv_hide_clm
+                              Status          = lv_status
+                              StatusCriticality = 2 " Yellow/Orange
+                              TemplateContent = lv_template_content
+                              TemplateName    = lv_template_name
+                              TemplateMime    = lv_template_mime ) ).
+          ENDIF.
 
         CATCH cx_root INTO DATA(lx_root).
           " Single COMBINED Modify for error!
           MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-                      ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status TemplateContent TemplateName TemplateMime )
+                      ENTITY Migration UPDATE FIELDS ( HideComplaints HideClaims Status StatusCriticality TemplateContent TemplateName TemplateMime )
                       WITH VALUE #( ( %tky            = ls_header-%tky
                                       HideComplaints  = lv_hide_comp
                                       HideClaims      = lv_hide_clm
                                       Status          = 'Error: Failed to parse Excel sheet.'
+                                      StatusCriticality = 1 " Red
                                       TemplateContent = lv_template_content
                                       TemplateName    = lv_template_name
                                       TemplateMime    = lv_template_mime ) ).
@@ -391,6 +474,8 @@ CLASS lhc_Migration IMPLEMENTATION.
     ENTITY Migration BY \_ClaimsItems ALL FIELDS WITH CORRESPONDING #( keys ) RESULT DATA(lt_clm_items).
 
     LOOP AT lt_jobs INTO DATA(ls_job).
+
+      DATA(lv_migration_success) = abap_true.
 
       CASE ls_job-TargetObject.
         WHEN '01'. " Complaints
@@ -424,17 +509,31 @@ CLASS lhc_Migration IMPLEMENTATION.
 
           IF lt_create_comp_target IS NOT INITIAL.
             MODIFY ENTITIES OF zrefx_i_complaints
-              ENTITY Complaints CREATE FIELDS (
+              ENTITY Complaints CREATE FIELDS ( Createddate
                  Status Vendorid Vendorcompanyname
                 Contactpersonname Contactmobile Contactemail
                 Complaintcategory Sourcechannel Complainttype Urgency
                 Referencetype Referenceid Landid Titledeedno Projectid
                 Claimreferenceno Region Detaileddescription Financialimpact
-              ) WITH lt_create_comp_target.
-          ENDIF.
+              ) WITH lt_create_comp_target
+              FAILED DATA(lt_failed_comp)
+              REPORTED DATA(lt_rep_comp).
+            " IF IT FAILED: Abort the save and show the errors!
+            IF lt_failed_comp IS NOT INITIAL.
+              lv_migration_success = abap_false.
 
-          MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-            ENTITY ComplaintsItems DELETE FROM VALUE #( FOR comp_item IN lt_comp_items ( %tky = comp_item-%tky ) ).
+              " Pass the target BO error messages to the UI popup
+              LOOP AT lt_rep_comp-complaints INTO DATA(ls_msg).
+                APPEND VALUE #( %tky = ls_job-%tky
+                                %msg = ls_msg-%msg ) TO reported-migration.
+              ENDLOOP.
+
+            ELSE.
+              " Success: Delete staging items
+              MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                ENTITY ComplaintsItems DELETE FROM VALUE #( FOR comp_item IN lt_comp_items ( %tky = comp_item-%tky ) ).
+            ENDIF.
+          ENDIF.
 
         WHEN '02'. " Claims
           DATA lt_create_clm_target TYPE TABLE FOR CREATE zrefx_i_claims.
@@ -476,26 +575,76 @@ CLASS lhc_Migration IMPLEMENTATION.
                 Projectid Projectname Claimreferenceno Region City
                 Claimsubject Incidentdate Requestedpaymentdate
                 Detaileddescription Claimamount
-              ) WITH lt_create_clm_target.
+              ) WITH lt_create_clm_target
+              FAILED DATA(lt_failed_clm)
+              REPORTED DATA(lt_rep_clm).
+
+            " IF IT FAILED: We can't abort the save, but we can report the errors
+            IF lt_failed_clm IS NOT INITIAL.
+              lv_migration_success = abap_false.
+
+              " Pass the target BO error messages to the UI popup
+              LOOP AT lt_rep_clm-claims INTO DATA(ls_msg_clm).
+                APPEND VALUE #( %tky = ls_job-%tky
+                                %msg = ls_msg_clm-%msg ) TO reported-migration.
+              ENDLOOP.
+
+            ELSE.
+              " Success: Delete staging items
+              MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+                ENTITY ClaimsItems DELETE FROM VALUE #( FOR clm_item IN lt_clm_items ( %tky = clm_item-%tky ) ).
+            ENDIF.
+
           ENDIF.
 
-          MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-            ENTITY ClaimsItems DELETE FROM VALUE #( FOR clm_item IN lt_clm_items ( %tky = clm_item-%tky ) ).
       ENDCASE.
 
       " Final Header Update
-      MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
-        ENTITY Migration UPDATE FIELDS ( Status FileContent MimeType FileName TemplateContent TemplateMime TemplateName )
-        WITH VALUE #( ( %tky = ls_job-%tky
-                        Status          = 'Migrated Successfully'
-                        FileContent     = ''
-                        MimeType        = ''
-                        FileName        = ''
-                        TemplateContent = ''
-                        TemplateName    = ''
-                        TemplateMime    = '' ) ).
+      IF lv_migration_success = abap_true.
+        MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+          ENTITY Migration UPDATE FIELDS ( Status StatusCriticality FileContent MimeType FileName TemplateContent TemplateMime TemplateName )
+          WITH VALUE #( ( %tky = ls_job-%tky
+                          Status          = 'Migrated Successfully'
+                          StatusCriticality = 3 " Green
+                          FileContent     = ''
+                          MimeType        = ''
+                          FileName        = ''
+                          TemplateContent = ''
+                          TemplateName    = ''
+                          TemplateMime    = '' ) ).
+      ELSE.
+        " If failed, update status to show error
+        MODIFY ENTITIES OF zrefx_i_migration IN LOCAL MODE
+          ENTITY Migration UPDATE FIELDS ( Status StatusCriticality )
+          WITH VALUE #( ( %tky = ls_job-%tky
+                          Status = 'Error: Target application rejected the data.'
+                          StatusCriticality = 1 ) ). " Red
+      ENDIF.
 
     ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+
+    " 1. Read the current status of the records
+    READ ENTITIES OF zrefx_i_migration IN LOCAL MODE
+      ENTITY Migration FIELDS ( Status ) WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_jobs).
+
+    " 2. Evaluate the status. If it contains 'Migrated', disable Edit and Delete!
+    result = VALUE #( FOR ls_job IN lt_jobs (
+      %tky    = ls_job-%tky
+      %update = COND #( WHEN ls_job-Status CS 'Migrated'
+                        THEN if_abap_behv=>fc-o-disabled
+                        ELSE if_abap_behv=>fc-o-enabled )
+      %delete = COND #( WHEN ls_job-Status CS 'Migrated'
+                        THEN if_abap_behv=>fc-o-disabled
+                        ELSE if_abap_behv=>fc-o-enabled )
+      %action-edit = COND #( WHEN ls_job-Status CS 'Migrated'
+                             THEN if_abap_behv=>fc-o-disabled
+                             ELSE if_abap_behv=>fc-o-enabled )
+    ) ).
 
   ENDMETHOD.
 

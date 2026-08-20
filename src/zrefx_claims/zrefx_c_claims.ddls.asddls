@@ -28,6 +28,8 @@ define root view entity ZREFX_C_CLAIMS
       Vendorregistrationno,
       Contactemail,
       Legalflag,
+      PaymentTerm,
+      BudgetCheck,
       //      Vendorcompanyname,
       //      Contactpersonname,
       //      Contactmobile,
@@ -52,6 +54,7 @@ define root view entity ZREFX_C_CLAIMS
       @ObjectModel.text.element: [ 'CityDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       City,
+      OtherCity,
       @ObjectModel.text.element: [ 'MainDivDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       MainDivision,
@@ -71,10 +74,12 @@ define root view entity ZREFX_C_CLAIMS
       _Status.Description   as StatusDescription,
       _City.City            as CityDescription,
       _MainDiv.MainDIVISION as MainDivDescription,
+      _urgency.Description  as UrgencyDesctiption,
 
       _claimcat,
       _urgency,
       _Status,
+      _City,
       _Attachments  : redirected to composition child ZREFX_C_ATT_CLAIMS,
       _WorkflowInfo : redirected to composition child ZREFX_C_WF_CLM
 }

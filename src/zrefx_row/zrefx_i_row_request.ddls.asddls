@@ -7,22 +7,25 @@ define root view entity ZREFX_I_ROW_REQUEST
   as select from zrefx_row
   association [1..1] to ZREFX_I_ROW_STATIONTYPES      as _StationType   on  $projection.Stationtype = _StationType.Code
   association [1..1] to ZREFX_I_ROW_REQUESTTYPES      as _RequestType   on  $projection.Requesttype = _RequestType.Code
-  association [0..1] to ZREFX_I_ROW_STATUS            as _Status        on  _Status.Statustype     = 'REQUEST'
-                                                                        and $projection.Statuscode = _Status.Code
+//  association [0..1] to ZREFX_I_ROW_STATUS            as _Status        on  _Status.Statustype     = 'REQUEST'
+ //                                                                       and $projection.Statuscode = _Status.Code
   association [1..1] to ZREFX_I_ROW_STEP_MILESTONE    as _StepMilestone on  $projection.Currentstep = _StepMilestone.Code
 
   association [1..1] to ZREFX_I_ROW_PROCESSOR_ROLE    as _ProcessorRole on  $projection.Currentprocessorrole = _ProcessorRole.Code
 
   association [0..1] to ZREFX_I_ROW_STEP_MILESTONE    as _Milestone     on  $projection.Milestone = _Milestone.Code
+  //  composition [0..*] of ZREFX_I_WF_CLM     as _WorkflowInfo
   association [1..1] to ZREFX_I_ROW_WORKFLOW_INSTANCE as _Workflow      on  _Workflow.Objecttype = 'REQUEST'
+  association [1]    to ZREFX_DOV_CITY                as _City          on  $projection.City = _City.Value
+  association [1]    to ZREFX_DOV_STATUS              as _StatusText  on  $projection.Statuscode = _StatusText.Value 
 
-
-  association [0..*] to ZREFX_I_ROW_SUBSIDIARY       as _Subsidiary    on  $projection.RequestId = _Subsidiary.RequestID
-  composition of many ZREFX_I_ROW_CLARIFICATION     as _Clarifications
-  composition of many ZREFX_I_ROW_REQUEST_ATTACHMENT as _RequestAttachments
-  composition of many ZREFX_I_ROW_PROPOSAL             as _Proposal
-  composition of one ZREFX_I_ROW_LAND_ALLOCATION    as _LandAllocations
+  association [0..*] to ZREFX_I_ROW_SUBSIDIARY        as _Subsidiary    on  $projection.RequestId = _Subsidiary.RequestID
+  composition of many ZREFX_I_ROW_CLARIFICATION       as _Clarifications
+  composition of many ZREFX_I_ROW_REQUEST_ATTACHMENT  as _RequestAttachments
+  composition of many ZREFX_I_ROW_PROPOSAL            as _Proposal
+  composition of one ZREFX_I_ROW_LAND_ALLOCATION      as _LandAllocations
   composition of many ZREFX_I_ROW_WORKFLOW_INSTANCE   as _WorkflowInstance
+  composition [0..*] of ZREFX_I_WF_ROW     as _ROWWorkflowInfo
 
 {
 
@@ -31,9 +34,17 @@ define root view entity ZREFX_I_ROW_REQUEST
       requesttype                as Requesttype,
       requestdescription         as Requestdescription,
       requestpurpose             as Requestpurpose,
+      initiatorid                as Initiatorid,
+      initiatorfullname          as Initiatorfullname,
+      initiatororganization      as Initiatororganization,
+      employeenumber             as Employeenumber,
+      emailaddress               as Emailaddress,
+      contactnumber              as Contactnumber,
       businessjustification      as Businessjustification,
+      @ObjectModel.text.association: '_StatusText'
       statuscode                 as Statuscode,
-      _Status._Text.Description  as Status,
+ //     _StatusText.Description    as Status,
+//      _Status._Text.Description  as Status,
       //    status                     as Status,
       currentstep                as Currentstep,
       currentstepchangedat       as Currentstepchangedat,
@@ -49,6 +60,7 @@ define root view entity ZREFX_I_ROW_REQUEST
       companycode                as Companycode,
       businessarea               as Businessarea,
       profitcenter               as Profitcenter,
+      estimatedprojectcost       as EstimatedProjectCost,
       costcenter                 as Costcenter,
       projectname                as Projectname,
       projectname_a              as ProjectnameA,
@@ -58,6 +70,7 @@ define root view entity ZREFX_I_ROW_REQUEST
       projectbudgetyear          as Projectbudgetyear,
       projectapprovalyear        as Projectapprovalyear,
       projectcostsar             as Projectcostsar,
+
       projectstartdate           as Projectstartdate,
       projectenddate             as Projectenddate,
       hijristartdate             as Hijristartdate,
@@ -75,12 +88,19 @@ define root view entity ZREFX_I_ROW_REQUEST
       areasqmrequested           as Areasqmrequested,
       gislocationlink            as Gislocationlink,
       gisprojectid               as Gisprojectid,
+      gisdrawing                 as  Gisdrawing,
       previousrequestno          as Previousrequestno,
       requestorcomments          as Requestorcomments,
       additionalcomments         as Additionalcomments,
       department                 as Department,
       userid                     as Userid,
       username                   as Username,
+      sitearea                   as Sitearea,
+      @ObjectModel.text.association: '_City'
+      city                       as City,
+      
+      othercity                  as Othercity,
+      region                     as Region,
       _StepMilestone.Description as CurrentStepDesc,
       title                      as Title,
       currentstepdescription     as Currentstepdescription,
@@ -92,8 +112,8 @@ define root view entity ZREFX_I_ROW_REQUEST
       workflowinstanceid         as Workflowinstanceid,
       //milestonesequence          as Milestonesequence,
       _Milestone.Sequence        as MilestoneSequence,
-
-
+      confirminformation         as ConfirmInformation,
+      consentdate                as ConsentDate,
 
       _Workflow,
 
@@ -102,7 +122,7 @@ define root view entity ZREFX_I_ROW_REQUEST
       // _UserRef,
       _StationType,
       _RequestType,
-      _Status,
+     // _Status,
       _RequestAttachments,
       _Proposal,
 
@@ -110,5 +130,8 @@ define root view entity ZREFX_I_ROW_REQUEST
       _Subsidiary,
       _WorkflowInstance,
       _Clarifications,
-      _LandAllocations
+      _LandAllocations,
+      _City,
+      _ROWWorkflowInfo,
+      _StatusText
 }

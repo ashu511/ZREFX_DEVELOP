@@ -17,15 +17,17 @@ annotate entity ZREFX_C_MIGRATION with
   JobUuid;
 
   @UI.identification: [ { position: 10 } ]
-  @UI.textArrangement: #TEXT_FIRST
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_VH_TARGETS', element: 'Value' } }]
+  @UI.textArrangement: #TEXT_ONLY
   @UI.lineItem: [ { position: 10 } ]
   TargetObject;
 
   @UI.identification: [ { position: 20 } ]
   FileContent;
 
-  @UI.identification: [ { position: 30 } ]
-  @UI.lineItem: [ { position: 20 } ]
+  @UI.identification: [ { position: 30, criticality: 'StatusCriticality', criticalityRepresentation: #WITH_ICON } ]
+  @UI.lineItem: [ { position: 20, criticality: 'StatusCriticality', criticalityRepresentation: #WITH_ICON } ]
+  @UI.dataPoint: { title: 'Job Status', criticality: 'StatusCriticality' }
   @EndUserText.label: 'Status'
   Status;
 
@@ -38,12 +40,6 @@ annotate entity ZREFX_C_MIGRATION with
 
   @UI.hidden: true
   LastChangedAt;
-
-  @UI.hidden: true
-  MimeType;
-
-  @UI.hidden: true
-  FileName;
 
   @UI.identification: [ { position: 40 } ]
   TemplateContent;

@@ -4,7 +4,8 @@ define service ZREFX_SD_CLAIMS {
   expose ZREFX_C_ATT_CLAIMS;
   expose ZREFX_C_WF_CLM;
   expose ZREFX_DOV_URGENCY;
-  expose ZREFX_DOV_COMPCAT        as ClaimCategoryF4;
-  expose ZREFX_I_CLAIMS_VENDOR_F4 as VendorF4;
-  expose ZREFX_DOV_STATUS         as StatusF4;
+  expose ZREFX_DOV_CLAIMCAT;
+  expose ZREFX_DOV_CITY;
+  expose ZREFX_I_CLAIMS_VENDOR_F4;
+  expose ZREFX_DOV_STATUS;
 }

@@ -1,0 +1,5 @@
+@ObjectModel.leadingEntity.name: 'ZI_BtpConfigurationsDa_S'
+define service ZUI_BTPCONFIGURATIONSDA {
+  expose ZI_BTPCONFIGURATIONSDA_S as BtpConfigurationAll;
+  expose ZI_BTPCONFIGURATIONSDA as BtpConfigurationsDa;
+}

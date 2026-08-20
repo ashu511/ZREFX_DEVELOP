@@ -50,6 +50,7 @@ define root view entity ZREFX_C_COMPLAINTS
       @ObjectModel.text.element: [ 'CityDescription' ]
       @UI.textArrangement: #TEXT_FIRST
       City,
+      OtherCity,
       //      @ObjectModel.text.element: [ 'MainDivDescription' ]
       //      @UI.textArrangement: #TEXT_FIRST
       MainDivision,

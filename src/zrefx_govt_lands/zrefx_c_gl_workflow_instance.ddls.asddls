@@ -2,29 +2,25 @@
 @EndUserText.label: 'Projection view for Workflow Instance'
 @Metadata.ignorePropagatedAnnotations: true
 @Metadata.allowExtensions: true
-define view entity ZREFX_C_GL_WORKFLOW_INSTANCE 
-as projection on   ZREFX_I_GL_WORKFLOW_INSTANCE
+define view entity ZREFX_C_GL_WORKFLOW_INSTANCE
+  as projection on ZREFX_I_GL_WORKFLOW_INSTANCE
 {
-  key  Objectid,
   key RequestId,
+  key LogUuid,
+      WfInstanceId,
       Objecttype,
-      Definitionid,
-      Instanceid,
-      Statuscode,
-      _Status._Text.Description as Status,
-      CreatedBy,
-      ActionDate,
+      Approvalstep,
+      Approvalstepdesc,
+      ApproverEmail,
+      CurrentStatus,
+      CurrentOwner,
+      Currentownerdesig,
+      OrganizationField,
       Comments,
-      Department,
-      UserId,
-      UserName,
-      Title,
-      DivisionEmployeeId,
-      DivisionEmployeeName,
-      BusinessArea,
-      DivisionManagerId,
-      DivisionManagerName,
-      
-      _Status,
+      Region,
+      SubmissionDate,
+      DecisionOutcome,
+      /* Associations */
+
       _GLRequest : redirected to parent ZREFX_C_GL_REQUEST
 }

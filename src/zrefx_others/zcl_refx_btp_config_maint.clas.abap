@@ -21,7 +21,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_btp_config_maint IMPLEMENTATION.
+CLASS ZCL_REFX_BTP_CONFIG_MAINT IMPLEMENTATION.
 
 
   METHOD if_oo_adt_classrun~main.

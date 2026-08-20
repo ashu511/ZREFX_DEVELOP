@@ -12,10 +12,13 @@ ENDCLASS.
 
 
 
-CLASS zcl_complaint_upload IMPLEMENTATION.
+CLASS ZCL_COMPLAINT_UPLOAD IMPLEMENTATION.
+
+
   METHOD if_oo_adt_classrun~main.
     upload_data( ).
   ENDMETHOD.
+
 
   METHOD upload_data.
     "Your upload logic will go here

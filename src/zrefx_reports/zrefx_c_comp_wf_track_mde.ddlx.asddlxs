@@ -37,90 +37,74 @@ annotate entity ZREFX_C_COMP_WF_TRACK with
                    }
          ]
 
+  @EndUserText.label: 'Complaint Id'
   @UI: { lineItem: [ { position: 10, label: 'Complaint Id'  } ],
   identification: [{ position: 10, label: 'Complaint Id' }],
   selectionField: [ { position: 10 } ]
        }
   @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_ID_VH', element: 'ComplaintId' } }]
   ComplaintId;
-  //WfInstanceId;
-//  @UI: { lineItem: [ { position: 20, label: 'Complaint Category'  } ],
-//  identification: [{ position: 20, label: 'Complaint Category' }],
-//  selectionField: [ { position: 20 } ]
-//      }
-//  Category;
-//  @UI: { lineItem: [ { position: 30, label: 'Source'  } ],
-//  identification: [{ position: 30, label: 'Source' }],
-//  selectionField: [ { position: 30 } ]
-//    }
-//  Source;
+
+  @EndUserText.label: 'Region'
   @UI: { lineItem: [ { position: 40, label: 'Region'  } ],
   identification: [{ position: 40, label: 'Region' }],
-  selectionField: [ { position: 40 } ]
+  selectionField: [ { position: 20 } ]
    }
   @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_COMP_REGION_VH', element: 'Region' } }]
   Region;
+
+  @EndUserText.label: 'Main Division'
   @UI: { lineItem: [ { position: 50, label: 'Main Division'  } ],
   identification: [{ position: 50, label: 'Main Division' }],
-  selectionField: [ { position: 50 } ]
+  selectionField: [ { position: 30 } ]
   }
   Maindivision;
+
   @UI: { lineItem: [ { position: 60, label: 'Current Status'  } ],
   identification: [{ position: 60, label: 'Current Status' }]
-//  ,
-//  selectionField: [ { position: 60 } ]
   }
-//  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'CurrentStatus'} }]
-
   CurrentStatus;
 
   @UI: { lineItem: [ { position: 70, label: 'Submission From Date'  } ],
-  identification: [{ position: 70, label: 'Submission From Date' }],
-  selectionField: [ { position: 70 } ]
+  identification: [{ position: 70, label: 'Submission From Date' }]
   }
   SubmissionFromDate;
-  @UI: { lineItem: [ { position: 80, label: 'Submission To Date'  } ],
-  identification: [{ position: 80, label: 'Submission To Date' }],
-  selectionField: [ { position: 80 } ]
-  }
 
+  @UI: { lineItem: [ { position: 80, label: 'Submission To Date'  } ],
+  identification: [{ position: 80, label: 'Submission To Date' }]
+  }
   SubmissionToDate;
 
   @UI: { lineItem: [ { position: 85, label: 'Approval Step'  } ],
-  identification: [{ position: 85, label: 'Approval Step' }],
-  selectionField: [ { position: 85 } ]
+  identification: [{ position: 85, label: 'Approval Step' }]
   }
-
   ApprovalStep;
+
   @UI: { lineItem: [ { position: 87, label: 'Approval Step Dec'  } ],
-  identification: [{ position: 87, label: 'Approval Step Dec' }],
-  selectionField: [ { position: 87 } ]
+  identification: [{ position: 87, label: 'Approval Step Dec' }]
   }
   ApprovalStepDesc;
-  @UI: { lineItem: [ { position: 90, label: 'Current Owner'  } ],
-  identification: [{ position: 90, label: 'Current Owner' }],
-  selectionField: [ { position: 90 } ]
-  }
 
+  @UI: { lineItem: [ { position: 90, label: 'Current Owner'  } ],
+  identification: [{ position: 90, label: 'Current Owner' }]
+  }
   CurrentOwner;
+
+  @EndUserText.label: 'Days Open'
   @UI: { lineItem: [ { position: 100, label: 'Days Open'  } ],
   identification: [{ position: 100, label: 'Days Open' }],
-  selectionField: [ { position: 100 } ]
+  selectionField: [ { position: 40 } ]
   }
-
   DaysOpen;
+
   @UI: { lineItem: [ { position: 110, label: 'SLA Status'  } ],
-  identification: [{ position: 110, label: 'SLA Status' }],
-  selectionField: [ { position: 110 } ]
+  identification: [{ position: 110, label: 'SLA Status' }]
   }
   SlaStatus;
 
   @UI: { lineItem: [ { position: 120, label: 'Legal Flag'  } ],
-  identification: [{ position: 120, label: 'Legal Flag' }],
-  selectionField: [ { position: 120 } ]
+  identification: [{ position: 120, label: 'Legal Flag' }]
   }
-
   Legalflag;
-
 
 }

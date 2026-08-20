@@ -12,6 +12,7 @@ define behavior for ZREFX_C_ROW_REQUEST //alias <alias_name>
   use association _Proposal { create; }
   use association _RequestAttachments { create; }
   use association _WorkflowInstance { create; }
+  use association _ROWWorkflowInfo { create; }
 }
 
 define behavior for ZREFX_C_ROW_CLARIFICATION //alias <alias_name>
@@ -92,4 +93,11 @@ define behavior for ZREFX_C_ROW_WORKFLOW_INSTANCE //alias <alias_name>
   use delete;
 
   use association _ROWRequest;
+}
+define behavior for ZREFX_C_WF_ROW //alias <alias_name>
+{
+  use update;
+  use delete;
+
+  use association _RowWorkflow;
 }

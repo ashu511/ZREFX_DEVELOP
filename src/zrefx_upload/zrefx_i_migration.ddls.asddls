@@ -11,13 +11,16 @@ define root view entity ZREFX_I_MIGRATION
       @EndUserText.label: 'Target Application'
       cast(target_object as zrefx_de_target) as TargetObject,
       @EndUserText.label: 'Upload Excel File'
-      @Semantics.largeObject: { mimeType: 'MimeType', fileName: 'FileName', contentDispositionPreference: #ATTACHMENT }
       file_content                           as FileContent,
-      @UI.hidden: true
       mime_type                              as MimeType,
-      @UI.hidden: true
       file_name                              as FileName,
       status                                 as Status,
+      case
+      when status like 'Error%' then 1       // 1 = Red (Negative)
+      when status like 'Migrated%' then 3    // 3 = Green (Positive)
+      when status like 'Data Staged%' then 2 // 2 = Orange/Yellow (Critical)
+      else 0                                 // 0 = Grey (Neutral)
+      end                                    as StatusCriticality,
       @Semantics.user.createdBy: true
       created_by                             as CreatedBy,
       @Semantics.systemDateTime.createdAt: true
@@ -29,7 +32,7 @@ define root view entity ZREFX_I_MIGRATION
       template_mime                          as TemplateMime,
       template_name                          as TemplateName,
       // -------------------------------------------
-      
+
       // --- Dynamic Tab Visibility Flags ---
       hide_complaints                        as HideComplaints,
       hide_claims                            as HideClaims,

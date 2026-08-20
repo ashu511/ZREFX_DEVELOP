@@ -20,7 +20,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_refx_bgpf_dms_att_dwn IMPLEMENTATION.
+CLASS ZCL_REFX_BGPF_DMS_ATT_DWN IMPLEMENTATION.
 
 
   METHOD if_sadl_exit_calc_element_read~calculate.

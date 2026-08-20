@@ -38,6 +38,7 @@ annotate entity ZREFX_C_ROW_REQUEST with
        ===================================================================== */
   @UI.facet: [
     // --- TABS (Collections) ---
+
     { id: 'idReqestorDetails',         type: #COLLECTION, label: 'Requestor and Requestor Details',        position: 10 },
     { id: 'idRequestDetails',          type: #COLLECTION, label: 'Request Details',                        position: 20 },
     { id: 'idProjectDetails',          type: #COLLECTION, label: 'Project Details',                        position: 30 },
@@ -48,8 +49,10 @@ annotate entity ZREFX_C_ROW_REQUEST with
 
     { id: 'idDisc',                    type: #COLLECTION, label: 'Disclaimer',                             position: 80 },
 
+
     // --- SECTIONS (Inside the Tabs) ---
-    { id: 'IdReqestorDetails',  type: #FIELDGROUP_REFERENCE, label: 'Requestor and Requestor Details',    parentId: 'idReqestorDetails',  targetQualifier: 'tqReqestorDetails', position: 10 },
+
+    { id: 'IdReqestorDetails',  type: #FIELDGROUP_REFERENCE, label: 'Initiator Details',                  parentId: 'idReqestorDetails',  targetQualifier: 'tqReqestorDetails', position: 10 },
     { id: 'IdRequestDetails',   type: #FIELDGROUP_REFERENCE, label: 'Request Details',                    parentId: 'idRequestDetails',   targetQualifier: 'tqRequestDetails',  position: 10 },
     { id: 'IdProjectDetails',   type: #FIELDGROUP_REFERENCE, label: 'Project Details',                    parentId: 'idProjectDetails',   targetQualifier: 'tqProjectDetails',  position: 10 },
   //    { id: 'IdProjSpecs',        type: #FIELDGROUP_REFERENCE, label: 'Project/Station Specification',      parentId: 'idProjSpecs',        targetQualifier: 'tqProjSpecs',       position: 10 },
@@ -64,15 +67,21 @@ annotate entity ZREFX_C_ROW_REQUEST with
   @UI.fieldGroup: [{ position: 10, qualifier: 'tqRequestDetails' }]
   @Search.defaultSearchElement: true
   RequestId;
+
   @EndUserText.label: 'Request  Date'
   @UI.lineItem: [{ position: 20 }]
   @UI.fieldGroup: [{ position: 20, qualifier: 'tqRequestDetails' }]
-
   Requestdate;
   @EndUserText.label: 'Request  type'
   @UI.lineItem: [{ position: 30 }]
   @UI.fieldGroup: [{ position: 30, qualifier: 'tqRequestDetails' }]
   Requesttype;
+
+  @EndUserText.label: 'Status'
+  @UI.lineItem: [{ position: 35 }]
+  @UI.fieldGroup: [{ position: 35, qualifier: 'tqRequestDetails' }]
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'Value'} }]
+  Statuscode;
   @EndUserText.label: 'Request Description'
   @UI.lineItem: [{ position: 40 }]
   @UI.fieldGroup: [{ position: 40, qualifier: 'tqRequestDetails' }]
@@ -132,12 +141,14 @@ annotate entity ZREFX_C_ROW_REQUEST with
   @UI.lineItem: [{ position: 260 }]
   @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
   Voltagekv;
-
-
   @EndUserText.label: ' Project Name'
   @UI.lineItem: [{ position: 260 }]
   @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
   Projectname;
+  @EndUserText.label: ' Project Arabic Name'
+  @UI.lineItem: [{ position: 265 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
+  ProjectnameA;
   @EndUserText.label: 'Project Approval Year'
   @UI.lineItem: [{ position: 260 }]
   @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
@@ -159,6 +170,11 @@ annotate entity ZREFX_C_ROW_REQUEST with
   @UI.fieldGroup: [{ position: 70, qualifier: 'tqProjectDetails' }]
   Projectcostsar;
 
+  @EndUserText.label: 'Estimated Project Cost SAR'
+  @UI.lineItem: [{ position: 261 }]
+  @UI.fieldGroup: [{ position: 80, qualifier: 'tqProjectDetails' }]
+  EstimatedProjectCost;
+
   //Ritght of way Requirement Details
   @EndUserText.label: 'Length'
   @UI.lineItem: [{ position: 300 }]
@@ -176,16 +192,64 @@ annotate entity ZREFX_C_ROW_REQUEST with
 
 
   //Geographic Location
-    @EndUserText.label: 'GIS Id'
+  @EndUserText.label: 'City'
   @UI.lineItem: [{ position: 400 }]
   @UI.fieldGroup: [{ position: 10, qualifier: 'tqGis' }]
-  Gisprojectid;
-  
-  @EndUserText.label: 'Gis Link'
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_CITY', element: 'Value'} }]
+  City;
+  @EndUserText.label: 'Region'
   @UI.lineItem: [{ position: 410 }]
   @UI.fieldGroup: [{ position: 20, qualifier: 'tqGis' }]
-  Gislocationlink;
+  Region;
 
+  @EndUserText.label: 'GIS Id'
+  @UI.lineItem: [{ position: 430 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqGis' }]
+  Gisprojectid;
+
+  @EndUserText.label: 'Gis Link'
+  @UI.lineItem: [{ position: 440 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqGis' }]
+  Gislocationlink;
+  @EndUserText.label: 'Gis Drawing'
+  @UI.lineItem: [{ position: 450 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqGis' }]
+  Gisdrawing;
+  @EndUserText.label: 'Site area'
+  @UI.lineItem: [{ position: 460 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqGis' }]
+  Sitearea;
+
+
+  @EndUserText.label: 'Initiator Id'
+  @UI.lineItem: [{ position: 500 }]
+  @UI.fieldGroup: [{ position: 10, qualifier: 'tqReqestorDetails' }]
+  Initiatorid;
+  @EndUserText.label: 'Employee Number'
+  @UI.lineItem: [{ position: 510 }]
+  @UI.fieldGroup: [{ position: 20, qualifier: 'tqReqestorDetails' }]
+  Employeenumber;
+  @EndUserText.label: 'Initiator Full Name'
+  @UI.lineItem: [{ position: 520 }]
+  @UI.fieldGroup: [{ position: 30, qualifier: 'tqReqestorDetails' }]
+  Initiatorfullname;
+  @EndUserText.label: 'Initiator Organization'
+  @UI.lineItem: [{ position: 530 }]
+  @UI.fieldGroup: [{ position: 40, qualifier: 'tqReqestorDetails' }]
+  Initiatororganization;
+  @EndUserText.label: 'Email Address'
+  @UI.lineItem: [{ position: 540 }]
+  @UI.fieldGroup: [{ position: 50, qualifier: 'tqReqestorDetails' }]
+  Emailaddress;
+  @EndUserText.label: 'Contact Number'
+  @UI.lineItem: [{ position: 550 }]
+  @UI.fieldGroup: [{ position: 60, qualifier: 'tqReqestorDetails' }]
+  Contactnumber;
+
+  @EndUserText.label: 'Other City'
+  @UI.lineItem: [{ position: 560 }]
+  @UI.fieldGroup: [{ position: 70, qualifier: 'tqInitiatorDetails' }]
+  Othercity;
 
 
 

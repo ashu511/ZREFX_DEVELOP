@@ -6,6 +6,7 @@ define view entity ZREFX_I_COMP_WF_ALL_STEPS
   as select from    zrefx_wf_com as Log
   // Self-join to find any APPROVE or COMPLETED entries for the exact same step
     left outer join zrefx_wf_com as ApprovedLog on  Log.complaint_id             = ApprovedLog.complaint_id
+//    and Log.log_uuid             = ApprovedLog.log_uuid
                                                 and Log.approvalstep             = ApprovedLog.approvalstep
                                                 and (
                                                    ApprovedLog.current_status    = 'APPROVE'

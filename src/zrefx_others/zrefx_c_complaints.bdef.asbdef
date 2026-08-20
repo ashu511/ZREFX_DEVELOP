@@ -7,6 +7,10 @@ define behavior for ZREFX_C_COMPLAINTS //alias <alias_name>
   use create;
   use update;
   use delete;
+
+  // Add this line to lock the UI changes to createddate
+  field ( readonly ) Createddate;
+
   use action UpdateDivision;
   //  use action UpdateWorkflowInfo;
   //  use action Edit;
