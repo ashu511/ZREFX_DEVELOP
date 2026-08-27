@@ -1,0 +1,5 @@
+@ObjectModel.leadingEntity.name: 'ZC_ClaimsAppConfig_S'
+define service ZREFX_SD_CLAIM_CONFIG {
+  expose ZC_CLAIMSAPPCONFIG_S as ClaimsAppConfigAll;
+  expose ZC_CLAIMSCONFIG as ClaimsAppConfig;
+}

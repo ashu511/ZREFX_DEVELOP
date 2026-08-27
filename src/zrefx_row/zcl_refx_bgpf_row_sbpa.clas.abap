@@ -18,11 +18,13 @@ CLASS zcl_refx_bgpf_row_sbpa DEFINITION
   PRIVATE SECTION.
 
     TYPES: BEGIN OF ty_context_data,
-             row_id TYPE string,
+             row_id    TYPE string,
+             inbox_url TYPE string,
            END OF ty_context_data,
 
            BEGIN OF ty_sbpa_payload,
              definition_id TYPE string,
+
              context       TYPE ty_context_data,
            END OF ty_sbpa_payload.
 
@@ -37,15 +39,25 @@ ENDCLASS.
 CLASS zcl_refx_bgpf_row_sbpa IMPLEMENTATION.
 
   METHOD if_bgmc_op_single~execute.
+    " =======================================================================
+    " GET DYNAMIC CONFIGURATION (INJECT SINGLETON)
+    " =======================================================================
+    DATA(lo_config) = zcl_refx_row_config=>get_instance( ).
 
+    DATA(lv_btp_dest)  = lo_config->get_sbpa_destination( ).
+    DATA(lv_wf_def)    = lo_config->get_wf_definition_id( ).
+    DATA(lv_api_key)   = lo_config->get_sbpa_api_key( ).
+    DATA(lv_env_id)    = lo_config->get_wf_environment_id( ).
+    DATA(lv_inbox_url) = lo_config->get_sbpa_inbox_url( ).
+    " Insert Inbox URL to SBPA Context
+    gs_context-inbox_url = lv_inbox_url.
     " =======================================================================
     " 1. BUILD SBPA JSON PAYLOAD
     " =======================================================================
     DATA(ls_payload) = VALUE ty_sbpa_payload(
-      definition_id = 'sa30.sec-rs-dev-6durkmdm.re06rightofwayprocess.rightOfWayProcess'
+      definition_id = lv_wf_def "'sa30.sec-rs-dev-6durkmdm.re06rightofwayprocess.rightOfWayProcess'
       context       = gs_context
     ).
-
     " Serialize to JSON exactly like the Complaints app
     DATA(lv_json) = /ui2/cl_json=>serialize(
       data          = ls_payload
@@ -70,9 +82,13 @@ CLASS zcl_refx_bgpf_row_sbpa IMPLEMENTATION.
 
         lo_request->set_header_field( i_name = 'Content-Type' i_value = 'application/json' ).
         " Using the exact API key and URI from your Complaints reference
-        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+*        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = lv_api_key ).
         lo_request->set_uri_path( '/workflow/rest/v1/workflow-instances' ).
-        lo_request->set_query( query = 'environmentId=newrealestate' ). " Exact environment ID
+*        lo_request->set_query( query = 'environmentId=newrealestate' ). " Exact environment ID
+        DATA(lv_query_string) = |environmentId={ lv_env_id }|.
+        lo_request->set_query( query = lv_query_string ).
+
         lo_request->set_text( lv_json ).
 
         DATA(lo_response) = lo_http_client->execute( if_web_http_client=>post ).
@@ -102,20 +118,20 @@ CLASS zcl_refx_bgpf_row_sbpa IMPLEMENTATION.
 
             " Use RAP EML (Local Mode) to insert the log into zrefx_gl_workin.
             " adjust_numbers will automatically generate the 'Objectid' UUID!
-         MODIFY ENTITIES OF zrefx_i_row_request
-              ENTITY Row
-                CREATE BY \_WorkflowInstance
-                FIELDS ( ApprovalStep ApprovalStepDesc WfInstanceId CurrentStatus CurrentOwner SubmissionDate )
-                WITH VALUE #( ( RequestId = mv_requestid
-                                %target = VALUE #( ( %cid               = 'INIT_GL_WF'
-                                                     ApprovalStep       = '0'
-                                                     ApprovalStepDesc   = 'TRIGGERED'
-                                                     WfInstanceId       = ls_response-id
-                                                     CurrentStatus      = 'SUBMITTED'
-                                                     CurrentOwner       = mv_submittedby
-                                                     SubmissionDate = cl_abap_context_info=>get_system_date( ) ) ) ) )
-              REPORTED DATA(ls_reported)
-              FAILED DATA(ls_failed).
+*            MODIFY ENTITIES OF zrefx_i_row_request
+*                 ENTITY Row
+*                   CREATE BY \_WorkflowInstance
+*                   FIELDS ( ApprovalStep ApprovalStepDesc WfInstanceId CurrentStatus CurrentOwner SubmissionDate )
+*                   WITH VALUE #( ( RequestId = mv_requestid
+*                                   %target = VALUE #( ( %cid               = 'INIT_GL_WF'
+*                                                        ApprovalStep       = '0'
+*                                                        ApprovalStepDesc   = 'TRIGGERED'
+*                                                        WfInstanceId       = ls_response-id
+*                                                        CurrentStatus      = 'SUBMITTED'
+*                                                        CurrentOwner       = mv_submittedby
+*                                                        SubmissionDate = cl_abap_context_info=>get_system_date( ) ) ) ) )
+*                 REPORTED DATA(ls_reported)
+*                 FAILED DATA(ls_failed).
 
 *            IF ls_failed IS INITIAL.
 *              " Background process handles COMMIT automatically

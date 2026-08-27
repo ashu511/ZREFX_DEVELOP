@@ -4,12 +4,8 @@
 define view entity ZREFX_C_ROW_SITEVISITNOM
   as projection on ZREFX_I_ROW_SITEVISITNOM
 {
-  key ID,
-  key ProposalId,
-  key ProposalLand_Id,
+  key Id,
   key RequestId,
-      Proposedlandid,
-
       Nominatedby,
       Nominatedat,
       Engineer,
@@ -18,23 +14,19 @@ define view entity ZREFX_C_ROW_SITEVISITNOM
       Preoposeddatetime,
       Agreeddatetime,
       Notes,
-      _Status._Text.Description as Status,
+      Status,
       Statuscode,
       Acceptedby,
       Acceptedat,
       Acceptancecomment,
       Declinereason,
       Department,
+      Userid,
+      Username,
       Title,
-      UserId,
-      UserName,
       Division,
-      EmailId,
-      ContactNo,
-
-      _Workflow,
-      _LandRequest  : redirected to ZREFX_C_ROW_REQUEST,
-      // _UserRef,
-      _Status,
-      _ProposedLand : redirected to parent ZREFX_C_ROW_PROPOSEDLAND
+      Emailid,
+      Contactno,
+      /* Associations */
+      _SiteVisit : redirected to parent ZREFX_C_ROW_SITEVISIT
 }

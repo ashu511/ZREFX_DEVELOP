@@ -52,6 +52,7 @@ CLASS zcl_refx_bgpf_complaints_sbpa DEFINITION
              vendorname_ar        TYPE string,
              submittedby          TYPE string,
              complantype          TYPE string,
+             inbox_url            TYPE string,
            END OF ty_context_data,
 
            BEGIN OF ty_complaint_wrapper,
@@ -69,10 +70,21 @@ ENDCLASS.
 
 
 
-CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
+CLASS zcl_refx_bgpf_complaints_sbpa IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.
+
+    " =======================================================================
+    " GET DYNAMIC CONFIGURATION (INJECT SINGLETON)
+    " =======================================================================
+    DATA(lo_config) = zcl_refx_comp_config=>get_instance( ).
+
+    DATA(lv_btp_dest)  = lo_config->get_sbpa_destination( ).
+    DATA(lv_wf_def)    = lo_config->get_wf_definition_id( ).
+    DATA(lv_api_key)   = lo_config->get_sbpa_api_key( ).
+    DATA(lv_env_id)    = lo_config->get_wf_environment_id( ).
+    DATA(lv_inbox_url) = lo_config->get_sbpa_inbox_url( ).
 
     " =======================================================================
     " ENHANCE CONTEXT WITH BILINGUAL CATEGORY DESCRIPTION
@@ -107,12 +119,15 @@ CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
     " OVERWRITE the raw code in the context with the new bilingual string
     " before it gets serialized into JSON!
     gs_context-categorycode = lv_bilingual_desc.
-    " =======================================================================
+
+    " Insert Inbox URL to SBPA Context
+    gs_context-inbox_url = lv_inbox_url.
 
     DATA(ls_payload) = VALUE ty_sbpa_payload(
-**      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintApprovalProcess' " Found in SBPA Monitoring
-*      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintProcess' " Found in SBPA Monitoring
-      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04newcomplaintmanagement.complaintProcess' " Found in SBPA Monitoring
+***      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintApprovalProcess' " Found in SBPA Monitoring
+**      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintProcess' " Found in SBPA Monitoring
+*      definition_id = 'sa30.sec-rs-dev-6durkmdm.re04newcomplaintmanagement.complaintProcess' " Found in SBPA Monitoring
+      definition_id = lv_wf_def
       context-complaint_context = gs_context
     ).
 
@@ -141,12 +156,14 @@ CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
                         ( abap = 'VENDORNAME_AR'        json = 'vendorName_ar' )
                         ( abap = 'SUBMITTEDBY'          json = 'SubmittedBy' )
                         ( abap = 'COMPLANTYPE'          json = 'ComplanType' )
+                        ( abap = 'INBOX_URL'            json = 'INBOX_URL' )
                       )
     ).
 
     TRY.
         DATA(lo_destination) = cl_http_destination_provider=>create_by_cloud_destination(
-          i_name       = 'sap_process_automation_service' ). "Found in SAP BTP Destinations
+*          i_name       = 'sap_process_automation_service' ). "Found in SAP BTP Destinations
+          i_name = lv_btp_dest ).
 
         DATA(lo_http_client) = cl_web_http_client_manager=>create_by_http_destination(
           i_destination = lo_destination ).
@@ -154,12 +171,19 @@ CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
         DATA(lo_request) = lo_http_client->get_http_request( ).
 
         lo_request->set_header_field( i_name = 'Content-Type' i_value = 'application/json' ).
-*        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'SS2n8TwUGgvznptjvpM5QK1HkW9oUMTS' ).
-*        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'tIz4x-XPQyPltaI8jA5wf3LEuL-wPFaU' ).
-        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+
+***        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'SS2n8TwUGgvznptjvpM5QK1HkW9oUMTS' ).
+**        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'tIz4x-XPQyPltaI8jA5wf3LEuL-wPFaU' ).
+*        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = lv_api_key ).
+
         lo_request->set_uri_path( '/workflow/rest/v1/workflow-instances' ).
-*        lo_request->set_query( query = 'environmentId=realestate' ).
-        lo_request->set_query( query = 'environmentId=newrealestate' ).
+
+**        lo_request->set_query( query = 'environmentId=realestate' ).
+*        lo_request->set_query( query = 'environmentId=newrealestate' ).
+        DATA(lv_query_string) = |environmentId={ lv_env_id }|.
+        lo_request->set_query( query = lv_query_string ).
+
         lo_request->set_text( lv_json ).
 
         DATA(lo_response) = lo_http_client->execute( if_web_http_client=>post ).
@@ -199,7 +223,6 @@ CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
                                                      ApprovalStep       = '0'
                                                      ApprovalStepDesc   = 'TRIGGERED'
                                                      WfInstanceId       = ls_response-id
-                                                     " You can map 'RUNNING' directly or hardcode 'SUBMITTED'
                                                      CurrentStatus      = 'SUBMITTED'
                                                      CurrentOwner       = gs_context-submittedby
                                                      SubmissionFromDate = cl_abap_context_info=>get_system_date( ) ) ) ) )
@@ -251,4 +274,5 @@ CLASS ZCL_REFX_BGPF_COMPLAINTS_SBPA IMPLEMENTATION.
     gs_context-vendorname_en        = vendorname_en.
 
   ENDMETHOD.
+
 ENDCLASS.

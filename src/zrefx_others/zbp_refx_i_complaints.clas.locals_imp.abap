@@ -230,9 +230,10 @@ CLASS lhc_attachments IMPLEMENTATION.
           ls_children    TYPE cmis_s_object_in_folder_list,
           lo_cmis_client TYPE REF TO if_cmis_client.
 
-    SELECT SINGLE config_value FROM zrefx_btp_config
-      WHERE object_id = 'repository_id'
-      INTO @lv_repo_id.
+*    SELECT SINGLE config_value FROM zrefx_btp_config
+*      WHERE object_id = 'repository_id'
+*      INTO @lv_repo_id.
+    lv_repo_id = zcl_refx_comp_config=>get_instance( )->get_dms_repository_id( ).
 
     lo_cmis_client = cl_cmis_client_factory2=>get_instance( ).
 
@@ -309,10 +310,11 @@ CLASS lhc_attachments IMPLEMENTATION.
            lv_documentid TYPE string.
 
 * Download the object                                                                                     *
-    SELECT SINGLE config_value
-      FROM zrefx_btp_config
-      WHERE object_id   = 'repository_id'
-      INTO @lv_repo_id.
+*    SELECT SINGLE config_value
+*      FROM zrefx_btp_config
+*      WHERE object_id   = 'repository_id'
+*      INTO @lv_repo_id.
+    lv_repo_id = zcl_refx_comp_config=>get_instance( )->get_dms_repository_id( ).
 
     LOOP AT keys ASSIGNING FIELD-SYMBOL(<ls_key>).
 

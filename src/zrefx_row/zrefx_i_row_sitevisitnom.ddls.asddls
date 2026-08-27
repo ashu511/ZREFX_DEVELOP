@@ -3,51 +3,34 @@
 @Metadata.ignorePropagatedAnnotations: true
 define view entity ZREFX_I_ROW_SITEVISITNOM
   as select from zrefx_row_svn
-  association        to parent ZREFX_I_ROW_PROPOSEDLAND as _ProposedLand on  $projection.RequestId       = _ProposedLand.RequestId
-                                                                       and $projection.ProposalLand_Id = _ProposedLand.Id
-                                                                       and $projection.ProposalId      = _ProposedLand.ProposalId
-
-  association [0..*] to ZREFX_I_ROW_REQUEST           as _LandRequest on  $projection.RequestId = _LandRequest.RequestId
-
-  // association [1..1] to ZREFX_I_USERREF             as _UserRef      on  $projection.Nominatedby = _UserRef.UserID
-
-  association        to ZREFX_I_ROW_STATUS            as _Status      on  _Status.Statustype     = 'NOMINATION'
-                                                                      and $projection.Statuscode = _Status.Code
-
-  association [1..1] to ZREFX_I_ROW_WORKFLOW_INSTANCE as _Workflow    on  _Workflow.Objecttype = 'NOMINATION'
+  association to parent ZREFX_I_ROW_SITEVISIT as _SiteVisit on  $projection.Id        = _SiteVisit.Id
+                                                            and $projection.RequestId = _SiteVisit.RequestId
+   association [1..1] to ZREFX_I_ROW_REQUEST as _ROW on $projection.RequestId = _ROW.RequestId                                                           
 {
+  key zrefx_row_svn.id                as Id,
+  key zrefx_row_svn.request_id        as RequestId,
+      zrefx_row_svn.nominatedby       as Nominatedby,
+      zrefx_row_svn.nominatedat       as Nominatedat,
+      zrefx_row_svn.engineer          as Engineer,
+      zrefx_row_svn.visitreason       as Visitreason,
+      zrefx_row_svn.priority          as Priority,
+      zrefx_row_svn.preoposeddatetime as Preoposeddatetime,
+      zrefx_row_svn.agreeddatetime    as Agreeddatetime,
+      zrefx_row_svn.notes             as Notes,
+      zrefx_row_svn.status            as Status,
+      zrefx_row_svn.statuscode        as Statuscode,
+      zrefx_row_svn.acceptedby        as Acceptedby,
+      zrefx_row_svn.acceptedat        as Acceptedat,
+      zrefx_row_svn.acceptancecomment as Acceptancecomment,
+      zrefx_row_svn.declinereason     as Declinereason,
+      zrefx_row_svn.department        as Department,
+      zrefx_row_svn.userid            as Userid,
+      zrefx_row_svn.username          as Username,
+      zrefx_row_svn.title             as Title,
+      zrefx_row_svn.division          as Division,
+      zrefx_row_svn.emailid           as Emailid,
+      zrefx_row_svn.contactno         as Contactno,
+      _SiteVisit,
+      _ROW
 
-  key   id                        as ID,
-  key   proposalid                as ProposalId,
-  key   proposallandid            as ProposalLand_Id,
-  key   request_id                as RequestId,
-        _ProposedLand.Landid      as Proposedlandid,
-
-        nominatedat               as Nominatedat,
-        engineer                  as Engineer,
-        nominatedby               as Nominatedby,
-        visitreason               as Visitreason,
-        priority                  as Priority,
-        preoposeddatetime         as Preoposeddatetime,
-        agreeddatetime            as Agreeddatetime,
-        notes                     as Notes,
-        _Status._Text.Description as Status,
-        statuscode                as Statuscode,
-        acceptedby                as Acceptedby,
-        acceptedat                as Acceptedat,
-        acceptancecomment         as Acceptancecomment,
-        declinereason             as Declinereason,
-        title                     as Title,
-        department                as Department,
-        userid                    as UserId,
-        username                  as UserName,
-        division                  as Division,
-        emailid                   as EmailId,
-        contactno                 as ContactNo,
-
-        _Workflow,
-        _ProposedLand,
-        _LandRequest,
-        //_UserRef,
-        _Status
 }

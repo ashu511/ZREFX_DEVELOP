@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Definition for Claims Report'
+define service ZREFX_SD_CLM_RPT {
+  expose ZREFX_C_CLM_RPT as ClaimsReport;
+}

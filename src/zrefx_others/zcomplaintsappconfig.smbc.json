@@ -1,0 +1,42 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Maintain Complaints App Configurations",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "serviceConfiguration": {
+    "serviceBinding": "ZREFX_SB_COMPLAINTAPPCONFIG_V4",
+    "serviceName": "ZREFX_SB_COMPLAINTAPPCONFIG_V4",
+    "serviceVersion": "0001",
+    "rootEntitySet": "CompConfigAll",
+    "name": "Complaints App Configuration",
+    "transportObject": "ZCOMPLAINTSAPPCONFIGT",
+    "configurationGroup": "",
+    "skipRootEntity": "skipWithoutCalculation"
+  },
+  "appConfiguration": {
+    "listReport": {},
+    "objectPages": [
+      {
+        "entitySet": "CompConfigAll",
+        "variantManagement": "control",
+        "showTransportSelectionStrip": true
+      }
+    ],
+    "tableSettings": [
+      {
+        "entitySet": "ComplaintsConfig",
+        "tableType": "gridTable",
+        "selectionMode": "single",
+        "selectAll": true,
+        "rowCountMode": "auto",
+        "frozenColumnCount": 2,
+        "creationModeName": "inlineCreationRows",
+        "createAtEnd": true,
+        "condensedTableLayout": true,
+        "widthIncludingColumnHeader": true
+      }
+    ]
+  }
+}

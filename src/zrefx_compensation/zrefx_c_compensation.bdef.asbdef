@@ -1,0 +1,34 @@
+projection;
+strict ( 2 );
+use side effects;
+define behavior for ZREFX_C_COMPENSATION //alias <alias_name>
+{
+  use create;
+  use update;
+  use delete;
+
+  use action UpdateDivision;
+
+  use association _Attachments { create; }
+  use association _WorkflowInfo { create; }
+}
+
+define behavior for ZREFX_C_ATT_COMPNS alias Attachments
+{
+  use update;
+  use delete;
+
+//  use action updateDmsId;
+  use action delete;
+  use action download;
+
+  use association _Compensation;
+}
+
+define behavior for ZREFX_C_WF_COMPNS //alias <alias_name>
+{
+//  use update;
+//  use delete;
+
+  use association _Compensation;
+}

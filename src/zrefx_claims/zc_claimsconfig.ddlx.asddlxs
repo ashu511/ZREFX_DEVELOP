@@ -1,0 +1,101 @@
+@Metadata.layer: #CUSTOMER
+@UI: {
+  headerInfo: {
+    typeName: 'Claims App Configuration', 
+    typeNamePlural: 'Claims App Configuration', 
+    title: {
+      type: #STANDARD, 
+      value: 'ObjectId'
+    }
+  }
+}
+annotate view ZC_ClaimsConfig with
+{
+  @UI.hidden: true
+  ConfigDeprecationCode_Critlty;
+  
+  @UI.hidden: true
+  ConfigurationDeprecation_Text;
+  
+  @UI.identification: [ {
+    position: 1 
+  } ]
+  @UI.lineItem: [ {
+    position: 1 
+  }, 
+  {
+    type: #FOR_ACTION, 
+    dataAction: 'Copy', 
+    label: 'Copy Selected Entry', 
+    invocationGrouping: #CHANGE_SET
+  } ]
+  @UI.facet: [ {
+    id: 'ClaimsAppConfig', 
+    purpose: #STANDARD, 
+    type: #IDENTIFICATION_REFERENCE, 
+    label: 'Claims App Configuration', 
+    position: 1 
+  } ]
+  ObjectId;
+  
+  @UI.identification: [ {
+    position: 2 
+  } ]
+  @UI.lineItem: [ {
+    position: 2 
+  } ]
+  Environment;
+  
+  @UI.identification: [ {
+    position: 3 , 
+    label: 'ConfigValue'
+  } ]
+  @UI.lineItem: [ {
+    position: 3 , 
+    label: 'ConfigValue'
+  } ]
+  ConfigValue;
+  
+  @UI.identification: [ {
+    position: 4 , 
+    label: 'Description'
+  } ]
+  @UI.lineItem: [ {
+    position: 4 , 
+    label: 'Description'
+  } ]
+  Description;
+  
+  @UI.identification: [ {
+    position: 5 , 
+    criticality: 'ConfigDeprecationCode_Critlty'
+  }, 
+  {
+    type: #FOR_ACTION, 
+    dataAction: 'Deprecate', 
+    label: 'Deprecate'
+  }, 
+  {
+    type: #FOR_ACTION, 
+    dataAction: 'Invalidate', 
+    label: 'Invalidate'
+  } ]
+  @UI.textArrangement: #TEXT_ONLY
+  @UI.lineItem: [ {
+    position: 5 , 
+    criticality: 'ConfigDeprecationCode_Critlty'
+  }, 
+  {
+    type: #FOR_ACTION, 
+    dataAction: 'Deprecate', 
+    label: 'Deprecate Selected Entry', 
+    invocationGrouping: #CHANGE_SET
+  }, 
+  {
+    type: #FOR_ACTION, 
+    dataAction: 'Invalidate', 
+    label: 'Invalidate Selected Entry', 
+    invocationGrouping: #CHANGE_SET
+  } ]
+  ConfigDeprecationCode;
+}

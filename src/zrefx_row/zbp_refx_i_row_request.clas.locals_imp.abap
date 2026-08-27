@@ -1,18 +1,18 @@
-CLASS lhc_zrefx_i_row_workflow_insta DEFINITION INHERITING FROM cl_abap_behavior_handler.
+CLASS lhc_ZREFX_I_WF_ROW DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
   PRIVATE SECTION.
 
     METHODS updateParentStatus FOR DETERMINE ON MODIFY
-      keys FOR ZREFX_I_ROW_WORKFLOW_INSTANCE~updateParentStatus.
+       keys FOR ZREFX_I_WF_ROW~updateParentStatus.
 
 ENDCLASS.
 
-CLASS lhc_zrefx_i_row_workflow_insta IMPLEMENTATION.
+CLASS lhc_ZREFX_I_WF_ROW IMPLEMENTATION.
 
   METHOD updateParentStatus.
-      " 1. Read the newly created Workflow Info records from the RAP Buffer
+    " 1. Read the newly created Workflow Info records from the RAP Buffer
     READ ENTITIES OF zrefx_i_row_request IN LOCAL MODE
-      ENTITY zrefx_i_row_workflow_instance
+      ENTITY ZREFX_I_WF_ROW
       FIELDS ( RequestId CurrentStatus DecisionOutcome ) WITH CORRESPONDING #( keys )
       RESULT DATA(lt_wf_logs).
 
@@ -82,7 +82,12 @@ CLASS lhc_attachments IMPLEMENTATION.
 
   METHOD updateDmsId.
     DATA lv_empty_content TYPE xstring.
-
+    TRY.
+        DATA(lv_user_name) = cl_abap_context_info=>get_user_formatted_name( ).
+        DATA(lv_system_date) = sy-datum && sy-uzeit.
+      CATCH cx_abap_context_info_error ##NO_HANDLER.
+        "handle exception
+    ENDTRY.
     LOOP AT keys ASSIGNING FIELD-SYMBOL(<ls_key>).
       " LOCAL MODE bypasses the UI lock to update Dmsid and wipe the HANA binary
       MODIFY ENTITIES OF zrefx_i_ROW_request IN LOCAL MODE
@@ -91,6 +96,8 @@ CLASS lhc_attachments IMPLEMENTATION.
         WITH VALUE #( ( RequestId         = <ls_key>-RequestId
                         AttachmentId      = <ls_key>-AttachmentId
                         Dmsid             = <ls_key>-%param-documentid
+                        CreatedBy         = lv_user_name
+                        CreatedAt         = lv_system_date
                         Content = lv_empty_content ) ).
     ENDLOOP.
 
@@ -171,23 +178,23 @@ CLASS lsc_zrefx_i_row_request IMPLEMENTATION.
     " =====================================================================
     " 3. CHILD: Workflow Instance
     " =====================================================================
-*    LOOP AT mapped-workflowinstance ASSIGNING FIELD-SYMBOL(<ls_wf>).
-*
-*      IF <ls_wf>-Objectid IS INITIAL.
-*
-*        TRY.
-*            <ls_wf>-Objectid = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*        ENDTRY.
-*
-*        <ls_wf>-RequestId = <ls_wf>-%tmp-RequestId.
-*
-*      ENDIF.
-*
-*    ENDLOOP.
+    LOOP AT mapped-ZREFX_I_WF_ROW ASSIGNING FIELD-SYMBOL(<ls_wf>).
+
+      IF <ls_wf>-LogUuid IS INITIAL.
+
+        TRY.
+            <ls_wf>-LogUuid = cl_system_uuid=>create_uuid_x16_static( ).
+          CATCH cx_uuid_error.
+        ENDTRY.
+
+        <ls_wf>-RequestId = <ls_wf>-%tmp-RequestId.
+
+      ENDIF.
+
+    ENDLOOP.
   ENDMETHOD.
   METHOD save_modified.
- " =====================================================================
+    " =====================================================================
     " VARIABLE DECLARATIONS
     " =====================================================================
     " Variables for DMS Background Process
@@ -206,10 +213,11 @@ CLASS lsc_zrefx_i_row_request IMPLEMENTATION.
     " 1. TRACK SUBMISSIONS FROM 'CREATE'
     " =====================================================================
     IF create-row IS NOT INITIAL.
-      LOOP AT create-row INTO DATA(ls_row_create).
+      LOOP AT create-row ASSIGNING FIELD-SYMBOL(<fs_row_create>).  "DATA(ls_row_create).
         " If the UI immediately passed 'SUBM' on creation
-        IF ls_row_create-Statuscode = '02'.
-          APPEND ls_row_create-RequestId TO lt_submitted_requests.
+        IF <fs_row_create>-Statuscode = '02'.
+          <fs_row_create>-Gisprojectid = <fs_row_create>-RequestId.
+          APPEND <fs_row_create>-RequestId TO lt_submitted_requests.
         ENDIF.
       ENDLOOP.
     ENDIF.
@@ -225,7 +233,6 @@ CLASS lsc_zrefx_i_row_request IMPLEMENTATION.
         ENDIF.
       ENDLOOP.
     ENDIF.
-
     " =====================================================================
     " 3. HANDLE DMS ATTACHMENT UPLOAD TRIGGER (For Submitted Requests)
     " =====================================================================
@@ -367,6 +374,8 @@ CLASS lhc_ZREFX_I_ROW_REQUEST DEFINITION INHERITING FROM cl_abap_behavior_handle
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
       IMPORTING REQUEST requested_authorizations FOR zrefx_i_row_request RESULT result.
+    METHODS fetchrequesttypebeforesave FOR DETERMINE ON MODIFY
+       keys FOR row~fetchrequesttypebeforesave.
 
 ENDCLASS.
 
@@ -376,6 +385,10 @@ CLASS lhc_ZREFX_I_ROW_REQUEST IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_global_authorizations.
+  ENDMETHOD.
+
+  METHOD fetchRequestTypeBeforeSave.
+
   ENDMETHOD.
 
 ENDCLASS.

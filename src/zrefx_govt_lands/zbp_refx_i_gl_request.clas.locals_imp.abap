@@ -30,14 +30,14 @@ CLASS lhc_workflowinstance IMPLEMENTATION.
          OR ls_wf_log-DecisionOutcome = 'REJECTED' OR ls_wf_log-DecisionOutcome = 'REJECT'.
 
         " Update this string to your exact GL Rejection Status code (e.g., 'REJT' or '04')
-        lv_new_parent_status = 'REJECTED'.
+        lv_new_parent_status = '04'.
 
         " Check if SBPA sent a final state (Approval)
       ELSEIF ls_wf_log-CurrentStatus = 'COMPLETED' OR ls_wf_log-DecisionOutcome = 'COMPLETED'
              OR ls_wf_log-DecisionOutcome = 'APPROVED'.
 
         " Update this string to your exact GL Approval Status code (e.g., 'APPR' or '03')
-        lv_new_parent_status = 'APPROVED'.
+        lv_new_parent_status = '03'.
 
       ENDIF.
 
@@ -69,19 +69,16 @@ CLASS lhc_reqattachment DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
   PRIVATE SECTION.
 
-    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
-      keys REQUEST requested_authorizations FOR ReqAttachment RESULT result.
     METHODS updateDmsId FOR MODIFY
        keys FOR ACTION ReqAttachment~updateDmsId RESULT result.
     METHODS download FOR MODIFY
        keys FOR ACTION ReqAttachment~download RESULT result.
+    METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
+      REQUEST requested_authorizations FOR ReqAttachment RESULT result.
 
 ENDCLASS.
 
 CLASS lhc_reqattachment IMPLEMENTATION.
-
-  METHOD get_instance_authorizations.
-  ENDMETHOD.
 
   METHOD updateDmsId.
 
@@ -172,13 +169,13 @@ CLASS lhc_reqattachment IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD get_global_authorizations.
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS lhc_ZREFX_I_GL_REQUEST DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
-
-    METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
-      IMPORTING keys REQUEST requested_authorizations FOR GovtLand RESULT result.
 
     METHODS get_global_authorizations FOR GLOBAL AUTHORIZATION
       IMPORTING REQUEST requested_authorizations FOR GovtLand RESULT result.
@@ -186,9 +183,6 @@ CLASS lhc_ZREFX_I_GL_REQUEST DEFINITION INHERITING FROM cl_abap_behavior_handler
 ENDCLASS.
 
 CLASS lhc_ZREFX_I_GL_REQUEST IMPLEMENTATION.
-
-  METHOD get_instance_authorizations.
-  ENDMETHOD.
 
   METHOD get_global_authorizations.
   ENDMETHOD.
@@ -274,110 +268,71 @@ CLASS lsc_ZREFX_I_GL_REQUEST IMPLEMENTATION.
     " =====================================================================
     " 3. CHILD: Workflow Instance
     " =====================================================================
-    LOOP AT mapped-workflowinstance ASSIGNING FIELD-SYMBOL(<ls_wf>).
+    LOOP AT mapped-workflowinstance ASSIGNING FIELD-SYMBOL(<lfs_wf>).
 
-      IF <ls_wf>-LogUuid IS INITIAL.
+      IF <lfs_wf>-LogUuid IS INITIAL.
 
         TRY.
-            <ls_wf>-LogUuid = cl_system_uuid=>create_uuid_x16_static( ).
+            <lfs_wf>-LogUuid = cl_system_uuid=>create_uuid_x16_static( ).
           CATCH cx_uuid_error.
         ENDTRY.
 
-        <ls_wf>-RequestId = <ls_wf>-%tmp-RequestId.
+        <lfs_wf>-RequestId = <lfs_wf>-%tmp-RequestId.
 
       ENDIF.
 
     ENDLOOP.
 
-*    " =====================================================================
-*    " 2. CHILD: Clarification
-*    " =====================================================================
-*    LOOP AT mapped-clarification ASSIGNING FIELD-SYMBOL(<ls_clar>).
-*      IF <ls_clar>-Id IS INITIAL.
-*        TRY.
-*            <ls_clar>-Id = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+    " =====================================================================
+    " 4. CHILD: Site Visit
+    " =====================================================================
+    LOOP AT mapped-sitevisit ASSIGNING FIELD-SYMBOL(<ls_sv>).
+      IF <ls_sv>-Id IS INITIAL.
+        TRY.
+            <ls_sv>-Id = cl_system_uuid=>create_uuid_x16_static( ).
+          CATCH cx_uuid_error.
+            CONTINUE.
+        ENDTRY.
 
-*    " =====================================================================
-*    " 3. CHILD: Land Allocation
-*    " =====================================================================
-*    LOOP AT mapped-landallocation ASSIGNING FIELD-SYMBOL(<ls_alloc>).
-*      IF <ls_alloc>-LandNumber IS INITIAL.
-*        TRY.
-*            <ls_alloc>-LandNumber = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error. RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+        " Map the parent request ID from the temporary buffer
+        <ls_sv>-RequestId = <ls_sv>-%tmp-RequestId.
+      ENDIF.
+    ENDLOOP.
 
-*    " =====================================================================
-*    " 4. CHILD: Proposal
-*    " =====================================================================
-*    LOOP AT mapped-proposal ASSIGNING FIELD-SYMBOL(<ls_prop>).
-*      IF <ls_prop>-Id IS INITIAL.
-*        TRY.
-*            <ls_prop>-Id = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+    " =====================================================================
+    " 5. GRANDCHILD: Site Visit Attachments
+    " =====================================================================
+    LOOP AT mapped-sitevisitattachment ASSIGNING FIELD-SYMBOL(<ls_svatt>).
+      IF <ls_svatt>-Dmsid IS INITIAL.
+        TRY.
+            " Generating a C32 UUID as a placeholder since Dmsid is CHAR(255)
+            <ls_svatt>-Dmsid = cl_system_uuid=>create_uuid_c32_static( ).
+          CATCH cx_uuid_error.
+            CONTINUE.
+        ENDTRY.
 
-*    " =====================================================================
-*    " 5. CHILD: Proposed Land
-*    " =====================================================================
-*    LOOP AT mapped-proposedland ASSIGNING FIELD-SYMBOL(<ls_pland>).
-*      IF <ls_pland>-Id IS INITIAL.
-*        TRY.
-*            <ls_pland>-Id = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+        " Map the parent keys from the temporary buffer
+        <ls_svatt>-SiteId    = <ls_svatt>-%tmp-SiteId.
+        <ls_svatt>-RequestId = <ls_svatt>-%tmp-RequestId.
+      ENDIF.
+    ENDLOOP.
 
-*    " =====================================================================
-*    " 6. CHILD: Site Visit
-*    " =====================================================================
-*    LOOP AT mapped-sitevisit ASSIGNING FIELD-SYMBOL(<ls_sv>).
-*      IF <ls_sv>-id IS INITIAL.
-*        TRY.
-*            <ls_sv>-id = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+    " =====================================================================
+    " 6. GRANDCHILD: Site Visit Nomination
+    " =====================================================================
+    LOOP AT mapped-sitevisitnom ASSIGNING FIELD-SYMBOL(<ls_svnom>).
+      IF <ls_svnom>-NominationId IS INITIAL.
+        TRY.
+            <ls_svnom>-NominationId = cl_system_uuid=>create_uuid_x16_static( ).
+          CATCH cx_uuid_error.
+            CONTINUE.
+        ENDTRY.
 
-*    " =====================================================================
-*    " 7. CHILD: Site Visit Attachments
-*    " =====================================================================
-*    LOOP AT mapped-sitevisitattachment ASSIGNING FIELD-SYMBOL(<ls_svatt>).
-*      IF <ls_svatt>-Dmsid IS INITIAL.
-*        TRY.
-*            <ls_svatt>-Dmsid = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
-
-*    " =====================================================================
-*    " 8. CHILD: Site Visit Nom
-*    " =====================================================================
-*    LOOP AT mapped-sitevisitnom ASSIGNING FIELD-SYMBOL(<ls_svnom>).
-*      IF <ls_svnom>-id IS INITIAL.
-*        TRY.
-*            <ls_svnom>-id = cl_system_uuid=>create_uuid_x16_static( ).
-*          CATCH cx_uuid_error.
-*            RAISE SHORTDUMP TYPE cx_uuid_error.
-*        ENDTRY.
-*      ENDIF.
-*    ENDLOOP.
+        " Map the parent keys from the temporary buffer
+        <ls_svnom>-Id        = <ls_svnom>-%tmp-Id.
+        <ls_svnom>-RequestId = <ls_svnom>-%tmp-RequestId.
+      ENDIF.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -404,7 +359,7 @@ CLASS lsc_ZREFX_I_GL_REQUEST IMPLEMENTATION.
     IF create-govtland IS NOT INITIAL.
       LOOP AT create-govtland INTO DATA(ls_gl_create).
         " If the UI immediately passed 'SUBM' on creation
-        IF ls_gl_create-Statuscode = 'SUBMITTED'.
+        IF ls_gl_create-Statuscode = '02'.
           APPEND ls_gl_create-RequestId TO lt_submitted_requests.
         ENDIF.
       ENDLOOP.
@@ -416,7 +371,7 @@ CLASS lsc_ZREFX_I_GL_REQUEST IMPLEMENTATION.
     IF update-govtland IS NOT INITIAL.
       LOOP AT update-govtland INTO DATA(ls_gl_update).
         " Critical: Check if the UI *actually changed* the status to 'SUBM' during this update
-        IF ls_gl_update-%control-Statuscode = if_abap_behv=>mk-on AND ls_gl_update-Statuscode = 'SUBMITTED'.
+        IF ls_gl_update-%control-Statuscode = if_abap_behv=>mk-on AND ls_gl_update-Statuscode = '02'.
           APPEND ls_gl_update-RequestId TO lt_submitted_requests.
         ENDIF.
       ENDLOOP.
@@ -529,7 +484,7 @@ CLASS lsc_ZREFX_I_GL_REQUEST IMPLEMENTATION.
         " === GUARD 2: DRAFT PREVENTION ===
         " If the parent is still a Draft, do not upload yet.
         READ TABLE lt_parents INTO DATA(ls_parent) WITH KEY entity COMPONENTS RequestId = <lfs_attachment>-RequestId.
-        IF sy-subrc = 0 AND ( ls_parent-Statuscode = 'DRAFT' OR ls_parent-Statuscode IS INITIAL ).
+        IF sy-subrc = 0 AND ( ls_parent-Statuscode = '01' OR ls_parent-Statuscode IS INITIAL ).
           CONTINUE.
         ENDIF.
 

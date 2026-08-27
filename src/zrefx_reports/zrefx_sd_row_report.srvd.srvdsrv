@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Defination for Report'
+define service ZREFX_SD_ROW_REPORT {
+  expose ZREFX_ROW_REPORT;
+}

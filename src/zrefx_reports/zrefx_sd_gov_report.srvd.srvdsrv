@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Defination for GOV Report'
+define service ZREFX_SD_GOV_REPORT {
+  expose ZREFX_GOV_REPORT;
+}

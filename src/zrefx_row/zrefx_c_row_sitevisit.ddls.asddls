@@ -1,20 +1,18 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
-@EndUserText.label: 'Projection view - Site Visit'
+@EndUserText.label: 'Projection view for Land Request'
 @Metadata.ignorePropagatedAnnotations: true
-define view entity ZREFX_C_ROW_SITEVISIT
+@Metadata.allowExtensions: true
+@ObjectModel.semanticKey: ['RequestId']
+define  view entity ZREFX_C_ROW_SITEVISIT
+//
   as projection on ZREFX_I_ROW_SITEVISIT
 {
-  key   ID,
-  key   ProposalId,
-  key   ProposalLandId,
+  key   Id,
   key   RequestId,
-        Proposal,
-        Proposedland,
         Plannedvisitdatetime,
         Actualvisitdatetime,
         Engineer,
         Statuscode,
-        _Status._Text.Description as Status,
         Reports,
         Widthmmeasured,
         Lengthmmeasured,
@@ -24,15 +22,10 @@ define view entity ZREFX_C_ROW_SITEVISIT
         Sitenotes,
         Department,
         Title,
-        UserId,
-        UserName,
+        Userid,
+        Username,
+        _SiteAttachments : redirected to composition child ZREFX_C_ROW_SITEVISIT_ATT,
+        _SiteVisitNom    : redirected to composition child ZREFX_C_ROW_SITEVISITNOM,
+         _Row : redirected to parent ZREFX_C_ROW_REQUEST
 
-        _Workflow,
-        _ProposedLand : redirected to parent ZREFX_C_ROW_PROPOSEDLAND,
-        _Attachments : redirected to composition child ZREFX_C_ROW_SITEVISIT_ATT,
-
-        // _UserRef,
-        _Status,
-        _SiteVisitNom,
-        _LandRequest  : redirected to ZREFX_C_ROW_REQUEST
 }

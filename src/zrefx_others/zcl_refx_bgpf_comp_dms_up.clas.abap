@@ -32,7 +32,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_REFX_BGPF_COMP_DMS_UP IMPLEMENTATION.
+CLASS zcl_refx_bgpf_comp_dms_up IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.
@@ -54,9 +54,10 @@ CLASS ZCL_REFX_BGPF_COMP_DMS_UP IMPLEMENTATION.
       RECEIVING
         ro_client = lo_cmis_client.
 
-    SELECT SINGLE config_value FROM zrefx_btp_config
-      WHERE object_id = 'repository_id'
-      INTO @lv_repo_id.
+*    SELECT SINGLE config_value FROM zrefx_btp_config
+*      WHERE object_id = 'repository_id'
+*      INTO @lv_repo_id.
+    lv_repo_id = zcl_refx_comp_config=>get_instance( )->get_dms_repository_id( ).
 
     lo_cmis_client->get_repository_info(
       EXPORTING iv_repository_id   = lv_repo_id

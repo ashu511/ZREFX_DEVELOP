@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service Definition for Complaint Report'
+define service ZREFX_SD_COMP_RPT {
+  expose ZREFX_C_COMP_RPT as ComplaintsReport;
+}

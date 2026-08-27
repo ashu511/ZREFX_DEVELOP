@@ -1,0 +1,5 @@
+@ObjectModel.leadingEntity.name: 'ZC_ComplaintsAppConfig_S'
+define service ZREFX_SD_COMPLAINTSAPPCONFIG {
+  expose ZC_COMPLAINTSAPPCONFIG_S as CompConfigAll;
+  expose ZC_COMPLAINTSCONFIG as ComplaintsConfig;
+}

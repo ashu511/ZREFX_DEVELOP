@@ -1,0 +1,110 @@
+managed with additional save implementation in class ZBP_I_CLAIMCONFIG_S unique;
+strict ( 1 );
+with draft;
+define behavior for ZI_ClaimsAppConfig_S alias ClaimsAppConfigAll
+draft table ZREFX_D_CLMCFGS
+with unmanaged save
+lock master total etag LastChangedAtMax
+authorization master( global )
+{
+  field ( readonly )
+   SingletonID;
+
+  field ( features : instance )
+   TransportRequestID;
+
+  field ( notrigger )
+   SingletonID,
+   LastChangedAtMax;
+
+
+  update;
+  internal create;
+  internal delete;
+
+  draft action ( features : instance ) Edit with additional implementation;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare {
+    validation ClaimsAppConfig ~ ValidateDataConsistency;
+  }
+  action ( features : instance ) SelectCustomizingTransptReq parameter D_SelectCustomizingTransptReqP result [1] $self;
+
+  association _ClaimsAppConfig { create ( features : instance ); with draft; }
+
+  validation ValidateTransportRequest on save ##NOT_ASSIGNED_TO_DETACT
+  {
+    create;
+    update;
+  }
+
+  side effects
+  {
+    action SelectCustomizingTransptReq affects
+        $self;
+  }
+
+}
+
+define behavior for ZI_ClaimsConfig alias ClaimsAppConfig ##UNMAPPED_FIELD[SingletonID] ##UNMAPPED_FIELD[ConfigDeprecationCode_Critlty]
+persistent table ZREFX_CLM_CONFIG
+draft table ZREFX_CLM_CON_D
+etag master LocChangedAt
+lock dependent by _ClaimsAppConfigAll
+authorization dependent by _ClaimsAppConfigAll
+{
+  field ( mandatory : create )
+   ObjectId,
+   Environment;
+
+  field ( readonly )
+   SingletonID,
+   ChangedAt,
+   LocChangedAt,
+   ConfigDeprecationCode,
+   ConfigDeprecationCode_Critlty;
+
+  field ( readonly : update )
+   ObjectId,
+   Environment;
+
+  field ( notrigger )
+   SingletonID,
+   ChangedAt,
+   LocChangedAt;
+
+
+  update( features : global );
+  delete( features : instance );
+
+  action ( features : instance ) Deprecate result [1] $self;
+  action ( features : instance ) Invalidate result [1] $self;
+  factory action ( features : instance ) Copy parameter ZD_CopyClaimsConfiguration [1];
+
+  mapping for ZREFX_CLM_CONFIG
+  {
+    ObjectId = OBJECT_ID;
+    Environment = ENVIRONMENT;
+    ConfigValue = CONFIG_VALUE;
+    Description = DESCRIPTION;
+    ConfigDeprecationCode = CONFIGDEPRECATIONCODE;
+    ChangedAt = CHANGED_AT;
+    LocChangedAt = LOC_CHANGED_AT;
+  }
+
+  association _ClaimsAppConfigAll { with draft; }
+
+  validation ValidateTransportRequest on save ##NOT_ASSIGNED_TO_DETACT
+  {
+    create;
+    update;
+    delete;
+  }
+  validation ValidateDataConsistency on save
+  {
+    create;
+    update;
+  }
+
+}

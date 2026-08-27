@@ -17,12 +17,11 @@ with additional save
 
   determination fetchRequestTypeBeforeSave on modify { create; }
 
-  association _Clarifications { create; }
-  association _LandAllocations { create; }
-  association _Proposal { create; }
   association _RequestAttachments { create; }
-  association _WorkflowInstance { create; }
+  //  association _WorkflowInstance { create; }
   association _ROWWorkflowInfo { create; }
+  association _SiteVisit { create; }
+
   mapping for zrefx_row
     {
       RequestId                  = request_id;
@@ -87,263 +86,34 @@ with additional save
       UserName                   = username;
       Title                      = title;
       Department                 = department;
-      CurrentStepDesc            = currentstepdescription;
-      //      Projectname_A            = projectname_a;
+      //      CurrentStepDesc            = currentstepdescription;
+      ProjectnameA               = projectname_a;
       CurrentProcessorName       = currentprocessorname;
       CurrentProcessorDepartment = currentprocessordepartment;
-      MileStoneDescription       = milestonedesc;
+      //      MileStoneDescription       = milestonedesc;
       Milestone                  = milestone;
       WorkflowInstanceId         = workflowinstanceid;
-      MilestoneSequence          = milestonesequence;
+      //     MilestoneSequence          = milestonesequence;
       City                       = city;
       Region                     = region;
       Sitearea                   = sitearea;
       ConfirmInformation         = confirminformation;
       ConsentDate                = consentdate;
+      RequestorOrg               = req_org;
+      RequestorOrgText           = req_org_text;
+      RequestorOrgAText          = req_org_text_a;
+      REDivOrg                   = re_division_org;
+      REDivOrgText               = re_division_text;
+      REDivOrgAText              = re_division_text_a;
+      REReviewer                 = re_reviewer;
+      RERevEmail                 = re_reviewer_email;
+      REQFocalPoint              = req_focal_point;
+      REQFocalPointEmail         = req_focal_point_email;
     }
 
 
 }
 
-define behavior for ZREFX_I_ROW_CLARIFICATION //alias <alias_name>
-persistent table zrefx_row_clarif
-lock dependent by _ROWRequest
-authorization dependent by _ROWRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) Id, RequestId;
-
-  association _ROWRequest;
-
-  mapping for zrefx_row_clarif
-    {
-      RequestId  = request_id;
-      Answer     = answer;
-      Answeredby = answeredby;
-      Question   = question;
-      Raisedby   = raisedby;
-      //      Statuscode = statuscode;
-      UserId     = userid;
-      UserName   = username;
-      Title      = title;
-      Department = department;
-      Id         = id;
-    }
-}
-
-define behavior for ZREFX_I_ROW_LAND_ALLOCATION //alias <alias_name>
-persistent table zrefx_row_landal
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) RequestId;
-
-
-  association _LandRequest;
-  mapping for zrefx_row_landal
-    {
-      RequestId        = request_id;
-      // Id            = id;
-      LandNumber       = landnumber;
-      LeaseInContract  = leaseincontract;
-      LeaseOutContract = leaseoutcontract;
-    }
-}
-
-define behavior for ZREFX_I_ROW_PROPOSAL //alias <alias_name>
-persistent table zrefx_row_psl
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) Id, RequestId;
-  association _LandRequest;
-  association _ProposedLand { create; }
-  mapping for zrefx_row_psl
-    {
-      RequestId          = request_id;
-      Cownedlandavl      = cownedlandavl;
-      Focaluser          = focaluser;
-      Justification      = justification;
-      Notes              = notes;
-      Preparedby         = preparedby;
-      Proposaldate       = proposaldate;
-      Proposalstatuscode = proposalstatuscode;
-      Proposedland       = proposedlands;
-      Requestorcomment   = requestorcomment;
-      Reviewedby         = reviewedby;
-      Selectedland       = selectedland;
-      Sponsorcontact     = sponsorcontact;
-      Sponsoremail       = sponsoremail;
-      Sponsorname        = sponsorname;
-      Sponsororg         = sponsororg;
-      Status             = status;
-      Version            = version;
-      Id                 = id;
-      UserId             = userid;
-      UserName           = username;
-      Title              = title;
-      Department         = department;
-    }
-}
-
-define behavior for ZREFX_I_ROW_PROPOSEDLAND //alias <alias_name>
-persistent table zrefx_row_propl
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) Id, ProposalId, RequestId;
-  association _LandRequest;
-  association _Proposal;
-  association _SiteVisit { create; }
-  association _SiteVisitNom { create; }
-  mapping for zrefx_row_propl
-    {
-      Id                       = id;
-      ProposalId               = proposalid;
-      RequestId                = request_id;
-      Landid                   = landid;
-      City                     = city;
-      District                 = district;
-      Postalcode               = postalcode;
-      Totalarea                = totalarea;
-      Remainingarea            = remainingarea;
-      Latitude                 = latitude;
-      Longitude                = longitude;
-      Gismaplink               = gismaplink;
-      Divisionemployeeuserid   = divisionemployeeuserid;
-      Divisionemployeefullname = divisionemployeefullname;
-      Divisionemployeeremarks  = divisionemployeeremarks;
-      Supportingdocuments      = supportingdocuments;
-      IsFitsRequirement        = isfitsrequirement;
-      IsSelectSiteVisit        = isselectsitevisit;
-      Status                   = status;
-    }
-}
-
-define behavior for ZREFX_I_ROW_SITEVISIT //alias <alias_name>
-persistent table zrefx_row_sitevi
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) ID, ProposalId, ProposalLandId, RequestId;
-  association _LandRequest;
-  association _ProposedLand;
-  association _Attachments { create; }
-  mapping for zrefx_row_sitevi
-    {
-      ID                   = id;
-      RequestId            = request_id;
-      ProposalId           = proposalid;
-      ProposalLandId       = proposalandid;
-      Proposal             = proposal;
-      Proposedland         = proposedland;
-      Plannedvisitdatetime = plannedvisitdatetime;
-      Actualvisitdatetime  = actualvisitdatetime;
-      Engineer             = engineer;
-      Statuscode           = statuscode;
-      Status               = status;
-      Reports              = reports;
-      Widthmmeasured       = widthmmeasured;
-      Lengthmmeasured      = lengthmmeasured;
-      Areasqmmeasured      = areasqmmeasured;
-      Obstacles            = obstacles;
-      Safetyobservations   = safetyobservations;
-      Sitenotes            = sitenotes;
-      UserId               = userid;
-      UserName             = username;
-      Title                = title;
-      Department           = department;
-    }
-}
-
-define behavior for ZREFX_I_ROW_SITEVISIT_ATT //alias <alias_name>
-persistent table zrefx_row_visita
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) RequestId, Dmsid, SiteId, ProposalId, ProposalLandId;
-  association _LandRequest;
-  association _SiteVisit;
-  mapping for zrefx_row_visita
-    {
-      SiteId         = siteid;
-      ProposalId     = proposalid;
-      ProposalLandId = proposallandid;
-      Category       = category;
-      Documentname   = documentname;
-      Filename       = filename;
-      Mediatype      = mediatype;
-      Dmsid          = dmsid;
-      Notes          = notes;
-      DocumentType   = documenttype;
-    }
-}
-
-define behavior for ZREFX_I_ROW_SITEVISITNOM //alias <alias_name>
-persistent table zrefx_row_svn
-lock dependent by _LandRequest
-authorization dependent by _LandRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) ID, ProposalId, ProposalLand_Id, RequestId;
-  association _LandRequest;
-  association _ProposedLand;
-  mapping for zrefx_row_svn
-    {
-      ID                = id;
-      ProposalId        = proposalid;
-      ProposalLand_Id   = proposallandid;
-      Proposedlandid    = proposedlandid;
-      Nominatedby       = nominatedby;
-      Nominatedat       = nominatedat;
-      Engineer          = engineer;
-      Visitreason       = visitreason;
-      Priority          = priority;
-      Preoposeddatetime = preoposeddatetime;
-      Agreeddatetime    = agreeddatetime;
-      Notes             = notes;
-      Status            = status;
-      Statuscode        = statuscode;
-      Acceptedby        = acceptedby;
-      Acceptedat        = acceptedat;
-      Acceptancecomment = acceptancecomment;
-      Declinereason     = declinereason;
-      RequestId         = request_id;
-      UserId            = userid;
-      UserName          = username;
-      Title             = title;
-      Department        = department;
-      Division          = division;
-      EmailId           = emailid;
-      ContactNo         = contactno;
-    }
-}
 
 define behavior for ZREFX_I_ROW_REQUEST_ATTACHMENT alias Attachments
 persistent table zrefx_row_req_a
@@ -376,53 +146,6 @@ with additional save
     }
 }
 
-define behavior for ZREFX_I_ROW_WORKFLOW_INSTANCE //alias <alias_name>
-persistent table zrefx_row_workin
-lock dependent by _ROWRequest
-authorization dependent by _ROWRequest
-late numbering
-//etag master <field_name>
-{
-  update;
-  delete;
-  field ( readonly ) Objectid, RequestId;
-  association _ROWRequest;
-  determination updateParentStatus on modify { create; }
-  //  determination initWorkflowDetails on modify { create; }
-  mapping for zrefx_row_workin
-    {
-      RequestId            = request_id;
-      Comments             = comments;
-      CreatedBy            = createdby;
-      Definitionid         = definitionid;
-      Department           = department;
-      Instanceid           = instanceid;
-      Objectid             = objectid;
-      Objecttype           = objecttype;
-      Status               = status;
-      UserId               = userid;
-      ActionDate           = actiondate;
-      UserName             = username;
-      Title                = title;
-      Statuscode           = statuscode;
-      DivisionEmployeeId   = divemplid;
-      DivisionEmployeeName = divemplname;
-      DivisionManagerId    = divmanagerid;
-      DivisionManagerName  = divmanagername;
-      BusinessArea         = businessarea;
-      WfInstanceId         = wf_instance_id;
-      Approvalstep         = approvalstep;
-      Approvalstepdesc     = approvalstepdesc;
-      ApproverEmail        = approver_email;
-      CurrentStatus        = current_status;
-      CurrentOwner         = current_owner;
-      Currentownerdesig    = currentownerdesig;
-      OrganizationField    = organization_field;
-      Region               = region;
-      SubmissionDate       = submission_date;
-
-    }
-}
 
 define behavior for ZREFX_I_WF_ROW //alias <alias_name>
 persistent table zrefx_wf_row
@@ -435,6 +158,7 @@ late numbering
   delete;
   field ( readonly ) LogUuid, RequestId;
   association _RowWorkflow;
+  determination updateParentStatus on modify { create; }
   mapping for zrefx_wf_row
     {
       RequestId          = request_id;
@@ -453,4 +177,113 @@ late numbering
       SubmissionToDate   = submission_to_date;
       DecisionOutcome    = decision_outcome;
     }
+}
+
+
+define behavior for ZREFX_I_ROW_SITEVISIT //alias <alias_name>
+persistent table zrefx_row_sitevi
+lock dependent by _Row
+authorization dependent by _Row
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Id, RequestId;
+  association _Row;
+  association _SiteAttachments { create; }
+
+  association _SiteVisitNom { create; }
+  mapping for zrefx_row_sitevi
+    {
+      Id                   = Id;
+      RequestId            = request_id;
+      Nomination           = nomination;
+      Plannedvisitdatetime = plannedvisitdatetime;
+      Actualvisitdatetime  = actualvisitdatetime;
+      Engineer             = engineer;
+      Statuscode           = statuscode;
+      Status               = status;
+      Reports              = reports;
+      Widthmmeasured       = widthmmeasured;
+      Lengthmmeasured      = lengthmmeasured;
+      Areasqmmeasured      = areasqmmeasured;
+      Obstacles            = obstacles;
+      Safetyobservations   = safetyobservations;
+      Sitenotes            = sitenotes;
+      Department           = department;
+      Userid               = userid;
+      Username             = username;
+      Title                = title;
+    }
+}
+
+define behavior for ZREFX_I_ROW_SITEVISIT_ATT //alias <alias_name>
+persistent table zrefx_row_visita
+lock dependent by _ROW
+authorization dependent by _ROW
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) RequestId, Dmsid, SiteId;
+  association _SiteVisit;
+  association _ROW;
+  mapping for zrefx_row_visita
+    {
+      RequestId    = request_id;
+      Dmsid        = dmsid;
+      SiteId       = siteid;
+      Category     = category;
+      CreatedAt    = created_at;
+      CreatedBy    = created_by;
+      DocumentType = documenttype;
+      Documentname = documentname;
+      Filename     = filename;
+      Mediatype    = mediatype;
+      Notes        = notes;
+    }
+
+}
+
+define behavior for ZREFX_I_ROW_SITEVISITNOM //alias <alias_name>
+persistent table zrefx_row_svn
+lock dependent by _ROW
+authorization dependent by _ROW
+late numbering
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) Id, RequestId;
+  association _SiteVisit;
+  association _ROW;
+  mapping for zrefx_row_svn
+    {
+      Id                = id;
+      RequestId         = request_id;
+      Nominatedby       = nominatedby;
+      Nominatedat       = nominatedat;
+      Engineer          = engineer;
+      Visitreason       = visitreason;
+      Priority          = priority;
+      Preoposeddatetime = preoposeddatetime;
+      Agreeddatetime    = agreeddatetime;
+      Notes             = notes;
+      Status            = status;
+      Statuscode        = statuscode;
+      Acceptedby        = acceptedby;
+      Acceptedat        = acceptedat;
+      Acceptancecomment = acceptancecomment;
+      Declinereason     = declinereason;
+      Department        = department;
+      UserId            = userid;
+      UserName          = username;
+      Title             = title;
+      Division          = division;
+      EmailId           = emailid;
+      ContactNo         = contactno;
+    }
+
 }

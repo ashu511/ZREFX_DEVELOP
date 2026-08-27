@@ -4,12 +4,9 @@
 define view entity ZREFX_C_GL_SITEVISITNOM
   as projection on ZREFX_I_GL_SITEVISITNOM
 {
-  key ID,
-  key ProposalId,
-  key ProposalLand_Id,
+  key Id,
+  key NominationId,
   key RequestId,
-      Proposedlandid,
-
       Nominatedby,
       Nominatedat,
       Engineer,
@@ -18,23 +15,20 @@ define view entity ZREFX_C_GL_SITEVISITNOM
       Preoposeddatetime,
       Agreeddatetime,
       Notes,
-      _Status._Text.Description as Status,
+      Status,
       Statuscode,
       Acceptedby,
       Acceptedat,
       Acceptancecomment,
       Declinereason,
       Department,
+      Userid,
+      Username,
       Title,
-      UserId,
-      UserName,
       Division,
-      EmailId,
-      ContactNo,
-
-      _Workflow,
-      _LandRequest  : redirected to ZREFX_C_GL_REQUEST,
-      // _UserRef,
-      _Status,
-      _ProposedLand : redirected to parent ZREFX_C_GL_PROPOSEDLAND
+      Emailid,
+      Contactno,
+      /* Associations */
+      _GLRequest : redirected to ZREFX_C_GL_REQUEST,
+      _SiteVisit : redirected to parent ZREFX_C_GL_SITEVISIT
 }

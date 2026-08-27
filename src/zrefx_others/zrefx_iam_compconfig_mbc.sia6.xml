@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_SIA6" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <SIA6>
+    <MAIN_OBJECT>
+     <NAME>ZREFX_IAM_COMPCONFIG_MBC</NAME>
+     <TYPE>SIA6</TYPE>
+     <DESCRIPTION>IAM App for Complaints Configuration</DESCRIPTION>
+     <RESPONSIBLE>CB9980000090</RESPONSIBLE>
+     <MASTER_LANGUAGE>EN</MASTER_LANGUAGE>
+     <MASTER_SYSTEM>DV3</MASTER_SYSTEM>
+     <PACKAGE_REF>
+      <PACKAGE_NAME>ZREFX_OTHERS</PACKAGE_NAME>
+     </PACKAGE_REF>
+     <ABAP_LANGU_VERSION>5</ABAP_LANGU_VERSION>
+    </MAIN_OBJECT>
+    <APP_ID>ZREFX_IAM_COMPCONFIG_MBC</APP_ID>
+    <APP_TYPE>MBC</APP_TYPE>
+    <ABAP_LANGUAGE_VERSION>5</ABAP_LANGUAGE_VERSION>
+    <SERVICE>
+     <item>
+      <REL_NAME>ZREFX_SB_COMPLAINTAPPCONFIG_V4</REL_NAME>
+      <REL_TYPE>G4BA</REL_TYPE>
+      <APP_ID>ZREFX_IAM_COMPCONFIG_MBC</APP_ID>
+      <SRVC_NAME>E35830D773A556B05E0083B350F5AE</SRVC_NAME>
+      <SRVC_TYPE>HT</SRVC_TYPE>
+      <TEXT>Maintain Complaints App Configuration</TEXT>
+      <TYPE_TEXT>OData V4</TYPE_TEXT>
+     </item>
+    </SERVICE>
+    <AUTH>
+     <item>
+      <AUTH_OBJECT>S_TABU_NAM</AUTH_OBJECT>
+      <STATUS>U</STATUS>
+      <TEXT>Table Access by Generic Standard Tools</TEXT>
+      <AUTH_ITEM>
+       <item>
+        <UUID>LiiR7bmPH+GnmkIkznM4tQ==</UUID>
+        <AUTH_OBJECT>S_TABU_NAM</AUTH_OBJECT>
+        <AUTH_OBJECT_INSTANCE>0001</AUTH_OBJECT_INSTANCE>
+        <TEXT>Table Access by Generic Standard Tools</TEXT>
+        <STATUS>U</STATUS>
+        <VALUES>
+         <item>
+          <FIELD>ACTVT</FIELD>
+          <VALUE>Display,Change</VALUE>
+          <VALUES>
+           <item>
+            <UUID>LiiR7bmPH+GnmkIkznN4tQ==</UUID>
+            <LOW_VALUE>03</LOW_VALUE>
+           </item>
+           <item>
+            <UUID>LiiR7bmPH+GnmkIkznNYtQ==</UUID>
+            <LOW_VALUE>02</LOW_VALUE>
+           </item>
+          </VALUES>
+          <TEXT>Activity</TEXT>
+          <STATUS>U</STATUS>
+          <IS_ACTVT>X</IS_ACTVT>
+         </item>
+         <item>
+          <FIELD>TABLE</FIELD>
+          <VALUE>ZI_COMPLAINTSCONFIG</VALUE>
+          <VALUES>
+           <item>
+            <UUID>LiiR7bmPH+GnmkIkznOYtQ==</UUID>
+            <LOW_VALUE>ZI_COMPLAINTSCONFIG</LOW_VALUE>
+           </item>
+          </VALUES>
+          <TEXT>Table Name</TEXT>
+          <STATUS>U</STATUS>
+         </item>
+        </VALUES>
+       </item>
+      </AUTH_ITEM>
+     </item>
+    </AUTH>
+    <PUBLISH_STATUS>p</PUBLISH_STATUS>
+    <RTYPE_MIG_STATUS>3</RTYPE_MIG_STATUS>
+   </SIA6>
+  </asx:values>
+ </asx:abap>
+</abapGit>

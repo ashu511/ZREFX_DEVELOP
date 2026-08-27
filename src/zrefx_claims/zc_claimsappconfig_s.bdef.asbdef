@@ -1,0 +1,30 @@
+projection;
+strict;
+use draft;
+use side effects;
+define behavior for ZC_ClaimsAppConfig_S alias ClaimsAppConfigAll
+{
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+  use action SelectCustomizingTransptReq;
+
+  use association _ClaimsAppConfig { create; with draft; }
+
+}
+
+define behavior for ZC_ClaimsConfig alias ClaimsAppConfig
+use etag
+{
+  use update;
+  use delete;
+
+  use action Deprecate;
+  use action Invalidate;
+  use action Copy;
+
+  use association _ClaimsAppConfigAll { with draft; }
+
+}

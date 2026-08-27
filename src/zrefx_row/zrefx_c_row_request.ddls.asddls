@@ -40,9 +40,9 @@ define root view entity ZREFX_C_ROW_REQUEST
       @EndUserText.label: 'Status Code'
       Statuscode,
 
-//      @EndUserText.label: 'Status'
-//      _StatusText.Description as Status,
-//      _Status._Text.Description as Status,
+      //      @EndUserText.label: 'Status'
+      //      _StatusText.Description as Status,
+      //      _Status._Text.Description as Status,
 
       @EndUserText.label: 'Current Step'
       Currentstep,
@@ -169,7 +169,7 @@ define root view entity ZREFX_C_ROW_REQUEST
 
       @EndUserText.label: 'GIS Project ID'
       Gisprojectid,
-      
+
       @EndUserText.label: 'GIS Drawing'
       Gisdrawing,
 
@@ -191,8 +191,8 @@ define root view entity ZREFX_C_ROW_REQUEST
       @EndUserText.label: 'User Name'
       Username,
 
-      @EndUserText.label: 'Current Step Description'
-      CurrentStepDesc,
+//      @EndUserText.label: 'Current Step Description'
+//      CurrentStepDesc,
 
       @EndUserText.label: 'Current Processor Name'
       Currentprocessorname,
@@ -200,44 +200,65 @@ define root view entity ZREFX_C_ROW_REQUEST
       @EndUserText.label: 'Current Processor Department'
       Currentprocessordepartment,
 
-      @EndUserText.label: 'Milestone Description'
-      MileStoneDescription,
+//      @EndUserText.label: 'Milestone Description'
+//      MileStoneDescription,
 
-      @EndUserText.label: 'Milestone'
-      Milestone,
-       @EndUserText.label: 'Site Area'
+//      @EndUserText.label: 'Milestone'
+//      Milestone,
+      @EndUserText.label: 'Site Area'
       Sitearea,
       @EndUserText.label: 'City'
       City,
-        @EndUserText.label: 'Other City'
+      @EndUserText.label: 'Other City'
       Othercity,
       @EndUserText.label: 'Region'
       Region,
       @EndUserText.label: 'City Desctiption'
-      _City.City                as CityDescription,
-        @EndUserText.label: 'Status Text'
-      _StatusText.Description                as StatusDescription,
-       @EndUserText.label: 'Confirm Information'
+      _City.City              as CityDescription,
+      @EndUserText.label: 'Status Text'
+      _StatusText.Description as StatusDescription,
+      @EndUserText.label: 'Confirm Information'
       ConfirmInformation,
       @EndUserText.label: 'Consent Date'
       ConsentDate,
       Workflowinstanceid,
-      MilestoneSequence,
+//      MilestoneSequence,
+      @EndUserText.label: 'Requester Organization'
+      RequestorOrg,
+      @EndUserText.label: 'Requester Organization Text'
+      RequestorOrgText,
+      @EndUserText.label: 'Requester Organization Arabic Text'
+      RequestorOrgAText,
+      @EndUserText.label: 'Realestate Division'
+      REDivOrg,
+      @EndUserText.label: 'Realestate Division Text'
+      REDivOrgText,
+      @EndUserText.label: 'Realestate Division Arabic Text'
+      REDivOrgAText,
+      @EndUserText.label: 'Realestate Reviewer'
+      REReviewer,
+      @EndUserText.label: 'Realestate Reviewer Email'
+      RERevEmail,
+      @EndUserText.label: 'Requester Focal '
+      REQFocalPoint,
+      @EndUserText.label: 'Requester Focal Point Email'
+      REQFocalPointEmail,
 
-      _Proposal           : redirected to composition child ZREFX_C_ROW_PROPOSAL,
+//      _Proposal           : redirected to composition child ZREFX_C_ROW_PROPOSAL,
       _RequestAttachments : redirected to composition child ZREFX_C_ROW_REQUEST_ATTACHMENT,
-      _Clarifications     : redirected to composition child ZREFX_C_ROW_CLARIFICATION,
-      _LandAllocations    : redirected to composition child ZREFX_C_ROW_LAND_ALLOCATION,
-      _WorkflowInstance   : redirected to composition child ZREFX_C_ROW_WORKFLOW_INSTANCE,
+//      _Clarifications     : redirected to composition child ZREFX_C_ROW_CLARIFICATION,
+//      _LandAllocations    : redirected to composition child ZREFX_C_ROW_LAND_ALLOCATION,
+//      _WorkflowInstance   : redirected to composition child ZREFX_C_ROW_WORKFLOW_INSTANCE,
       _ROWWorkflowInfo    : redirected to composition child ZREFX_C_WF_ROW,
-      _StepMilestone,
-      _ProcessorRole,
+        _SiteVisit : redirected to composition child ZREFX_C_ROW_SITEVISIT,
+//      _StepMilestone,
+//      _ProcessorRole,
       // _UserRef,
-      _StationType,
-      _RequestType,
+//      _StationType,
+//      _RequestType,
       //_Status,
       _City,
-      _Subsidiary,
-      _Workflow,
+//      _Subsidiary,
+//      _Workflow,
       _StatusText
 }

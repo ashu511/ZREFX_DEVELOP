@@ -5,28 +5,12 @@
 //@ObjectModel.semanticKey: ['RequestId']
 define root view entity ZREFX_I_ROW_REQUEST
   as select from zrefx_row
-  association [1..1] to ZREFX_I_ROW_STATIONTYPES      as _StationType   on  $projection.Stationtype = _StationType.Code
-  association [1..1] to ZREFX_I_ROW_REQUESTTYPES      as _RequestType   on  $projection.Requesttype = _RequestType.Code
-//  association [0..1] to ZREFX_I_ROW_STATUS            as _Status        on  _Status.Statustype     = 'REQUEST'
- //                                                                       and $projection.Statuscode = _Status.Code
-  association [1..1] to ZREFX_I_ROW_STEP_MILESTONE    as _StepMilestone on  $projection.Currentstep = _StepMilestone.Code
-
-  association [1..1] to ZREFX_I_ROW_PROCESSOR_ROLE    as _ProcessorRole on  $projection.Currentprocessorrole = _ProcessorRole.Code
-
-  association [0..1] to ZREFX_I_ROW_STEP_MILESTONE    as _Milestone     on  $projection.Milestone = _Milestone.Code
-  //  composition [0..*] of ZREFX_I_WF_CLM     as _WorkflowInfo
-  association [1..1] to ZREFX_I_ROW_WORKFLOW_INSTANCE as _Workflow      on  _Workflow.Objecttype = 'REQUEST'
-  association [1]    to ZREFX_DOV_CITY                as _City          on  $projection.City = _City.Value
-  association [1]    to ZREFX_DOV_STATUS              as _StatusText  on  $projection.Statuscode = _StatusText.Value 
-
-  association [0..*] to ZREFX_I_ROW_SUBSIDIARY        as _Subsidiary    on  $projection.RequestId = _Subsidiary.RequestID
-  composition of many ZREFX_I_ROW_CLARIFICATION       as _Clarifications
-  composition of many ZREFX_I_ROW_REQUEST_ATTACHMENT  as _RequestAttachments
-  composition of many ZREFX_I_ROW_PROPOSAL            as _Proposal
-  composition of one ZREFX_I_ROW_LAND_ALLOCATION      as _LandAllocations
-  composition of many ZREFX_I_ROW_WORKFLOW_INSTANCE   as _WorkflowInstance
-  composition [0..*] of ZREFX_I_WF_ROW     as _ROWWorkflowInfo
-
+  association [1] to ZREFX_DOV_CITY                  as _City       on $projection.City = _City.Value
+  association [1] to ZREFX_DOV_STATUS                as _StatusText on $projection.Statuscode = _StatusText.Value
+  composition of many ZREFX_I_ROW_REQUEST_ATTACHMENT as _RequestAttachments
+//  composition of many ZREFX_I_ROW_WORKFLOW_INSTANCE  as _WorkflowInstance
+  composition [0..*] of ZREFX_I_WF_ROW               as _ROWWorkflowInfo
+  composition [0..*] of ZREFX_I_ROW_SITEVISIT        as _SiteVisit
 {
 
   key request_id                 as RequestId,
@@ -43,8 +27,8 @@ define root view entity ZREFX_I_ROW_REQUEST
       businessjustification      as Businessjustification,
       @ObjectModel.text.association: '_StatusText'
       statuscode                 as Statuscode,
- //     _StatusText.Description    as Status,
-//      _Status._Text.Description  as Status,
+      //     _StatusText.Description    as Status,
+      //      _Status._Text.Description  as Status,
       //    status                     as Status,
       currentstep                as Currentstep,
       currentstepchangedat       as Currentstepchangedat,
@@ -88,7 +72,7 @@ define root view entity ZREFX_I_ROW_REQUEST
       areasqmrequested           as Areasqmrequested,
       gislocationlink            as Gislocationlink,
       gisprojectid               as Gisprojectid,
-      gisdrawing                 as  Gisdrawing,
+      gisdrawing                 as Gisdrawing,
       previousrequestno          as Previousrequestno,
       requestorcomments          as Requestorcomments,
       additionalcomments         as Additionalcomments,
@@ -98,40 +82,36 @@ define root view entity ZREFX_I_ROW_REQUEST
       sitearea                   as Sitearea,
       @ObjectModel.text.association: '_City'
       city                       as City,
-      
+
       othercity                  as Othercity,
       region                     as Region,
-      _StepMilestone.Description as CurrentStepDesc,
+
       title                      as Title,
       currentstepdescription     as Currentstepdescription,
       currentprocessorname       as Currentprocessorname,
       currentprocessordepartment as Currentprocessordepartment,
       milestone                  as Milestone,
-      _Milestone.Description     as MileStoneDescription,
+
       //      milestonedesc              as Milestonedesc,
       workflowinstanceid         as Workflowinstanceid,
       //milestonesequence          as Milestonesequence,
-      _Milestone.Sequence        as MilestoneSequence,
+
       confirminformation         as ConfirmInformation,
       consentdate                as ConsentDate,
-
-      _Workflow,
-
-      _StepMilestone,
-      _ProcessorRole,
-      // _UserRef,
-      _StationType,
-      _RequestType,
-     // _Status,
+      req_org                    as RequestorOrg,
+      req_org_text               as RequestorOrgText,
+      req_org_text_a             as RequestorOrgAText,
+      re_division_org            as REDivOrg,
+      re_division_text           as REDivOrgText,
+      re_division_text_a         as REDivOrgAText,
+      re_reviewer                as REReviewer,
+      re_reviewer_email          as RERevEmail,
+      req_focal_point            as REQFocalPoint,
+      req_focal_point_email      as REQFocalPointEmail,
       _RequestAttachments,
-      _Proposal,
-
-      _Milestone,
-      _Subsidiary,
-      _WorkflowInstance,
-      _Clarifications,
-      _LandAllocations,
+    //  _WorkflowInstance,
       _City,
       _ROWWorkflowInfo,
-      _StatusText
+      _StatusText,
+      _SiteVisit
 }

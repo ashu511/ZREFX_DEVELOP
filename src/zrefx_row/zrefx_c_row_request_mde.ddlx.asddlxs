@@ -82,6 +82,10 @@ annotate entity ZREFX_C_ROW_REQUEST with
   @UI.fieldGroup: [{ position: 35, qualifier: 'tqRequestDetails' }]
   @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'Value'} }]
   Statuscode;
+    @EndUserText.label: 'Status Description'
+  @UI.lineItem: [{ position: 36 }]
+  @UI.fieldGroup: [{ position: 36, qualifier: 'tqRequestDetails' }]
+   StatusDescription;
   @EndUserText.label: 'Request Description'
   @UI.lineItem: [{ position: 40 }]
   @UI.fieldGroup: [{ position: 40, qualifier: 'tqRequestDetails' }]

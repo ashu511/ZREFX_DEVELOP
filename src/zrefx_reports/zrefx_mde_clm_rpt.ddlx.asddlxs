@@ -1,0 +1,107 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'Claim',
+  typeNamePlural: 'Claims Report'
+}
+annotate view ZREFX_C_CLM_RPT with
+{
+  @EndUserText.label: 'Claim ID'
+  @UI.lineItem: [{ position: 10 }]
+  ClaimId;
+
+  // Single Selection Field (Filter) + F4 Value Help
+  @EndUserText.label: 'Claims Status'
+  @UI.selectionField: [{ position: 10 }]
+  @UI.textArrangement: #TEXT_ONLY
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'Value' } }]
+  @UI.lineItem: [{ position: 20 }]
+  Status;
+
+  @EndUserText.label: 'Vendor ID'
+  @UI.lineItem: [{ position: 30 }]
+  Vendorid;
+
+  @EndUserText.label: 'Contact Person Name'
+  @UI.lineItem: [{ position: 40 }]
+  Contactpersonname;
+
+  @EndUserText.label: 'Claim Category'
+  @UI.lineItem: [{ position: 50 }]
+  Claimcategory;
+
+  @EndUserText.label: 'Created Date'
+  @UI.lineItem: [{ position: 60 }]
+  Createddate;
+
+  @EndUserText.label: 'Vendor Reg. No'
+  @UI.lineItem: [{ position: 70 }]
+  Vendorregistrationno;
+
+  @EndUserText.label: 'Contact Email'
+  @UI.lineItem: [{ position: 80 }]
+  Contactemail;
+
+  @EndUserText.label: 'Source Channel'
+  @UI.lineItem: [{ position: 90 }]
+  Sourcechannel;
+
+  @EndUserText.label: 'Claim Type'
+  @UI.lineItem: [{ position: 100 }]
+  Claimtype;
+
+  @EndUserText.label: 'Urgency'
+  @UI.lineItem: [{ position: 110 }]
+  Urgency;
+
+  @EndUserText.label: 'Reference Type'
+  @UI.lineItem: [{ position: 120 }]
+  Referencetype;
+
+  @EndUserText.label: 'Reference ID'
+  @UI.lineItem: [{ position: 130 }]
+  Referenceid;
+
+  @EndUserText.label: 'Lease Number'
+  @UI.lineItem: [{ position: 140 }]
+  Leasenumber;
+
+  @EndUserText.label: 'Project ID'
+  @UI.lineItem: [{ position: 150 }]
+  Projectid;
+
+  @EndUserText.label: 'Project Name'
+  @UI.lineItem: [{ position: 160 }]
+  Projectname;
+
+  @EndUserText.label: 'Claim Reference No'
+  @UI.lineItem: [{ position: 170 }]
+  Claimreferenceno;
+
+  @EndUserText.label: 'Region'
+  @UI.lineItem: [{ position: 180 }]
+  Region;
+
+  @EndUserText.label: 'City'
+  @UI.lineItem: [{ position: 190 }]
+  City;
+
+  @EndUserText.label: 'Claim Subject'
+  @UI.lineItem: [{ position: 200 }]
+  Claimsubject;
+
+  @EndUserText.label: 'Incident Date'
+  @UI.lineItem: [{ position: 210 }]
+  Incidentdate;
+
+  @EndUserText.label: 'Requested Payment Date'
+  @UI.lineItem: [{ position: 220 }]
+  Requestedpaymentdate;
+
+  @EndUserText.label: 'Detailed Description'
+  @UI.lineItem: [{ position: 230 }]
+  Detaileddescription;
+
+  @EndUserText.label: 'Claim Amount'
+  @UI.lineItem: [{ position: 240 }]
+  Claimamount;
+}

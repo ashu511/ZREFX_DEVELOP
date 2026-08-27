@@ -1,0 +1,99 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'Complaint',
+  typeNamePlural: 'Complaints Report'
+}
+annotate view ZREFX_C_COMP_RPT with
+{
+  @EndUserText.label: 'Complaint ID'
+  @UI.lineItem: [{ position: 10 }]
+  ComplaintId;
+
+  // Single Selection Field (Filter) + F4 Value Help
+  @EndUserText.label: 'Complaint Status'
+  @UI.selectionField: [{ position: 10 }]
+  @UI.textArrangement: #TEXT_ONLY
+  @Consumption.valueHelpDefinition: [{ entity: { name: 'ZREFX_DOV_STATUS', element: 'Value' } }]
+  @UI.lineItem: [{ position: 20 }]
+  Status;
+
+  @EndUserText.label: 'Vendor ID'
+  @UI.lineItem: [{ position: 30 }]
+  Vendorid;
+
+  @EndUserText.label: 'Vendor Company Name'
+  @UI.lineItem: [{ position: 40 }]
+  Vendorcompanyname;
+
+  @EndUserText.label: 'Complaint Category'
+  @UI.lineItem: [{ position: 50 }]
+  Complaintcategory;
+
+  @EndUserText.label: 'Created Date'
+  @UI.lineItem: [{ position: 60 }]
+  Createddate;
+
+  @EndUserText.label: 'Contact Person Name'
+  @UI.lineItem: [{ position: 70 }]
+  Contactpersonname;
+
+  @EndUserText.label: 'Contact Mobile'
+  @UI.lineItem: [{ position: 80 }]
+  Contactmobile;
+
+  @EndUserText.label: 'Contact Email'
+  @UI.lineItem: [{ position: 90 }]
+  Contactemail;
+
+  @EndUserText.label: 'Legal Flag'
+  @UI.lineItem: [{ position: 100 }]
+  Legalflag;
+
+  @EndUserText.label: 'Source Channel'
+  @UI.lineItem: [{ position: 110 }]
+  Sourcechannel;
+
+  @EndUserText.label: 'Complaint Type'
+  @UI.lineItem: [{ position: 120 }]
+  Complainttype;
+
+  @EndUserText.label: 'Urgency'
+  @UI.lineItem: [{ position: 130 }]
+  Urgency;
+
+  @EndUserText.label: 'Reference Type'
+  @UI.lineItem: [{ position: 140 }]
+  Referencetype;
+
+  @EndUserText.label: 'Reference ID'
+  @UI.lineItem: [{ position: 150 }]
+  Referenceid;
+
+  @EndUserText.label: 'Land ID'
+  @UI.lineItem: [{ position: 160 }]
+  Landid;
+
+  @EndUserText.label: 'Title Deed No'
+  @UI.lineItem: [{ position: 170 }]
+  Titledeedno;
+
+  @EndUserText.label: 'Project ID'
+  @UI.lineItem: [{ position: 180 }]
+  Projectid;
+
+  @EndUserText.label: 'Claim Reference No'
+  @UI.lineItem: [{ position: 190 }]
+  Claimreferenceno;
+
+  @EndUserText.label: 'Region'
+  @UI.lineItem: [{ position: 200 }]
+  Region;
+
+  @EndUserText.label: 'Detailed Description'
+  @UI.lineItem: [{ position: 210 }]
+  Detaileddescription;
+
+  @EndUserText.label: 'Financial Impact'
+  @UI.lineItem: [{ position: 220 }]
+  Financialimpact;
+}

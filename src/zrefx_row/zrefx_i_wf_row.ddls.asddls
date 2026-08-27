@@ -1,4 +1,4 @@
-@AbapCatalog.viewEnhancementCategory: [#NONE]
+
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Workflow Interface view for ROW'
 @Metadata.ignorePropagatedAnnotations: true

@@ -22,14 +22,32 @@ define root view entity ZREFX_C_GL_REQUEST
       @EndUserText.label: 'Request Purpose'
       Requestpurpose,
 
+      @EndUserText.label: 'Initiatorid'
+      Initiatorid,
+
+      @EndUserText.label: 'Initiator full name'
+      Initiatorfullname,
+
+      @EndUserText.label: 'Initiator organization'
+      Initiatororganization,
+
+      @EndUserText.label: 'Employe enumber'
+      Employeenumber,
+
+      @EndUserText.label: 'Email address'
+      Emailaddress,
+
+      @EndUserText.label: ' Contactnumber'
+      Contactnumber,
+
       @EndUserText.label: 'Business Justification'
       Businessjustification,
 
       @EndUserText.label: 'Status Code'
       Statuscode,
 
-      @EndUserText.label: 'Status'
-      _Status._Text.Description as Status,
+      //      @EndUserText.label: 'Status'
+      //      _Status._Text.Description as Status,
 
       @EndUserText.label: 'Current Step'
       Currentstep,
@@ -82,8 +100,8 @@ define root view entity ZREFX_C_GL_REQUEST
       @EndUserText.label: 'Project Name (English)'
       Projectname,
 
-      //      @EndUserText.label: 'Project Name (Arabic)'
-      //      Projectname_A,
+      @EndUserText.label: 'Project Name (Arabic)'
+      ProjectnameA,
 
       @EndUserText.label: 'WBS Project Number'
       Wbsprojectno,
@@ -102,6 +120,9 @@ define root view entity ZREFX_C_GL_REQUEST
 
       @EndUserText.label: 'Project Cost (SAR)'
       Projectcostsar,
+
+      @EndUserText.label: 'Estimated Project Cost (SAR)'
+      EstimatedProjectCost,
 
       @EndUserText.label: 'Project Start Date'
       Projectstartdate,
@@ -154,6 +175,9 @@ define root view entity ZREFX_C_GL_REQUEST
       @EndUserText.label: 'GIS Project ID'
       Gisprojectid,
 
+      @EndUserText.label: 'GIS Drawing'
+      Gisdrawing,
+
       @EndUserText.label: 'Requestor Comments'
       Requestorcomments,
 
@@ -172,8 +196,8 @@ define root view entity ZREFX_C_GL_REQUEST
       @EndUserText.label: 'User Name'
       Username,
 
-      @EndUserText.label: 'Current Step Description'
-      CurrentStepDesc,
+      //      @EndUserText.label: 'Current Step Description'
+      //      CurrentStepDesc,
 
       @EndUserText.label: 'Current Processor Name'
       Currentprocessorname,
@@ -181,27 +205,75 @@ define root view entity ZREFX_C_GL_REQUEST
       @EndUserText.label: 'Current Processor Department'
       Currentprocessordepartment,
 
-      @EndUserText.label: 'Milestone Description'
-      MileStoneDescription,
+      //      @EndUserText.label: 'Milestone Description'
+      //      MileStoneDescription,
 
       @EndUserText.label: 'Milestone'
       Milestone,
 
+      @EndUserText.label: 'City'
+      City,
+
+      @EndUserText.label: 'Other City'
+      Othercity,
+
+      @EndUserText.label: 'Region'
+      Region,
+
+      @EndUserText.label: 'City Desctiption'
+      _City.City              as CityDescription,
+
+      @EndUserText.label: 'Status Text'
+      _StatusText.Description as StatusDescription,
+
+      @EndUserText.label: 'Confirm Information'
+      ConfirmInformation,
+
+      @EndUserText.label: 'Consent Date'
+      ConsentDate,
+
+      @EndUserText.label: 'Government Authority'
+      GovtAuthority,
+
+      @EndUserText.label: 'Required Date'
+      RequiredDate,
+
       Workflowinstanceid,
-      MilestoneSequence,
+      //      MilestoneSequence,
 
-            _Proposal           : redirected to composition child ZREFX_C_GL_PROPOSAL,
-            _RequestAttachments : redirected to composition child ZREFX_C_GL_REQUEST_ATTACHMENT,
-            _Clarifications     : redirected to composition child ZREFX_C_GL_CLARIFICATION,
-            _LandAllocations    : redirected to composition child ZREFX_C_GL_LAND_ALLOCATION ,
-            _WorkflowInstance   : redirected to composition child ZREFX_C_GL_WORKFLOW_INSTANCE,
+      @EndUserText.label: 'Requester Organization'
+      RequestorOrg,
 
-      _StepMilestone,
-      _ProcessorRole,
-      // _UserRef,
-      _StationType,
-      _RequestType,
-      _Status,
-      _Subsidiary,
-      _Workflow
+      @EndUserText.label: 'Requester Organization Text'
+      RequestorOrgText,
+
+      @EndUserText.label: 'Requester Organization Arabic Text'
+      RequestorOrgAText,
+
+      @EndUserText.label: 'Realestate Division'
+      REDivOrg,
+
+      @EndUserText.label: 'Realestate Division Text'
+      REDivOrgText,
+
+      @EndUserText.label: 'Realestate Division Arabic Text'
+      REDivOrgAText,
+
+      @EndUserText.label: 'Realestate Reviewer'
+      REReviewer,
+
+      @EndUserText.label: 'Realestate Reviewer Email'
+      RERevEmail,
+
+      @EndUserText.label: 'Requester Focal '
+      REQFocalPoint,
+
+      @EndUserText.label: 'Requester Focal Point Email'
+      REQFocalPointEmail,
+
+      _RequestAttachments : redirected to composition child ZREFX_C_GL_REQUEST_ATTACHMENT,
+      _WorkflowInstance   : redirected to composition child ZREFX_C_GL_WORKFLOW_INSTANCE,
+      _SiteVisit          : redirected to composition child ZREFX_C_GL_SITEVISIT,
+      _City,
+      _StatusText
 }

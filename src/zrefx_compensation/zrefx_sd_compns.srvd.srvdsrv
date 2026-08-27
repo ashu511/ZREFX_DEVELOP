@@ -1,0 +1,11 @@
+@EndUserText.label: 'Service Defination for Compensation'
+define service ZREFX_SD_COMPNS {
+  expose ZREFX_C_COMPENSATION;
+  expose ZREFX_C_ATT_COMPNS;
+  expose ZREFX_C_WF_COMPNS;
+  expose ZREFX_DOV_URGENCY;
+  expose ZREFX_DOV_CLAIMCAT;
+  expose ZREFX_DOV_CITY;
+  expose ZREFX_I_CLAIMS_VENDOR_F4;
+  expose ZREFX_DOV_STATUS;
+}

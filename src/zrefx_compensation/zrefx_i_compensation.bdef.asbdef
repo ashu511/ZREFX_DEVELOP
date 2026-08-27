@@ -1,0 +1,167 @@
+managed implementation in class zbp_refx_i_compensation unique;
+strict ( 2 );
+
+define behavior for ZREFX_I_COMPENSATION //alias <alias_name>
+persistent table zrefx_compns
+lock master
+authorization master ( global )
+etag master Lastchangedat
+late numbering
+with additional save
+{
+  create;
+  update;
+  delete;
+
+  field ( mandatory ) Compensationcategory;
+  association _Attachments { create; }
+  association _WorkflowInfo { create; }
+  determination setInitialDate on modify { create; }
+  static action UpdateDivision parameter ZREFX_A_UI_UPDATE result [1] $self;
+  field ( readonly ) CompensationId, Createddate, Legalflag, MainDivision;
+  mapping for zrefx_compns
+    {
+      CompensationId          = compns_id;
+      Createddate             = createddate;
+      Status                  = status;
+      //      Vendorcompanyname    = vendorcompanyname;
+      //      Contactpersonname    = contactpersonname;
+      //      Contactmobile        = contactmobile;
+      //      Vendorregistrationno = vendorregistrationno;
+      //      Contactemail         = contactemail;
+      //      Preferredlanguage    = preferredlanguage;
+      Vendorid                = vendorid;
+      Vendorname              = vendorname;
+      Vendoraltnum            = vendoraltnum;
+      Vendorcompanyname       = vendorcompanyname;
+      Contactpersonname       = contactpersonname;
+      Contactmobile           = contactmobile;
+      Vendorregistrationno    = vendorregistrationno;
+      Contactemail            = contactemail;
+      Legalflag               = Legalflag;
+      PaymentTerm             = paymentterm;
+      BudgetCheck             = budgetcheck;
+      //      Vendoraddress        = vendoraddress;
+      Compensationcategory    = compnscategory;
+      Sourcechannel           = sourcechannel;
+      Compensationtype        = compnstype;
+      Urgency                 = urgency;
+      Referencetype           = referencetype;
+      Referenceid             = referenceid;
+      Landid                  = landid;
+      Contractnumber          = contractnumber;
+      Leasenumber             = leasenumber;
+      Projectid               = projectid;
+      Projectname             = projectname;
+      Compensationreferenceno = compnsreferenceno;
+      Region                  = region;
+      MainDivision            = maindivision;
+      Titledeedno             = titledeedno;
+      City                    = city;
+      OtherCity               = othercity;
+      Compnssubject            = compnssubject;
+      Incidentdate            = incidentdate;
+      Requestedpaymentdate    = requestedpaymentdate;
+      Detaileddescription     = detaileddescription;
+      Compensationamount      = compnsamount;
+      Confirminformation      = confirminformation;
+      Consentdate             = consentdate;
+      RequestorEmail          = requestoremail;
+      CreatedBy               = createdby;
+      Lastchangedat           = lastchangedat;
+      Locallastchangedat      = locallastchangedat;
+    }
+}
+
+define behavior for ZREFX_I_ATT_COMPNS alias Attachments
+persistent table zrefx_att_compns
+lock dependent by _Compensation
+authorization dependent by _Compensation
+//etag master  Lastchangedat
+late numbering
+with additional save
+{
+  update;
+  delete;
+  field ( readonly ) CompensationId, AttachmentId;
+  action updateDmsId parameter ZREFX_A_DMS_UPD_COM_OUT result [1] $self;
+
+  static action delete
+    parameter ZREFX_A_DMS_DDEL_CPN_IN
+    result [1] $self;
+
+  static action download
+    parameter ZREFX_A_DMS_CLM_DOW_IN
+    result [1] ZREFX_A_DMS_CLM_DOW_OUT;
+
+  association _Compensation;
+  mapping for zrefx_att_compns
+    {
+      CompensationId = compns_id;
+      //      AttachmentId = attachment_id;
+      //      Dmsid        = dmsid;
+      //      Filename     = filename;
+      //      Mimetype     = mimetype;
+      //      Content      = content;
+      //      CreatedAt    = created_at;
+      //      CreatedBy    = created_by;
+      AttachmentId   = attachment_id;
+      Dmsid          = dmsid;
+      CreatedAt      = created_at;
+      CreatedBy      = created_by;
+      Documentname   = documentname;
+      Documenttype   = documenttype;
+      Filename       = filename;
+      Mediatype      = mediatype;
+      Mimetype       = mimetype;
+      Content        = content;
+      Notes          = notes;
+    }
+}
+
+define behavior for ZREFX_I_WF_COMPNS //alias <alias_name>
+persistent table zrefx_wf_compns
+lock dependent by _Compensation
+authorization dependent by _Compensation
+late numbering
+with additional save
+{
+  update;
+  delete;
+  field ( readonly ) CompensationId, LogUuid;
+  association _Compensation;
+  // Every time SBPA does a POST to this entity, this logic will run.
+  determination updateParentStatus on modify { create; }
+  mapping for zrefx_wf_compns
+    {
+      CompensationId     = compns_id;
+      LogUuid            = log_uuid;
+      WfInstanceId       = wf_instance_id;
+      CurrentOwnerDesig  = currentownerdesig;
+      Comments           = comments;
+      OrganizationField  = organization_field;
+      Region             = region;
+      ApprovalStep       = approvalstep;
+      ApprovalStepDesc   = approvalstepdesc;
+      ApproverEmail      = approver_email;
+      CurrentStatus      = current_status;
+      CurrentOwner       = current_owner;
+      SubmissionFromDate = submission_from_date;
+      SubmissionToDate   = submission_to_date;
+      DecisionOutcome    = decision_outcome;
+      SlaStatus          = sla_status;
+      DaysOpen           = days_open;
+      SettlementStatus   = settlement_status;
+      PostingFromDate    = posting_from_date;
+      PostingToDate      = posting_to_date;
+      PaymentStatus      = payment_status;
+      ApprovedAmount     = approved_amount;
+      PostedAmount       = posted_amount;
+      CurrencyCode       = currency_code;
+      AccountDocNo       = account_doc_no;
+      PaymentDate        = payment_date;
+      AgingFromDate      = aging_from_date;
+      AgingToDate        = aging_to_date;
+      EscalationFlag     = escalation_flag;
+    }
+}

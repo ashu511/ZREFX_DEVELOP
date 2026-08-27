@@ -1,0 +1,42 @@
+{
+  "formatVersion": "1",
+  "header": {
+    "description": "Maintain Claims App Configuration",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "serviceConfiguration": {
+    "serviceBinding": "ZREFX_SB_CLAIM_CONFIG_V4",
+    "serviceName": "ZREFX_SB_CLAIM_CONFIG_V4",
+    "serviceVersion": "0001",
+    "rootEntitySet": "ClaimsAppConfigAll",
+    "name": "Claims App Configuration",
+    "transportObject": "ZCLAIMSCONFIGURATIONT",
+    "configurationGroup": "",
+    "skipRootEntity": "skip"
+  },
+  "appConfiguration": {
+    "listReport": {},
+    "objectPages": [
+      {
+        "entitySet": "ClaimsAppConfigAll",
+        "variantManagement": "control",
+        "showTransportSelectionStrip": true
+      }
+    ],
+    "tableSettings": [
+      {
+        "entitySet": "ClaimsAppConfig",
+        "tableType": "gridTable",
+        "selectionMode": "single",
+        "selectAll": true,
+        "rowCountMode": "auto",
+        "frozenColumnCount": 2,
+        "creationModeName": "inlineCreationRows",
+        "createAtEnd": true,
+        "condensedTableLayout": true,
+        "widthIncludingColumnHeader": true
+      }
+    ]
+  }
+}

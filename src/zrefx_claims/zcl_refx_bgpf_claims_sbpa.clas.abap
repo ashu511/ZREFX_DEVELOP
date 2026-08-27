@@ -59,6 +59,7 @@ CLASS zcl_refx_bgpf_claims_sbpa DEFINITION
              vendoremail   TYPE string,
              vendorname_en TYPE string,
              vendorname_ar TYPE string,
+             inbox_url     TYPE string,
            END OF ty_claim_data,
 
            BEGIN OF ty_context_wrapper,
@@ -76,11 +77,20 @@ ENDCLASS.
 
 
 
-CLASS ZCL_REFX_BGPF_CLAIMS_SBPA IMPLEMENTATION.
+CLASS zcl_refx_bgpf_claims_sbpa IMPLEMENTATION.
 
 
   METHOD if_bgmc_op_single~execute.
+    " =======================================================================
+    " GET DYNAMIC CONFIGURATION (INJECT SINGLETON)
+    " =======================================================================
+    DATA(lo_config) = zcl_refx_claim_config=>get_instance( ).
 
+    DATA(lv_btp_dest)  = lo_config->get_sbpa_destination( ).
+    DATA(lv_wf_def)    = lo_config->get_wf_definition_id( ).
+    DATA(lv_api_key)   = lo_config->get_sbpa_api_key( ).
+    DATA(lv_env_id)    = lo_config->get_wf_environment_id( ).
+    DATA(lv_inbox_url) = lo_config->get_sbpa_inbox_url( ).
     " =======================================================================
     " ENHANCE CONTEXT WITH BILINGUAL CATEGORY DESCRIPTION
     " =======================================================================
@@ -114,12 +124,16 @@ CLASS ZCL_REFX_BGPF_CLAIMS_SBPA IMPLEMENTATION.
     " OVERWRITE the raw code in the context with the new bilingual string
     " before it gets serialized into JSON!
     gs_context-claimcategory = lv_bilingual_desc.
+    " Insert Inbox URL to SBPA Context
+    gs_context-inbox_url = lv_inbox_url.
     " =======================================================================
 
     DATA(ls_payload) = VALUE ty_sbpa_payload(
 *       definition_id = 'sa30.sec-rs-dev-6durkmdm.re04acomplaintmanagementprocess.complaintApprovalProcess' " Found in SBPA Monitoring
 *       definition_id = 'sa30.sec-rs-dev-6durkmdm.re05newclaimmanagement.claimProcess'
-        definition_id = 'sa30.sec-rs-dev-6durkmdm.re05newclaimmanagement1.claimProcess'
+*        definition_id = 'sa30.sec-rs-dev-6durkmdm.re05newclaimmanagement1.claimProcess'
+        definition_id = lv_wf_def
+
        context = VALUE ty_context_wrapper(
         claimData = VALUE ty_claim_data(
 *        claimid         = gs_context-claimid
@@ -144,7 +158,7 @@ CLASS ZCL_REFX_BGPF_CLAIMS_SBPA IMPLEMENTATION.
 *        CreatedDate      = gs_context-CreatedDate
          SubmittedBy  =  gs_context-submittedby
          SubmittedOn  =  gs_context-submittedon
-
+        inbox_url     = gs_context-inbox_url
        )
       )
     ).
@@ -177,12 +191,14 @@ CLASS ZCL_REFX_BGPF_CLAIMS_SBPA IMPLEMENTATION.
                         ( abap = 'VENDORNAME_AR' json = 'vendorName_ar' )
                         ( abap = 'LANDID'        json = 'LandId' )
                         ( abap = 'TITLEDEED'     json = 'TitleDeed' )
+                           ( abap = 'INBOX_URL'            json = 'INBOX_URL' )
                       )
     ).
 
     TRY.
         DATA(lo_destination) = cl_http_destination_provider=>create_by_cloud_destination(
-          i_name       = 'sap_process_automation_service' ). "Found in SAP BTP Destinations
+*          i_name       = 'sap_process_automation_service' ). "Found in SAP BTP Destinations
+       i_name = lv_btp_dest ).
 
         DATA(lo_http_client) = cl_web_http_client_manager=>create_by_http_destination(
           i_destination = lo_destination ).
@@ -190,9 +206,15 @@ CLASS ZCL_REFX_BGPF_CLAIMS_SBPA IMPLEMENTATION.
         DATA(lo_request) = lo_http_client->get_http_request( ).
 
         lo_request->set_header_field( i_name = 'Content-Type' i_value = 'application/json' ).
-        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+*       lo_request->set_header_field( i_name = 'irpa-api-key' i_value = 'bRxySNt3ahOYqHKszaT0cSgKWVCgb4lE' ).
+        lo_request->set_header_field( i_name = 'irpa-api-key' i_value = lv_api_key ).
+
         lo_request->set_uri_path( '/workflow/rest/v1/workflow-instances' ). ""check in BPA payload URL path
-        lo_request->set_query( query =  'environmentId=newrealestate' ). "'environmentId=sbpatestforallprocess' ). "'environmentId=realestate' ). "check in BPA payload URL path
+
+*        lo_request->set_query( query =  'environmentId=newrealestate' ). "'environmentId=sbpatestforallprocess' ). "'environmentId=realestate' ). "check in BPA payload URL path
+        DATA(lv_query_string) = |environmentId={ lv_env_id }|.
+        lo_request->set_query( query = lv_query_string ).
+
         lo_request->set_text( lv_json ).
 
         DATA(lo_response) = lo_http_client->execute( if_web_http_client=>post ).
